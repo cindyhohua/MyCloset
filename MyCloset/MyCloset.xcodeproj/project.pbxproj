@@ -18,6 +18,7 @@
 		CA016D392B04CB8D0066FBE7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D2F2B04CB8B0066FBE7 /* SceneDelegate.swift */; };
 		CA016D3A2B04CB8D0066FBE7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA016D302B04CB8C0066FBE7 /* Main.storyboard */; };
 		CA016D3B2B04CB8D0066FBE7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA016D312B04CB8D0066FBE7 /* LaunchScreen.storyboard */; };
+		CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D3C2B04F36B0066FBE7 /* DetailPageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		CA016D2F2B04CB8B0066FBE7 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = ../../../MyCloset/MyCloset/MyCloset/SceneDelegate.swift; sourceTree = "<group>"; };
 		CA016D302B04CB8C0066FBE7 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		CA016D312B04CB8D0066FBE7 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CA016D3C2B04F36B0066FBE7 /* DetailPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,8 +107,9 @@
 		CA016D292B04CB880066FBE7 /* HomePage */ = {
 			isa = PBXGroup;
 			children = (
-				CA016D2A2B04CB880066FBE7 /* HomePageTableCell.swift */,
 				CA016D2B2B04CB880066FBE7 /* HomePageViewController.swift */,
+				CA016D2A2B04CB880066FBE7 /* HomePageTableCell.swift */,
+				CA016D3C2B04F36B0066FBE7 /* DetailPageViewController.swift */,
 			);
 			path = HomePage;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 				CA016D342B04CB8D0066FBE7 /* HomePageTableCell.swift in Sources */,
 				CA016D392B04CB8D0066FBE7 /* SceneDelegate.swift in Sources */,
 				CA016D352B04CB8D0066FBE7 /* HomePageViewController.swift in Sources */,
+				CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */,
 				CA016D322B04CB8D0066FBE7 /* Extensions.swift in Sources */,
 				CA016D1B2B04C93D0066FBE7 /* MyCloset.xcdatamodeld in Sources */,
 			);
