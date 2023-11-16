@@ -8,5 +8,6 @@ target 'MyCloset' do
   # Pods for MyCloset
 
 pod 'SwiftLint'
+pod 'SnapKit', '~> 5.6.0'
 
 end

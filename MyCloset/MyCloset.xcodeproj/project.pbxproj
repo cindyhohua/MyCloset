@@ -19,6 +19,8 @@
 		CA016D3A2B04CB8D0066FBE7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA016D302B04CB8C0066FBE7 /* Main.storyboard */; };
 		CA016D3B2B04CB8D0066FBE7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA016D312B04CB8D0066FBE7 /* LaunchScreen.storyboard */; };
 		CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D3C2B04F36B0066FBE7 /* DetailPageViewController.swift */; };
+		CA016D3F2B05AF030066FBE7 /* NewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D3E2B05AF030066FBE7 /* NewPostViewController.swift */; };
+		CA016D412B05B76C0066FBE7 /* NewPostImageHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D402B05B76C0066FBE7 /* NewPostImageHeaderCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,8 @@
 		CA016D302B04CB8C0066FBE7 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		CA016D312B04CB8D0066FBE7 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CA016D3C2B04F36B0066FBE7 /* DetailPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageViewController.swift; sourceTree = "<group>"; };
+		CA016D3E2B05AF030066FBE7 /* NewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostViewController.swift; sourceTree = "<group>"; };
+		CA016D402B05B76C0066FBE7 /* NewPostImageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostImageHeaderCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +114,8 @@
 				CA016D2B2B04CB880066FBE7 /* HomePageViewController.swift */,
 				CA016D2A2B04CB880066FBE7 /* HomePageTableCell.swift */,
 				CA016D3C2B04F36B0066FBE7 /* DetailPageViewController.swift */,
+				CA016D3E2B05AF030066FBE7 /* NewPostViewController.swift */,
+				CA016D402B05B76C0066FBE7 /* NewPostImageHeaderCell.swift */,
 			);
 			path = HomePage;
 			sourceTree = "<group>";
@@ -125,6 +131,7 @@
 				CA016D092B04C93D0066FBE7 /* Sources */,
 				CA016D0A2B04C93D0066FBE7 /* Frameworks */,
 				CA016D0B2B04C93D0066FBE7 /* Resources */,
+				E3A782220BE03FC6CBA2C67A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -183,6 +190,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		E3A782220BE03FC6CBA2C67A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MyCloset/Pods-MyCloset-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MyCloset/Pods-MyCloset-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MyCloset/Pods-MyCloset-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		F5D2A663F3FE05B51F9D4F4A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -193,7 +217,6 @@
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
-				"${PODS_ROOT}/SwiftLint/swiftlint",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
@@ -218,8 +241,10 @@
 				CA016D392B04CB8D0066FBE7 /* SceneDelegate.swift in Sources */,
 				CA016D352B04CB8D0066FBE7 /* HomePageViewController.swift in Sources */,
 				CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */,
+				CA016D3F2B05AF030066FBE7 /* NewPostViewController.swift in Sources */,
 				CA016D322B04CB8D0066FBE7 /* Extensions.swift in Sources */,
 				CA016D1B2B04C93D0066FBE7 /* MyCloset.xcdatamodeld in Sources */,
+				CA016D412B05B76C0066FBE7 /* NewPostImageHeaderCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

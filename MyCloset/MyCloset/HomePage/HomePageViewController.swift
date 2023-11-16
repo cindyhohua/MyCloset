@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class HomePageViewController: UIViewController {
     let tableView = UITableView()
@@ -17,26 +18,42 @@ class HomePageViewController: UIViewController {
     
     func setupView() {
         view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.leading.equalTo(view)
+            make.trailing.equalTo(view)
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
         tableView.register(HomePageTableCell.self, forCellReuseIdentifier: "homepage")
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 200
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.brown, NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 25)]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 25)]
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "crown.fill"), style: .plain, target: self, action: #selector(leftButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
-            leftButton.tintColor = UIColor.brown
+            leftButton.tintColor = UIColor.lightBrown()
         let rightButton = UIBarButtonItem(image: UIImage(systemName: "bell.fill"), style: .plain, target: self, action: #selector(rightButtonTapped))
             navigationItem.rightBarButtonItem = rightButton
-            rightButton.tintColor = UIColor.brown
+            rightButton.tintColor = UIColor.lightBrown()
         view.addSubview(createPostButton)
+        createPostButton.setTitle("+", for: .normal)
+        createPostButton.titleLabel?.font = UIFont.roundedFont(ofSize: 40)
+        createPostButton.tintColor = .white
+        createPostButton.snp.makeConstraints { make in
+            make.trailing.equalTo(view).offset(-18)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
+            make.width.height.equalTo(70)
+        }
+        createPostButton.clipsToBounds = true
+        createPostButton.layer.cornerRadius = 35
+        createPostButton.backgroundColor = UIColor.lightBrown()
+        createPostButton.addTarget(self, action: #selector(createPost), for: .touchUpInside)
+    }
+    
+    @objc func createPost() {
+        let secondViewController = NewPostViewController()
+        navigationController?.pushViewController(secondViewController, animated: true)
     }
     
     @objc func leftButtonTapped() {
