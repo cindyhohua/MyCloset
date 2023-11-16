@@ -47,7 +47,7 @@ class HomePageTableCell: UITableViewCell {
         contentView.addSubview(cellImageView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(profileImage)
-        cellImageView.image = UIImage(named: "IMG_0691_Original")
+//        cellImageView.image = UIImage(named: "IMG_0691_Original")
         nameLabel.text = "白花油點馬啾"
         profileImage.image = UIImage(named: "download20231105155350")
         

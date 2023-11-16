@@ -49,10 +49,17 @@ class NewPostViewController: UIViewController, UIImagePickerControllerDelegate, 
         dismiss(animated: true, completion: nil)
     }
     
+    func convertToRelativePosition(_ point: CGPoint) -> CGPoint {
+        let relativeX = point.x / imageView.bounds.width
+        let relativeY = point.y / imageView.bounds.height
+        return CGPoint(x: relativeX, y: relativeY)
+    }
+    
     @objc func imageTapped(_ sender: UITapGestureRecognizer) {
         let location = sender.location(in: imageView)
-        position.append(location)
-        print("qq",position)
+        let relativePosition = convertToRelativePosition(location)
+        position.append(relativePosition)
+        print("qq", position)
         createButton(at: location)
     }
     

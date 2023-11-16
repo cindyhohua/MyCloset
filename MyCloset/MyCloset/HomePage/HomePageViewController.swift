@@ -7,13 +7,20 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 class HomePageViewController: UIViewController {
     let tableView = UITableView()
     let createPostButton = UIButton()
+    var test: String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        FirebaseStorageManager.shared.fetchData { url in
+            print("qqq",url)
+            self.test = url
+            self.setupView()
+        }
+//        setupView()
     }
     
     func setupView() {
@@ -67,7 +74,7 @@ class HomePageViewController: UIViewController {
 
 extension HomePageViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        2
+        1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -75,6 +82,7 @@ extension HomePageViewController: UITableViewDelegate, UITableViewDataSource {
             fatalError("Cant find cell")
         }
         cell.isUserInteractionEnabled = true
+        cell.cellImageView.kf.setImage(with: URL(string: test))
         return cell
     }
     
