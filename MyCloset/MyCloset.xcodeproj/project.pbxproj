@@ -29,6 +29,8 @@
 		CA016D502B05FDD50066FBE7 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CA016D4F2B05FDD50066FBE7 /* FirebaseFirestoreSwift */; };
 		CA016D522B05FDD50066FBE7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = CA016D512B05FDD50066FBE7 /* FirebaseStorage */; };
 		CA016D542B0603090066FBE7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CA016D532B0603090066FBE7 /* GoogleService-Info.plist */; };
+		CA016D562B0729C00066FBE7 /* DetailPageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D552B0729C00066FBE7 /* DetailPageCell.swift */; };
+		CA016D592B074C4B0066FBE7 /* MyClosetPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D582B074C4B0066FBE7 /* MyClosetPageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		CA016D422B05BF120066FBE7 /* NewPostSecondStepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostSecondStepViewController.swift; sourceTree = "<group>"; };
 		CA016D442B05FC510066FBE7 /* FirebaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseModel.swift; sourceTree = "<group>"; };
 		CA016D532B0603090066FBE7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CA016D552B0729C00066FBE7 /* DetailPageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageCell.swift; sourceTree = "<group>"; };
+		CA016D582B074C4B0066FBE7 /* MyClosetPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetPageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +121,7 @@
 				CA016D272B04CB860066FBE7 /* Extensions.swift */,
 				CA016D442B05FC510066FBE7 /* FirebaseModel.swift */,
 				CA016D292B04CB880066FBE7 /* HomePage */,
+				CA016D572B074C180066FBE7 /* MyClosetPage */,
 				CA016D212B04C93F0066FBE7 /* Info.plist */,
 				CA016D192B04C93D0066FBE7 /* MyCloset.xcdatamodeld */,
 				CA016D2E2B04CB8A0066FBE7 /* Assets.xcassets */,
@@ -131,11 +136,20 @@
 				CA016D2B2B04CB880066FBE7 /* HomePageViewController.swift */,
 				CA016D2A2B04CB880066FBE7 /* HomePageTableCell.swift */,
 				CA016D3C2B04F36B0066FBE7 /* DetailPageViewController.swift */,
+				CA016D552B0729C00066FBE7 /* DetailPageCell.swift */,
 				CA016D3E2B05AF030066FBE7 /* NewPostViewController.swift */,
 				CA016D422B05BF120066FBE7 /* NewPostSecondStepViewController.swift */,
 				CA016D402B05B76C0066FBE7 /* NewPostCell.swift */,
 			);
 			path = HomePage;
+			sourceTree = "<group>";
+		};
+		CA016D572B074C180066FBE7 /* MyClosetPage */ = {
+			isa = PBXGroup;
+			children = (
+				CA016D582B074C4B0066FBE7 /* MyClosetPageViewController.swift */,
+			);
+			path = MyClosetPage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -272,10 +286,12 @@
 				CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */,
 				CA016D432B05BF120066FBE7 /* NewPostSecondStepViewController.swift in Sources */,
 				CA016D3F2B05AF030066FBE7 /* NewPostViewController.swift in Sources */,
+				CA016D592B074C4B0066FBE7 /* MyClosetPageViewController.swift in Sources */,
 				CA016D452B05FC510066FBE7 /* FirebaseModel.swift in Sources */,
 				CA016D322B04CB8D0066FBE7 /* Extensions.swift in Sources */,
 				CA016D1B2B04C93D0066FBE7 /* MyCloset.xcdatamodeld in Sources */,
 				CA016D412B05B76C0066FBE7 /* NewPostCell.swift in Sources */,
+				CA016D562B0729C00066FBE7 /* DetailPageCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

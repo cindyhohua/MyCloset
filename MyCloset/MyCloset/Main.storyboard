@@ -41,10 +41,10 @@
             </objects>
             <point key="canvasLocation" x="265" y="1439"/>
         </scene>
-        <!--View Controller-->
+        <!--My Closet Page View Controller-->
         <scene sceneID="eN0-BT-0eO">
             <objects>
-                <viewController id="OO0-Vp-q8X" sceneMemberID="viewController">
+                <viewController id="OO0-Vp-q8X" customClass="MyClosetPageViewController" customModule="MyCloset" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JfT-4K-boL">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

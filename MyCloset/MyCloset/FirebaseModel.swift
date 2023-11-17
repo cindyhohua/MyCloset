@@ -44,25 +44,72 @@ class FirebaseStorageManager {
     private let db = Firestore.firestore()
 
     private init() {}
-    var imageURL: String = ""
-    func fetchData(completion: @escaping (String) -> Void) { //completion: @escaping ([Article]) -> Void
-//        var articles: [Article] = []
 
-        let articlesCollection = db.collection("articles")
-        articlesCollection.order(by: "createdTime", descending: true).getDocuments { (querySnapshot, error) in
-            if let error = error {
-                print("Error getting documents: \(error)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let data = document.data()
-                    let imageURL = data["imageURL"] as? String ?? ""
-                    self.imageURL = imageURL
-                    print(imageURL)
-//                        articles.append(article)
+    func fetchData(completion: @escaping ([Article]) -> Void) {
+            let articlesCollection = db.collection("articles")
+            articlesCollection.order(by: "createdTime", descending: true).getDocuments { (querySnapshot, error) in
+                if let error = error {
+                    print("Error getting documents: \(error)")
+                    completion([])
+                } else {
+                    var articles: [Article] = []
+                    for document in querySnapshot!.documents {
+                        let data = document.data()
+                        let imageURL = data["imageURL"] as? String ?? ""
+                        let dataAuthor = data["author"] as? [String: String]
+                        let author = Author(email: dataAuthor?["email"] as? String ?? "",
+                                            id: dataAuthor?["id"] as? String ?? "",
+                                            name: dataAuthor?["name"] as? String ?? "")
+                        
+                        let content = data["content"] as? String ?? ""
+                        let createdTime = data["createdTime"] as? Double ?? 0.0
+                        let id = document.documentID
+                        let positions = self.parsePositions(data["position"] as? [[String: Double]] ?? [])
+                        let productList = self.parseProducts(data["productList"] as? [[String: String]] ?? [])
+                        
+                        let article = Article(author: author,
+                                              content: content,
+                                              createdTime: createdTime,
+                                              id: id,
+                                              imageURL: imageURL,
+                                              productList: productList,
+                                              positions: positions)
+                        
+                        articles.append(article)
                     }
+                    completion(articles)
                 }
-            completion(self.imageURL)
             }
+        }
+        
+        private func parsePositions(_ positionsData: [[String: Double]]) -> [Position] {
+            var positions: [Position] = []
+            for positionData in positionsData {
+                if let x = positionData["x"],
+                   let y = positionData["y"] {
+                    let position = Position(x: x, y: y)
+                    positions.append(position)
+                }
+            }
+            return positions
+        }
+        
+        private func parseProducts(_ productsData: [[String: String]]) -> [Product] {
+            var products: [Product] = []
+            for productData in productsData {
+                let productName = productData["productName"] ?? ""
+                let productStore = productData["productStore"] ?? ""
+                let productPrice = productData["productPrice"] ?? ""
+                let productComment = productData["productComment"] ?? ""
+                
+                let product = Product(productName: productName,
+                                      productStore: productStore,
+                                      productPrice: productPrice,
+                                      productComment: productComment)
+                
+                products.append(product)
+            }
+            return products
         }
     
     
@@ -110,7 +157,6 @@ class FirebaseStorageManager {
             } else {
                 storageRef.downloadURL { (url, error) in
                     if let downloadURL = url {
-                        print("qqqqqqImageURL",downloadURL)
                         completion(.success(downloadURL))
                     } else if let error = error {
                         completion(.failure(error))

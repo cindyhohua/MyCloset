@@ -59,7 +59,6 @@ class NewPostViewController: UIViewController, UIImagePickerControllerDelegate, 
         let location = sender.location(in: imageView)
         let relativePosition = convertToRelativePosition(location)
         position.append(relativePosition)
-        print("qq", position)
         createButton(at: location)
     }
     

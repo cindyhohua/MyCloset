@@ -32,13 +32,11 @@ class NewPostSecondStepViewController: UIViewController {
         nextButton.tintColor = UIColor.lightBrown()
         navigationItem.rightBarButtonItem = nextButton
         navigationItem.rightBarButtonItem?.isEnabled = true
-        print(position)
         actualPositions = position.map { convertToActualPosition($0) }
         setupTableView()
     }
     
     @objc func postButtonTapped() {
-        print("Post")
         var productList: [Product] = []
         for row in 2..<tableView.numberOfRows(inSection: 0) {
             guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? NewPostProductCell else {
@@ -55,7 +53,6 @@ class NewPostSecondStepViewController: UIViewController {
             return
         }
         content = cellContent.textView.text ?? ""
-        print(productList)
         FirebaseStorageManager.shared.uploadImageAndGetURL(selectedImage!) { [weak self] result in
             switch result {
             case .success(let downloadURL):

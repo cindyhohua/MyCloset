@@ -12,15 +12,18 @@ import Kingfisher
 class HomePageViewController: UIViewController {
     let tableView = UITableView()
     let createPostButton = UIButton()
-    var test: String = ""
+    var articles: [Article] = []
     override func viewDidLoad() {
         super.viewDidLoad()
-        FirebaseStorageManager.shared.fetchData { url in
-            print("qqq",url)
-            self.test = url
-            self.setupView()
+        setupView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        FirebaseStorageManager.shared.fetchData { articles in
+            self.articles = articles
+            self.tableView.reloadData()
         }
-//        setupView()
     }
     
     func setupView() {
@@ -75,7 +78,7 @@ class HomePageViewController: UIViewController {
 
 extension HomePageViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1
+        articles.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -83,7 +86,8 @@ extension HomePageViewController: UITableViewDelegate, UITableViewDataSource {
             fatalError("Cant find cell")
         }
         cell.isUserInteractionEnabled = true
-        cell.cellImageView.kf.setImage(with: URL(string: test))
+        cell.nameLabel.text = articles[indexPath.row].author.name
+        cell.cellImageView.kf.setImage(with: URL(string: articles[indexPath.row].imageURL))
         cell.selectionStyle = .none
         return cell
     }
@@ -96,6 +100,7 @@ extension HomePageViewController: UITableViewDelegate, UITableViewDataSource {
         let selectedIndexPath = tableView.indexPathForSelectedRow
         tableView.deselectRow(at: selectedIndexPath!, animated: true)
         let secondViewController = DetailPageViewController()
+        secondViewController.article = articles[indexPath.row]
         navigationController?.pushViewController(secondViewController, animated: true)
     }
 }
