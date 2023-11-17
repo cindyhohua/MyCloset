@@ -39,10 +39,27 @@ class NewPostSecondStepViewController: UIViewController {
     
     @objc func postButtonTapped() {
         print("Post")
+        var productList: [Product] = []
+        for row in 2..<tableView.numberOfRows(inSection: 0) {
+            guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? NewPostProductCell else {
+                continue
+            }
+            let name = cell.nameLabel.text ?? ""
+            let store = cell.storeLabel.text ?? ""
+            let price = cell.priceLabel.text ?? ""
+            let comments = cell.commentsLabel.text ?? ""
+            productList.append(Product(productName: name, productStore: store, productPrice: price, productComment: comments))
+        }
+        var content = ""
+        guard let cellContent = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? NewPostCommentCell else {
+            return
+        }
+        content = cellContent.textView.text ?? ""
+        print(productList)
         FirebaseStorageManager.shared.uploadImageAndGetURL(selectedImage!) { [weak self] result in
             switch result {
             case .success(let downloadURL):
-                FirebaseStorageManager.shared.addArticle(imageURL: downloadURL.absoluteString, content: "qqq", positions: self?.position ?? [CGPoint(x: 0,y: 0)], category: "cindy") { _ in
+                FirebaseStorageManager.shared.addArticle(imageURL: downloadURL.absoluteString, content: content, positions: self?.position ?? [CGPoint(x: -10,y: -10)], productList: productList) { _ in
                     guard let viewControllers = self?.navigationController?.viewControllers else { return }
                     for controller in viewControllers {
                         if controller is HomePageViewController {
@@ -57,12 +74,7 @@ class NewPostSecondStepViewController: UIViewController {
     }
     
     @objc func backButtonTapped() {
-
         navigationController?.popViewController(animated: true)
-    }
-    
-    func setup() {
-        
     }
 }
 
@@ -98,7 +110,8 @@ extension NewPostSecondStepViewController: UITableViewDelegate, UITableViewDataS
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "comment", for: indexPath) as? NewPostCommentCell else {
                 fatalError("Cant find cell")
             }
-            cell.isUserInteractionEnabled = false
+            cell.isUserInteractionEnabled = true
+            cell.selectionStyle = .none
             return cell
         default:
             let cell = NewPostProductCell()
@@ -107,8 +120,5 @@ extension NewPostSecondStepViewController: UITableViewDelegate, UITableViewDataS
             cell.selectionStyle = .none
             return cell
         }
-        
     }
-    
-    
 }

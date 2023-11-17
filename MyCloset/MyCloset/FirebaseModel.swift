@@ -16,6 +16,7 @@ struct Article {
     let createdTime: Double
     let id: String
     let imageURL: String
+    let productList: [Product]
     let positions: [Position]
 }
 struct Author {
@@ -27,6 +28,13 @@ struct Author {
 struct Position {
     let x: Double
     let y: Double
+}
+
+struct Product {
+    let productName: String
+    let productStore: String
+    let productPrice: String
+    let productComment: String
 }
 
 class FirebaseStorageManager {
@@ -58,10 +66,14 @@ class FirebaseStorageManager {
         }
     
     
-    func addArticle(imageURL: String, content: String, positions: [CGPoint] , category: String, completion: @escaping (Error?) -> Void) {
+    func addArticle(imageURL: String, content: String, positions: [CGPoint] , productList: [Product], completion: @escaping (Error?) -> Void) {
         let convertedPositions: [[String: CGFloat]] = positions.map { point in
             return ["x": point.x, "y": point.y]
         }
+        let convertedProductList: [[String:String]] = productList.map { product in
+            return ["productName": product.productName, "productStore": product.productStore, "productPrice": product.productPrice, "productComment": product.productComment]
+        }
+        
         let articles = db.collection("articles")
         let document = articles.document()
         let author = [
@@ -74,6 +86,7 @@ class FirebaseStorageManager {
             "imageURL": imageURL,
             "position": convertedPositions,
             "content": content,
+            "productList": convertedProductList,
             "createdTime": Date().timeIntervalSince1970,
             "id": document.documentID,
         ]

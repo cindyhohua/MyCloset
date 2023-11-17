@@ -36,6 +36,7 @@ class HomePageViewController: UIViewController {
         tableView.delegate = self
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 200
+        tableView.separatorStyle = .none
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 25)]
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "crown.fill"), style: .plain, target: self, action: #selector(leftButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
@@ -83,6 +84,7 @@ extension HomePageViewController: UITableViewDelegate, UITableViewDataSource {
         }
         cell.isUserInteractionEnabled = true
         cell.cellImageView.kf.setImage(with: URL(string: test))
+        cell.selectionStyle = .none
         return cell
     }
     
