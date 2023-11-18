@@ -21,7 +21,7 @@
 		CA016D3F2B05AF030066FBE7 /* NewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D3E2B05AF030066FBE7 /* NewPostViewController.swift */; };
 		CA016D412B05B76C0066FBE7 /* NewPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D402B05B76C0066FBE7 /* NewPostCell.swift */; };
 		CA016D432B05BF120066FBE7 /* NewPostSecondStepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D422B05BF120066FBE7 /* NewPostSecondStepViewController.swift */; };
-		CA016D452B05FC510066FBE7 /* FirebaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D442B05FC510066FBE7 /* FirebaseModel.swift */; };
+		CA016D452B05FC510066FBE7 /* FirebaseStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D442B05FC510066FBE7 /* FirebaseStorageManager.swift */; };
 		CA016D482B05FDD50066FBE7 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = CA016D472B05FDD50066FBE7 /* FirebaseAnalytics */; };
 		CA016D4A2B05FDD50066FBE7 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CA016D492B05FDD50066FBE7 /* FirebaseAuth */; };
 		CA016D4C2B05FDD50066FBE7 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = CA016D4B2B05FDD50066FBE7 /* FirebaseDatabase */; };
@@ -31,6 +31,9 @@
 		CA016D542B0603090066FBE7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CA016D532B0603090066FBE7 /* GoogleService-Info.plist */; };
 		CA016D562B0729C00066FBE7 /* DetailPageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D552B0729C00066FBE7 /* DetailPageCell.swift */; };
 		CA016D592B074C4B0066FBE7 /* MyClosetPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D582B074C4B0066FBE7 /* MyClosetPageViewController.swift */; };
+		CA016D5B2B0758E40066FBE7 /* SegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D5A2B0758E40066FBE7 /* SegmentView.swift */; };
+		CA016D5D2B07691A0066FBE7 /* AddMyClothesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */; };
+		CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,10 +55,13 @@
 		CA016D3E2B05AF030066FBE7 /* NewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostViewController.swift; sourceTree = "<group>"; };
 		CA016D402B05B76C0066FBE7 /* NewPostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostCell.swift; sourceTree = "<group>"; };
 		CA016D422B05BF120066FBE7 /* NewPostSecondStepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostSecondStepViewController.swift; sourceTree = "<group>"; };
-		CA016D442B05FC510066FBE7 /* FirebaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseModel.swift; sourceTree = "<group>"; };
+		CA016D442B05FC510066FBE7 /* FirebaseStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager.swift; sourceTree = "<group>"; };
 		CA016D532B0603090066FBE7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CA016D552B0729C00066FBE7 /* DetailPageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageCell.swift; sourceTree = "<group>"; };
 		CA016D582B074C4B0066FBE7 /* MyClosetPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetPageViewController.swift; sourceTree = "<group>"; };
+		CA016D5A2B0758E40066FBE7 /* SegmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentView.swift; sourceTree = "<group>"; };
+		CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMyClothesViewController.swift; sourceTree = "<group>"; };
+		CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManeger.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,7 +125,8 @@
 				CA016D2C2B04CB880066FBE7 /* AppDelegate.swift */,
 				CA016D2F2B04CB8B0066FBE7 /* SceneDelegate.swift */,
 				CA016D272B04CB860066FBE7 /* Extensions.swift */,
-				CA016D442B05FC510066FBE7 /* FirebaseModel.swift */,
+				CA016D442B05FC510066FBE7 /* FirebaseStorageManager.swift */,
+				CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */,
 				CA016D292B04CB880066FBE7 /* HomePage */,
 				CA016D572B074C180066FBE7 /* MyClosetPage */,
 				CA016D212B04C93F0066FBE7 /* Info.plist */,
@@ -148,6 +155,8 @@
 			isa = PBXGroup;
 			children = (
 				CA016D582B074C4B0066FBE7 /* MyClosetPageViewController.swift */,
+				CA016D5A2B0758E40066FBE7 /* SegmentView.swift */,
+				CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */,
 			);
 			path = MyClosetPage;
 			sourceTree = "<group>";
@@ -280,14 +289,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA016D362B04CB8D0066FBE7 /* AppDelegate.swift in Sources */,
+				CA016D5D2B07691A0066FBE7 /* AddMyClothesViewController.swift in Sources */,
+				CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */,
 				CA016D342B04CB8D0066FBE7 /* HomePageTableCell.swift in Sources */,
 				CA016D392B04CB8D0066FBE7 /* SceneDelegate.swift in Sources */,
 				CA016D352B04CB8D0066FBE7 /* HomePageViewController.swift in Sources */,
+				CA016D5B2B0758E40066FBE7 /* SegmentView.swift in Sources */,
 				CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */,
 				CA016D432B05BF120066FBE7 /* NewPostSecondStepViewController.swift in Sources */,
 				CA016D3F2B05AF030066FBE7 /* NewPostViewController.swift in Sources */,
 				CA016D592B074C4B0066FBE7 /* MyClosetPageViewController.swift in Sources */,
-				CA016D452B05FC510066FBE7 /* FirebaseModel.swift in Sources */,
+				CA016D452B05FC510066FBE7 /* FirebaseStorageManager.swift in Sources */,
 				CA016D322B04CB8D0066FBE7 /* Extensions.swift in Sources */,
 				CA016D1B2B04C93D0066FBE7 /* MyCloset.xcdatamodeld in Sources */,
 				CA016D412B05B76C0066FBE7 /* NewPostCell.swift in Sources */,
