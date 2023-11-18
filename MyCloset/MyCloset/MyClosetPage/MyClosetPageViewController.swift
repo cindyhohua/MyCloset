@@ -126,6 +126,14 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 44
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedIndexPath = tableView.indexPathForSelectedRow
+        tableView.deselectRow(at: selectedIndexPath!, animated: true)
+        let secondViewController = MyClosetDetailPageViewController()
+        secondViewController.cloth = sections[indexPath.section].items[indexPath.row]
+        navigationController?.pushViewController(secondViewController, animated: true)
+    }
 
     @objc func headerTapped(_ sender: UITapGestureRecognizer) {
         if let section = sender.view?.tag {
@@ -147,6 +155,7 @@ class ClosetPageCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 25
         imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
 

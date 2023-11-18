@@ -34,6 +34,7 @@
 		CA016D5B2B0758E40066FBE7 /* SegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D5A2B0758E40066FBE7 /* SegmentView.swift */; };
 		CA016D5D2B07691A0066FBE7 /* AddMyClothesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */; };
 		CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */; };
+		CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		CA016D5A2B0758E40066FBE7 /* SegmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentView.swift; sourceTree = "<group>"; };
 		CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMyClothesViewController.swift; sourceTree = "<group>"; };
 		CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManeger.swift; sourceTree = "<group>"; };
+		CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetDetailPageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +159,7 @@
 				CA016D582B074C4B0066FBE7 /* MyClosetPageViewController.swift */,
 				CA016D5A2B0758E40066FBE7 /* SegmentView.swift */,
 				CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */,
+				CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */,
 			);
 			path = MyClosetPage;
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 				CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */,
 				CA016D432B05BF120066FBE7 /* NewPostSecondStepViewController.swift in Sources */,
 				CA016D3F2B05AF030066FBE7 /* NewPostViewController.swift in Sources */,
+				CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */,
 				CA016D592B074C4B0066FBE7 /* MyClosetPageViewController.swift in Sources */,
 				CA016D452B05FC510066FBE7 /* FirebaseStorageManager.swift in Sources */,
 				CA016D322B04CB8D0066FBE7 /* Extensions.swift in Sources */,
