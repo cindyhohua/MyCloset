@@ -35,6 +35,7 @@
 		CA016D5D2B07691A0066FBE7 /* AddMyClothesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */; };
 		CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */; };
 		CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */; };
+		CA3B0FB12B08DE8B001B708E /* DollPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +65,7 @@
 		CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMyClothesViewController.swift; sourceTree = "<group>"; };
 		CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManeger.swift; sourceTree = "<group>"; };
 		CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetDetailPageViewController.swift; sourceTree = "<group>"; };
+		CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 				CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */,
 				CA016D292B04CB880066FBE7 /* HomePage */,
 				CA016D572B074C180066FBE7 /* MyClosetPage */,
+				CA3B0FAF2B08DE70001B708E /* Doll page */,
 				CA016D212B04C93F0066FBE7 /* Info.plist */,
 				CA016D192B04C93D0066FBE7 /* MyCloset.xcdatamodeld */,
 				CA016D2E2B04CB8A0066FBE7 /* Assets.xcassets */,
@@ -162,6 +165,14 @@
 				CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */,
 			);
 			path = MyClosetPage;
+			sourceTree = "<group>";
+		};
+		CA3B0FAF2B08DE70001B708E /* Doll page */ = {
+			isa = PBXGroup;
+			children = (
+				CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */,
+			);
+			path = "Doll page";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -299,6 +310,7 @@
 				CA016D352B04CB8D0066FBE7 /* HomePageViewController.swift in Sources */,
 				CA016D5B2B0758E40066FBE7 /* SegmentView.swift in Sources */,
 				CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */,
+				CA3B0FB12B08DE8B001B708E /* DollPageViewController.swift in Sources */,
 				CA016D432B05BF120066FBE7 /* NewPostSecondStepViewController.swift in Sources */,
 				CA016D3F2B05AF030066FBE7 /* NewPostViewController.swift in Sources */,
 				CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */,
