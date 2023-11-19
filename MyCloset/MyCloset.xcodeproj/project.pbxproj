@@ -36,6 +36,7 @@
 		CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */; };
 		CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */; };
 		CA3B0FB12B08DE8B001B708E /* DollPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */; };
+		CA3B0FB32B09CF76001B708E /* DollPageCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManeger.swift; sourceTree = "<group>"; };
 		CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetDetailPageViewController.swift; sourceTree = "<group>"; };
 		CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageViewController.swift; sourceTree = "<group>"; };
+		CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageCVCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */,
+				CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */,
 			);
 			path = "Doll page";
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 				CA016D5B2B0758E40066FBE7 /* SegmentView.swift in Sources */,
 				CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */,
 				CA3B0FB12B08DE8B001B708E /* DollPageViewController.swift in Sources */,
+				CA3B0FB32B09CF76001B708E /* DollPageCVCell.swift in Sources */,
 				CA016D432B05BF120066FBE7 /* NewPostSecondStepViewController.swift in Sources */,
 				CA016D3F2B05AF030066FBE7 /* NewPostViewController.swift in Sources */,
 				CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */,
