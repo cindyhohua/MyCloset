@@ -33,6 +33,8 @@ class PaperDollBottomsViewController: UIViewController{
     var selected: [DollCloth]?
     var selectedColor: UIColor = .white
     
+    var segmentIndex = 0
+    
     let codeSegmented = SegmentView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44), buttonTitle: ["褲頭","褲子","顏色"])
 
     var neckline: [DollCloth] = [
@@ -82,7 +84,7 @@ class PaperDollBottomsViewController: UIViewController{
             leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "My Closet"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
-        // Set up doll parts
+        
         view.addSubview(imageViewDoll)
         imageViewDoll.image = UIImage(named: "doll")
         setupConstraints(for: imageViewDoll)
@@ -110,8 +112,26 @@ class PaperDollBottomsViewController: UIViewController{
     }
     
     @objc func addButtonTapped() {
-        let nextViewController = AddMyClosetViewController()
-        navigationController?.pushViewController(nextViewController, animated: true)
+        print("add")
+        var cloth: [String] = []
+        var clothB: [String] = []
+        for select in selected! {
+            cloth.append(select.outer)
+            clothB.append(select.bottom)
+        }
+        print(cloth, clothB)
+        let color = selectedColor
+        var red: CGFloat = 0.0
+        var green: CGFloat = 0.0
+        var blue: CGFloat = 0.0
+        var alpha: CGFloat = 0.0
+
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        print(red, green, blue)
+        print(self.cloth?.category)
+        print(self.cloth?.subcategory)
+        print(self.cloth?.item)
+        CoreDataManager.shared.addClothAndColor(category: (self.cloth?.category)!, subcategory: (self.cloth?.subcategory)!, item: (self.cloth?.item)!, clothArray: cloth, clothBArray: clothB, color: [red, green, blue])
     }
     
     @objc func backButtonTapped() {
@@ -180,6 +200,7 @@ extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollecti
     }
     
     func changeToIndex(_ manager: SegmentView, index: Int) {
+        segmentIndex = index
         if index < outfitss?.count ?? 0 {
             outfits = outfitss?[index]
             collectionView.reloadData()
@@ -198,6 +219,7 @@ extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollecti
     }
 
     func setupCV() {
+        CoreDataManager.shared.fetchData()
         colorPickerView.delegate = self
         codeSegmented.backgroundColor = UIColor.lightLightBrown()
         codeSegmented.delegate = self
@@ -257,10 +279,12 @@ extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // Handle the selection of an outfit
         if let selectedOutfit = outfits?[indexPath.item] {
             updateDollImage(with: selectedOutfit)
+            selected?[segmentIndex] = (outfitss?[segmentIndex][indexPath.item])!
+            print(selected)
         }
+        
     }
     
     func updateDollImage(with cloth: DollCloth) {

@@ -17,14 +17,14 @@ extension Clothes {
     }
 
     @NSManaged public var category: String?
-    @NSManaged public var subcategory: String?
+    @NSManaged public var content: String?
+    @NSManaged public var image: Data?
     @NSManaged public var item: String?
     @NSManaged public var price: String?
     @NSManaged public var store: String?
-    @NSManaged public var content: String?
-    @NSManaged public var image: Data?
-    @NSManaged public var cloth: [String]?
-    @NSManaged public var clothb: [String]?
-    @NSManaged public var color: UIColor?
+    @NSManaged public var subcategory: String?
+    @NSManaged public var cloth: NSArray?
+    @NSManaged public var clothB: NSArray?
+    @NSManaged public var color: NSArray?
 
 }

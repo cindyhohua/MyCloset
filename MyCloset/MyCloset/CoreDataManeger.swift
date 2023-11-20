@@ -16,6 +16,9 @@ struct ClothesStruct {
     var store: String?
     var content: String?
     var image: Data?
+    var cloth: [String]?
+    var clothB: [String]?
+    var color: [CGFloat]?
 }
 
 class CoreDataManager {
@@ -68,7 +71,10 @@ class CoreDataManager {
                     price: clothesEntity.price,
                     store: clothesEntity.store,
                     content: clothesEntity.content,
-                    image: clothesEntity.image
+                    image: clothesEntity.image,
+                    cloth: clothesEntity.cloth as? [String],
+                    clothB: clothesEntity.clothB as? [String],
+                    color: clothesEntity.color as? [CGFloat]
                 )
             }
             return clothesStructArray
@@ -105,21 +111,71 @@ class CoreDataManager {
             return [:]
         }
     }
+    
+    func addClothAndColor(category: String, subcategory: String, item: String, clothArray: [String], clothBArray: [String], color: [CGFloat]) {
+        let fetchRequest: NSFetchRequest<Clothes> = Clothes.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "category == %@ AND subcategory == %@ AND item == %@", category, subcategory, item)
+        
+        do {
+            let result = try CoreDataManager.shared.managedObjectContext.fetch(fetchRequest)
+            
+            if let existingClothes = result.first {
+                existingClothes.cloth = clothArray as NSArray
+                existingClothes.clothB = clothBArray as NSArray
+                
+                // Convert CGFloat array to NSArray
+                let colorNSArray = color.map { NSNumber(value: Float($0)) }
+                existingClothes.color = colorNSArray as NSArray
+            } else {
+                // Create a new Clothes object
+                let newClothes = Clothes(context: managedObjectContext)
+                newClothes.category = category
+                newClothes.subcategory = subcategory
+                newClothes.cloth = clothArray as NSArray
+                newClothes.clothB = clothBArray as NSArray
+                
+                // Convert CGFloat array to NSArray
+                let colorNSArray = color.map { NSNumber(value: Float($0)) }
+                newClothes.color = colorNSArray as NSArray
+            }
+            
+            saveContext()
+        } catch {
+            print("Error fetching data: \(error.localizedDescription)")
+        }
+    }
 
-
+    
+    
+    
     // MARK: - Fetch Data
-
-    func fetchData() -> [Clothes] {
+    
+    func fetchData() -> [ClothesStruct] {
         let fetchRequest: NSFetchRequest<Clothes> = Clothes.fetchRequest()
         do {
             let clothes = try managedObjectContext.fetch(fetchRequest)
-            return clothes
+            let clothesStructArray = clothes.map { clothesEntity in
+                return ClothesStruct(
+                    category: clothesEntity.category,
+                    subcategory: clothesEntity.subcategory,
+                    item: clothesEntity.item,
+                    price: clothesEntity.price,
+                    store: clothesEntity.store,
+                    content: clothesEntity.content,
+                    image: clothesEntity.image,
+                    cloth: clothesEntity.cloth as? [String],
+                    clothB: clothesEntity.clothB as? [String],
+                    color: clothesEntity.color as? [CGFloat]
+                )
+            }
+            return clothesStructArray
         } catch {
             print("Failed to fetch data: \(error.localizedDescription)")
             return []
         }
     }
 
+    
     // MARK: - Add Data
 
     func addClothes(category: String, subcategory: String, item: String, price: String, store: String, content: String, image: Data?) {

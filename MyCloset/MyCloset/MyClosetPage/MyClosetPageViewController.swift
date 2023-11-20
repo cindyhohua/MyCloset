@@ -21,6 +21,10 @@ class MyClosetPageViewController: UIViewController {
     var sectionAll : [[Section]] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
+        clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
+        makeSectionArray()
+        tableView.reloadData()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -132,6 +136,7 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(sections[indexPath.section].items[indexPath.row].cloth)
         let selectedIndexPath = tableView.indexPathForSelectedRow
         tableView.deselectRow(at: selectedIndexPath!, animated: true)
         let secondViewController = MyClosetDetailPageViewController()
