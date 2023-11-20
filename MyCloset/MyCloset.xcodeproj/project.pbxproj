@@ -37,6 +37,9 @@
 		CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */; };
 		CA3B0FB12B08DE8B001B708E /* DollPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */; };
 		CA3B0FB32B09CF76001B708E /* DollPageCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */; };
+		CA3B0FB52B0B1CD2001B708E /* DollModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB42B0B1CD2001B708E /* DollModel.swift */; };
+		CA3B0FB72B0B2053001B708E /* TopsChosenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */; };
+		CA3B0FB92B0B4BC4001B708E /* DollPageViewControllerBottoms.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB82B0B4BC4001B708E /* DollPageViewControllerBottoms.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +71,9 @@
 		CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetDetailPageViewController.swift; sourceTree = "<group>"; };
 		CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageViewController.swift; sourceTree = "<group>"; };
 		CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageCVCell.swift; sourceTree = "<group>"; };
+		CA3B0FB42B0B1CD2001B708E /* DollModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollModel.swift; sourceTree = "<group>"; };
+		CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopsChosenViewController.swift; sourceTree = "<group>"; };
+		CA3B0FB82B0B4BC4001B708E /* DollPageViewControllerBottoms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageViewControllerBottoms.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,7 +178,10 @@
 		CA3B0FAF2B08DE70001B708E /* Doll page */ = {
 			isa = PBXGroup;
 			children = (
+				CA3B0FB42B0B1CD2001B708E /* DollModel.swift */,
+				CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */,
 				CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */,
+				CA3B0FB82B0B4BC4001B708E /* DollPageViewControllerBottoms.swift */,
 				CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */,
 			);
 			path = "Doll page";
@@ -308,11 +317,13 @@
 				CA016D362B04CB8D0066FBE7 /* AppDelegate.swift in Sources */,
 				CA016D5D2B07691A0066FBE7 /* AddMyClothesViewController.swift in Sources */,
 				CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */,
+				CA3B0FB72B0B2053001B708E /* TopsChosenViewController.swift in Sources */,
 				CA016D342B04CB8D0066FBE7 /* HomePageTableCell.swift in Sources */,
 				CA016D392B04CB8D0066FBE7 /* SceneDelegate.swift in Sources */,
 				CA016D352B04CB8D0066FBE7 /* HomePageViewController.swift in Sources */,
 				CA016D5B2B0758E40066FBE7 /* SegmentView.swift in Sources */,
 				CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */,
+				CA3B0FB92B0B4BC4001B708E /* DollPageViewControllerBottoms.swift in Sources */,
 				CA3B0FB12B08DE8B001B708E /* DollPageViewController.swift in Sources */,
 				CA3B0FB32B09CF76001B708E /* DollPageCVCell.swift in Sources */,
 				CA016D432B05BF120066FBE7 /* NewPostSecondStepViewController.swift in Sources */,
@@ -323,6 +334,7 @@
 				CA016D322B04CB8D0066FBE7 /* Extensions.swift in Sources */,
 				CA016D1B2B04C93D0066FBE7 /* MyCloset.xcdatamodeld in Sources */,
 				CA016D412B05B76C0066FBE7 /* NewPostCell.swift in Sources */,
+				CA3B0FB52B0B1CD2001B708E /* DollModel.swift in Sources */,
 				CA016D562B0729C00066FBE7 /* DetailPageCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

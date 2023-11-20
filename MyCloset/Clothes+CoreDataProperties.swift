@@ -2,7 +2,7 @@
 //  Clothes+CoreDataProperties.swift
 //  
 //
-//  Created by 賀華 on 2023/11/18.
+//  Created by 賀華 on 2023/11/20.
 //
 //
 
@@ -23,5 +23,8 @@ extension Clothes {
     @NSManaged public var store: String?
     @NSManaged public var content: String?
     @NSManaged public var image: Data?
+    @NSManaged public var cloth: [String]?
+    @NSManaged public var clothb: [String]?
+    @NSManaged public var color: UIColor?
 
 }

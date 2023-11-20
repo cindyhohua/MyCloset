@@ -7,13 +7,8 @@
 
 import UIKit
 import SnapKit
-struct DollCloth {
-    let outer: String
-    let bottom: String
-    let name: String
-}
 
-class PaperDollTopsViewController: UIViewController{
+class PaperDollBottomsViewController: UIViewController{
     var cloth: ClothesStruct?
 
     var dollParts: [String: UIImageView] = [:]
@@ -38,44 +33,42 @@ class PaperDollTopsViewController: UIViewController{
     var selected: [DollCloth]?
     var selectedColor: UIColor = .white
     
-    let codeSegmented = SegmentView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44), buttonTitle: ["領口","袖子","衣襬","圖案","顏色"])
+    let codeSegmented = SegmentView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44), buttonTitle: ["褲頭","褲子","顏色"])
 
     var neckline: [DollCloth] = [
-        DollCloth(outer: "領口1", bottom: "B領口1", name: "neckline"),
-        DollCloth(outer: "領口2", bottom: "B領口2", name: "neckline"),
-        DollCloth(outer: "領口3", bottom: "B領口3", name: "neckline"),
-        DollCloth(outer: "領口4", bottom: "B領口4", name: "neckline")
+        DollCloth(outer: "褲頭1", bottom: "B褲頭1", name: "neckline"),
+        DollCloth(outer: "褲頭2", bottom: "B褲頭2", name: "neckline"),
+        DollCloth(outer: "褲頭3", bottom: "B褲頭3", name: "neckline"),
+        DollCloth(outer: "褲頭4", bottom: "B褲頭4", name: "neckline")
     ]
     
     var sleeve: [DollCloth] = [
-        DollCloth(outer: "袖子1", bottom: "B袖子1", name: "sleeve"),
-        DollCloth(outer: "袖子2", bottom: "B袖子2", name: "sleeve"),
-        DollCloth(outer: "袖子3", bottom: "B袖子3", name: "sleeve"),
-        DollCloth(outer: "袖子4", bottom: "B袖子4", name: "sleeve"),
-        DollCloth(outer: "袖子5", bottom: "B袖子5", name: "sleeve")
+        DollCloth(outer: "褲子1", bottom: "B褲子1", name: "sleeve"),
+        DollCloth(outer: "褲子2", bottom: "B褲子2", name: "sleeve"),
+        DollCloth(outer: "褲子3", bottom: "B褲子3", name: "sleeve"),
+        DollCloth(outer: "褲子4", bottom: "B褲子4", name: "sleeve"),
+        DollCloth(outer: "褲子5", bottom: "B褲子5", name: "sleeve"),
+        DollCloth(outer: "褲子6", bottom: "B褲子6", name: "sleeve"),
+        DollCloth(outer: "褲子7", bottom: "B褲子7", name: "sleeve"),
+        DollCloth(outer: "褲子8", bottom: "B褲子8", name: "sleeve"),
+        DollCloth(outer: "褲子9", bottom: "B褲子9", name: "sleeve"),
+        DollCloth(outer: "褲子10", bottom: "B褲子10", name: "sleeve"),
+        DollCloth(outer: "褲子11", bottom: "B褲子11", name: "sleeve"),
+        DollCloth(outer: "褲子12", bottom: "B褲子12", name: "sleeve"),
+        DollCloth(outer: "褲子13", bottom: "B褲子13", name: "sleeve"),
+        DollCloth(outer: "褲子14", bottom: "B褲子14", name: "sleeve"),
+        DollCloth(outer: "褲子15", bottom: "B褲子15", name: "sleeve"),
+        DollCloth(outer: "褲子16", bottom: "B褲子16", name: "sleeve")
     ]
     
-    var hem: [DollCloth] = [
-        DollCloth(outer: "衣襬1", bottom: "B衣襬1", name: "hem"),
-        DollCloth(outer: "衣襬2", bottom: "B衣襬2", name: "hem"),
-        DollCloth(outer: "衣襬3", bottom: "B衣襬3", name: "hem")
-    ]
-    
-    var pattern: [DollCloth] = [
-        DollCloth(outer: "無", bottom: "無", name: "pattern"),
-        DollCloth(outer: "圖案1", bottom: "無", name: "pattern"),
-        DollCloth(outer: "圖案2", bottom: "無", name: "pattern"),
-        DollCloth(outer: "圖案3", bottom: "無", name: "pattern"),
-        DollCloth(outer: "圖案4", bottom: "無", name: "pattern")
-    ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupCV()
-        outfitss = [neckline, sleeve, hem, pattern]
+        outfitss = [neckline, sleeve]
         outfits = outfitss?[0]
-        selected = [neckline[0], sleeve[0], hem[0], pattern[0]]
+        selected = [neckline[0], sleeve[0]]
     }
 
     func setupViews() {
@@ -94,20 +87,13 @@ class PaperDollTopsViewController: UIViewController{
         imageViewDoll.image = UIImage(named: "doll")
         setupConstraints(for: imageViewDoll)
         addGestures(imageView: imageViewDoll)
-        
-//        setupDollPart(imageView: &dollParts["doll"], imageName: "doll", tintColor: nil)
-        //bottom
-        setupDollPart(imageView: &dollParts["Bbottom"], imageName: "B下身2", tintColor: selectedColor)
-        setupDollPart(imageView: &dollParts["bottom"], imageName: "下身2", tintColor: nil)
-        setupDollPart(imageView: &dollParts["Bpattern"], imageName: "無", tintColor: nil)
+
+        setupDollPart(imageView: &dollParts["bottom"], imageName: "上衣", tintColor: nil)
         //tops
         setupDollPart(imageView: &dollParts["Bsleeve"], imageName: sleeve[0].bottom, tintColor: selectedColor)
         setupDollPart(imageView: &dollParts["Bneckline"], imageName: neckline[0].bottom, tintColor: selectedColor)
-        setupDollPart(imageView: &dollParts["Bhem"], imageName: hem[0].bottom, tintColor: selectedColor)
-        setupDollPart(imageView: &dollParts["pattern"], imageName: pattern[0].bottom, tintColor: nil)
         setupDollPart(imageView: &dollParts["sleeve"], imageName: sleeve[0].outer, tintColor: nil)
         setupDollPart(imageView: &dollParts["neckline"], imageName: neckline[0].outer, tintColor: nil)
-        setupDollPart(imageView: &dollParts["hem"], imageName: hem[0].outer, tintColor: nil)
         
         view.addSubview(imageViewReal)
         if let clothImage = cloth?.image {
@@ -182,7 +168,7 @@ class PaperDollTopsViewController: UIViewController{
 }
 
 
-extension PaperDollTopsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SegmentControlDelegate, ColorPickerViewDelegate {
+extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SegmentControlDelegate, ColorPickerViewDelegate {
     func didSelectColor(_ color: UIColor) {
         selectedColor = color
         guard let selected = selected else { return }
@@ -198,7 +184,7 @@ extension PaperDollTopsViewController: UICollectionViewDataSource, UICollectionV
             outfits = outfitss?[index]
             collectionView.reloadData()
             colorPickerView.removeFromSuperview()
-        } else if index == 4 {
+        } else if index == 2 {
             view.addSubview(colorPickerView)
             colorPickerView.backgroundColor = .blue
             colorPickerView.translatesAutoresizingMaskIntoConstraints = false
@@ -287,11 +273,10 @@ extension PaperDollTopsViewController: UICollectionViewDataSource, UICollectionV
         switch cloth.name {
         case "neckline": selected?[0] = cloth
         case "sleeve": selected?[1] = cloth
-        case "hem": selected?[2] = cloth
-        case "pattern": selected?[3] = cloth
         default: break
         }
     }
 
 }
+
 

@@ -81,6 +81,7 @@ class MyClosetDetailPageViewController: UIViewController {
     
         dollButton.setTitle("紙娃娃試穿", for: .normal)
         dollButton.setTitleColor(.brown, for: .normal)
+        dollButton.addTarget(self, action: #selector(dollButtonTapped), for: .touchUpInside)
         dollButton.backgroundColor = UIColor.lightLightBrown()
         dollButton.layer.cornerRadius = 10
         dollButton.snp.makeConstraints { make in
@@ -90,4 +91,20 @@ class MyClosetDetailPageViewController: UIViewController {
             make.centerX.equalTo(view)
         }
     }
+    @objc func dollButtonTapped() {
+        switch (cloth?.category)! {
+        case "Tops":
+            let secondViewController = TopsChosenViewController()
+            secondViewController.cloth = cloth
+            navigationController?.pushViewController(secondViewController, animated: true)
+        case "Bottoms":
+            let secondViewController = PaperDollBottomsViewController()
+            navigationController?.pushViewController(secondViewController, animated: true)
+        case "Accessories": print("Accessories")
+        default: print("default")
+        }
+        
+    }
 }
+
+

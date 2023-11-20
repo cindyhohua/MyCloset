@@ -17,13 +17,18 @@ struct Section {
 class MyClosetPageViewController: UIViewController {
     var tableView = UITableView()
     let buttonTitle = ["Tops","Bottoms","Accessories"]
-    let clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
+    var clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
     var sectionAll : [[Section]] = []
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(clothes)
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        sections = []
+        sectionAll = []
+        clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
         makeSectionArray()
-        setup()
+        tableView.reloadData()
     }
     
     @objc func addButtonTapped() {
@@ -49,7 +54,6 @@ class MyClosetPageViewController: UIViewController {
         }
         self.sections = sectionAll[0]
         self.tableView.reloadData()
-        print(sections)
     }
     
     
