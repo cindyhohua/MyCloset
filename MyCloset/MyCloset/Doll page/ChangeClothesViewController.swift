@@ -16,6 +16,8 @@ class ChangeClothesViewController: UIViewController {
     var sectionAll : [[Section]] = []
     var sections: [Section] = []
     var dollParts: [String: UIImageView] = [:]
+    var segmentesIndex: Int = 0
+    var selectedItems: [(Int, IndexPath)] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -45,7 +47,6 @@ class ChangeClothesViewController: UIViewController {
                 sectionAll.append([])
             }
         }
-        print(sectionAll)
         if !sectionAll.isEmpty {
             self.sections = sectionAll[0]
         }
@@ -144,6 +145,7 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
         }
         if let imageData = sections[indexPath.section].items[indexPath.row].image {
             cell.configure(with: imageData , name: sections[indexPath.section].items[indexPath.row].item ?? "")
+            cell.index = segmentesIndex
         } else {
             cell.configureWithoutImage(name: sections[indexPath.section].items[indexPath.row].item ?? "")
         }
@@ -173,25 +175,30 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        addImageViewToDoll(name: (sections[indexPath.section].items[indexPath.row].subcategory ?? "") + (sections[indexPath.section].items[indexPath.row].item ?? ""), imageNameArrayB: sections[indexPath.section].items[indexPath.row].clothB ?? [],imageNameArray: sections[indexPath.section].items[indexPath.row].cloth ?? [])
+        let cell = tableView.cellForRow(at: indexPath) as! ClosetPageCell
+        if cell.selectMine == true {
+            removeImageViewFromDoll(name: (sections[indexPath.section].items[indexPath.row].subcategory ?? "") + (sections[indexPath.section].items[indexPath.row].item ?? ""))
+            cell.selectMine = false
+        } else {
+            addImageViewToDoll(name: (sections[indexPath.section].items[indexPath.row].subcategory ?? "") + (sections[indexPath.section].items[indexPath.row].item ?? ""), imageNameArrayB: sections[indexPath.section].items[indexPath.row].clothB ?? [],imageNameArray: sections[indexPath.section].items[indexPath.row].cloth ?? [], color: sections[indexPath.section].items[indexPath.row].color ?? [1.0, 1.0 ,1.0])
+            cell.selectMine = true
+        }
     }
     
-    func addImageViewToDoll(name: String, imageNameArrayB: [String],imageNameArray: [String]) {
-        let array = imageNameArrayB + imageNameArray
-        print(array)
-        if let image = mergeImages(imageS: array) {
+    func addImageViewToDoll(name: String, imageNameArrayB: [String],imageNameArray: [String], color: [CGFloat]) {
+        let colorui = UIColor(red: color[0], green: color[1], blue: color[2], alpha: 1)
+        if let image = mergeImages(imageSB: imageNameArrayB, imageS: imageNameArray, color: colorui) {
             setupDollPart(imageView: &dollParts[name], imageName: image)
         } else {
             print("圖片合成失敗")
         }
     }
-
+    
     func removeImageViewFromDoll(name: String) {
         dollParts[name]?.removeFromSuperview()
     }
     
-    func mergeImages(imageS: [String]) -> UIImage? {
+    func mergeImages(imageSB: [String], imageS: [String], color: UIColor) -> UIImage? {
         var totalSize = CGSize.zero
         let image = UIImage(named: imageS[0])
         totalSize.width = max(totalSize.width, image?.size.width ?? 0)
@@ -199,7 +206,11 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
         
         UIGraphicsBeginImageContextWithOptions(totalSize, false, 0.0)
         defer { UIGraphicsEndImageContext() }
-
+        
+        for string in imageSB {
+            let image = UIImage(named: string)?.withTintColor(color)
+            image?.draw(at: CGPoint(x: 0, y: 0))
+        }
         for string in imageS {
             let image = UIImage(named: string)
             image?.draw(at: CGPoint(x: 0, y: 0))
@@ -227,10 +238,12 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
 
 extension ChangeClothesViewController: SegmentControlDelegate {
     func changeToIndex(_ manager: SegmentView, index: Int) {
+        segmentesIndex = index
         //        if index >= 0 && index < sectionAll.count && !self.sectionAll[index].isEmpty {
         self.sections = self.sectionAll[index]
         self.tableView.reloadData()
         //        }
     }
 }
+
 

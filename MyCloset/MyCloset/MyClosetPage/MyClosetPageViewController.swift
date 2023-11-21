@@ -59,7 +59,6 @@ class MyClosetPageViewController: UIViewController {
                 sectionAll.append([])
             }
         }
-        print(sectionAll)
         if !sectionAll.isEmpty {
             self.sections = sectionAll[0]
         }
@@ -142,7 +141,6 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(sections[indexPath.section].items[indexPath.row].cloth)
         let selectedIndexPath = tableView.indexPathForSelectedRow
         tableView.deselectRow(at: selectedIndexPath!, animated: true)
         let secondViewController = MyClosetDetailPageViewController()
@@ -168,6 +166,9 @@ extension MyClosetPageViewController: SegmentControlDelegate {
 }
 
 class ClosetPageCell: UITableViewCell {
+    var selectMine = false
+    var index = 0
+    let checkButton = UIButton()
     let circularImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 25
@@ -194,7 +195,7 @@ class ClosetPageCell: UITableViewCell {
     private func setupUI() {
         contentView.addSubview(circularImageView)
         contentView.addSubview(nameLabel)
-
+        contentView.addSubview(checkButton)
         circularImageView.snp.makeConstraints { make in
             make.top.equalTo(contentView).offset(3)
             make.leading.equalTo(contentView).offset(16)
@@ -207,6 +208,14 @@ class ClosetPageCell: UITableViewCell {
             make.leading.equalTo(circularImageView.snp.trailing).offset(16)
             make.centerY.equalTo(contentView)
         }
+        
+        checkButton.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+        checkButton.snp.makeConstraints { make in
+            make.centerY.equalTo(contentView)
+            make.trailing.equalTo(contentView).offset(-15)
+            make.width.height.equalTo(50)
+        }
+        checkButton.isHidden = true
     }
 
     func configure(with imageData: Data, name: String) {
