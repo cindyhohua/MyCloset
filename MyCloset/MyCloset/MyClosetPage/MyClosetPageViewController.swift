@@ -54,9 +54,14 @@ class MyClosetPageViewController: UIViewController {
                     sectionsForCategory.append(section)
                 }
                 sectionAll.append(sectionsForCategory)
+            } else {
+                sectionAll.append([])
             }
         }
-        self.sections = sectionAll[0]
+        print(sectionAll)
+        if !sectionAll.isEmpty {
+            self.sections = sectionAll[0]
+        }
         self.tableView.reloadData()
     }
     
@@ -154,8 +159,10 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
 
 extension MyClosetPageViewController: SegmentControlDelegate {
     func changeToIndex(_ manager: SegmentView, index: Int) {
-        self.sections = self.sectionAll[index]
-        self.tableView.reloadData()
+//        if index >= 0 && index < sectionAll.count && !self.sectionAll[index].isEmpty {
+            self.sections = self.sectionAll[index]
+            self.tableView.reloadData()
+//        }
     }
 }
 

@@ -38,6 +38,8 @@ class PaperDollTopsViewController: UIViewController{
     var selected: [DollCloth]?
     var selectedColor: UIColor = .white
     
+    var segmentIndex = 0
+    
     let codeSegmented = SegmentView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44), buttonTitle: ["領口","袖子","衣襬","圖案","顏色"])
 
     var neckline: [DollCloth] = [
@@ -124,8 +126,25 @@ class PaperDollTopsViewController: UIViewController{
     }
     
     @objc func addButtonTapped() {
-        let nextViewController = AddMyClosetViewController()
-        navigationController?.pushViewController(nextViewController, animated: true)
+        print("add")
+        var cloth: [String] = []
+        var clothB: [String] = []
+        for select in selected! {
+            cloth.append(select.outer)
+            clothB.append(select.bottom)
+        }
+        print(cloth, clothB)
+        let color = selectedColor
+        var red: CGFloat = 0.0
+        var green: CGFloat = 0.0
+        var blue: CGFloat = 0.0
+        var alpha: CGFloat = 0.0
+
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        print(red, green, blue)
+        print(cloth)
+        print(clothB)
+        CoreDataManager.shared.addClothAndColor(category: (self.cloth?.category)!, subcategory: (self.cloth?.subcategory)!, item: (self.cloth?.item)!, clothArray: cloth, clothBArray: clothB, color: [red, green, blue])
     }
     
     @objc func backButtonTapped() {
@@ -194,6 +213,7 @@ extension PaperDollTopsViewController: UICollectionViewDataSource, UICollectionV
     }
     
     func changeToIndex(_ manager: SegmentView, index: Int) {
+        segmentIndex = index
         if index < outfitss?.count ?? 0 {
             outfits = outfitss?[index]
             collectionView.reloadData()
@@ -271,9 +291,10 @@ extension PaperDollTopsViewController: UICollectionViewDataSource, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // Handle the selection of an outfit
         if let selectedOutfit = outfits?[indexPath.item] {
             updateDollImage(with: selectedOutfit)
+            selected?[segmentIndex] = (outfitss?[segmentIndex][indexPath.item])!
+            print(selected)
         }
     }
     

@@ -219,7 +219,6 @@ extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollecti
     }
 
     func setupCV() {
-        CoreDataManager.shared.fetchData()
         colorPickerView.delegate = self
         codeSegmented.backgroundColor = UIColor.lightLightBrown()
         codeSegmented.delegate = self
