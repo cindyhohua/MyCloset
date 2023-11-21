@@ -40,6 +40,7 @@
 		CA3B0FB52B0B1CD2001B708E /* DollModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB42B0B1CD2001B708E /* DollModel.swift */; };
 		CA3B0FB72B0B2053001B708E /* TopsChosenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */; };
 		CA3B0FB92B0B4BC4001B708E /* DollPageViewControllerBottoms.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB82B0B4BC4001B708E /* DollPageViewControllerBottoms.swift */; };
+		CA3B0FBD2B0C6C35001B708E /* ChangeClothesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FBC2B0C6C35001B708E /* ChangeClothesViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +75,7 @@
 		CA3B0FB42B0B1CD2001B708E /* DollModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollModel.swift; sourceTree = "<group>"; };
 		CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopsChosenViewController.swift; sourceTree = "<group>"; };
 		CA3B0FB82B0B4BC4001B708E /* DollPageViewControllerBottoms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageViewControllerBottoms.swift; sourceTree = "<group>"; };
+		CA3B0FBC2B0C6C35001B708E /* ChangeClothesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeClothesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				CA3B0FB42B0B1CD2001B708E /* DollModel.swift */,
+				CA3B0FBC2B0C6C35001B708E /* ChangeClothesViewController.swift */,
 				CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */,
 				CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */,
 				CA3B0FB82B0B4BC4001B708E /* DollPageViewControllerBottoms.swift */,
@@ -330,6 +333,7 @@
 				CA016D3F2B05AF030066FBE7 /* NewPostViewController.swift in Sources */,
 				CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */,
 				CA016D592B074C4B0066FBE7 /* MyClosetPageViewController.swift in Sources */,
+				CA3B0FBD2B0C6C35001B708E /* ChangeClothesViewController.swift in Sources */,
 				CA016D452B05FC510066FBE7 /* FirebaseStorageManager.swift in Sources */,
 				CA016D322B04CB8D0066FBE7 /* Extensions.swift in Sources */,
 				CA016D1B2B04C93D0066FBE7 /* MyCloset.xcdatamodeld in Sources */,

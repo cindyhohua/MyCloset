@@ -145,6 +145,12 @@ class PaperDollTopsViewController: UIViewController{
         print(cloth)
         print(clothB)
         CoreDataManager.shared.addClothAndColor(category: (self.cloth?.category)!, subcategory: (self.cloth?.subcategory)!, item: (self.cloth?.item)!, clothArray: cloth, clothBArray: clothB, color: [red, green, blue])
+        guard let viewControllers = self.navigationController?.viewControllers else { return }
+        for controller in viewControllers {
+            if controller is MyClosetDetailPageViewController {
+            self.navigationController?.popToViewController(controller, animated: true)
+            }
+        }
     }
     
     @objc func backButtonTapped() {

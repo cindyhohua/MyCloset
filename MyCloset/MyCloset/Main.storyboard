@@ -40,10 +40,10 @@
             </objects>
             <point key="canvasLocation" x="1057" y="1439"/>
         </scene>
-        <!--View Controller-->
+        <!--Change Clothes View Controller-->
         <scene sceneID="8jC-nK-dnL">
             <objects>
-                <viewController id="nlc-P6-rRC" sceneMemberID="viewController">
+                <viewController id="nlc-P6-rRC" customClass="ChangeClothesViewController" customModule="MyCloset" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="IpJ-SB-NgD">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

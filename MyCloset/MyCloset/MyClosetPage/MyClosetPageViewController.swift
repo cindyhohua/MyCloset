@@ -19,6 +19,7 @@ class MyClosetPageViewController: UIViewController {
     let buttonTitle = ["Tops","Bottoms","Accessories"]
     var clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
     var sectionAll : [[Section]] = []
+    var sections: [Section] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -66,7 +67,7 @@ class MyClosetPageViewController: UIViewController {
     }
     
     
-    var sections: [Section] = []
+    
     
 }
 
