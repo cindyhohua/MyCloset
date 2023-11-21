@@ -11,6 +11,12 @@ import SnapKit
 class ChangeClothesViewController: UIViewController {
     var tableView = UITableView()
     var imageViewDoll = UIImageView()
+    var imageViewChanging = UIImageView()
+    var imageArray: [UIImage] = []
+    var currentIndex = 0
+    var timer: Timer?
+    let group = DispatchGroup()
+    
     let buttonTitle = ["Tops","Bottoms","Accessories"]
     var clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
     var sectionAll : [[Section]] = []
@@ -23,7 +29,29 @@ class ChangeClothesViewController: UIViewController {
         setup()
         makeSectionArray()
         tableView.reloadData()
+        let image1 = UIImage(named: "changing1") ?? UIImage()
+        let image2 = UIImage(named: "changing2") ?? UIImage()
+        imageArray = [image1, image2]
+        timer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(switchImage), userInfo: nil, repeats: true)
     }
+    
+    @objc func switchImage() {
+            // Update the imageView with the current image
+            imageViewChanging.image = imageArray[currentIndex]
+
+            // Move to the next image in the array
+            currentIndex += 1
+
+            // If currentIndex exceeds the array bounds, reset it to 0
+            if currentIndex >= imageArray.count {
+                currentIndex = 0
+            }
+        }
+
+        deinit {
+            // Invalidate the timer when the view controller is deallocated
+            timer?.invalidate()
+        }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         sections = []
@@ -65,8 +93,12 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         // Set up doll parts
         view.addSubview(imageViewDoll)
+        view.addSubview(imageViewChanging)
+        imageViewChanging.image = UIImage(named: "changing1")
+        imageViewChanging.isHidden = true
         imageViewDoll.image = UIImage(named: "doll")
         setupConstraints(for: imageViewDoll)
+        setupConstraints(for: imageViewChanging)
         addGestures(imageView: imageViewDoll)
 
         let codeSegmented = SegmentView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 44), buttonTitle: buttonTitle)
@@ -175,22 +207,32 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! ClosetPageCell
-        if cell.selectMine == true {
+        print("qq")
+        group.enter()
+        if !(sections[indexPath.section].items[indexPath.row].cloth?.isEmpty ?? true) {
+            imageViewChanging.isHidden = false
             removeImageViewFromDoll(name: (sections[indexPath.section].items[indexPath.row].subcategory ?? "") + (sections[indexPath.section].items[indexPath.row].item ?? ""))
-            cell.selectMine = false
-        } else {
-            addImageViewToDoll(name: (sections[indexPath.section].items[indexPath.row].subcategory ?? "") + (sections[indexPath.section].items[indexPath.row].item ?? ""), imageNameArrayB: sections[indexPath.section].items[indexPath.row].clothB ?? [],imageNameArray: sections[indexPath.section].items[indexPath.row].cloth ?? [], color: sections[indexPath.section].items[indexPath.row].color ?? [1.0, 1.0 ,1.0])
-            cell.selectMine = true
+            
+            DispatchQueue.global().async {
+                self.addImageViewToDoll(name: (self.sections[indexPath.section].items[indexPath.row].subcategory ?? "") + (self.sections[indexPath.section].items[indexPath.row].item ?? ""), imageNameArrayB: self.sections[indexPath.section].items[indexPath.row].clothB ?? [], imageNameArray: self.sections[indexPath.section].items[indexPath.row].cloth ?? [], color: self.sections[indexPath.section].items[indexPath.row].color ?? [1.0, 1.0, 1.0])
+            }
         }
     }
     
-    func addImageViewToDoll(name: String, imageNameArrayB: [String],imageNameArray: [String], color: [CGFloat]) {
+    func addImageViewToDoll(name: String, imageNameArrayB: [String], imageNameArray: [String], color: [CGFloat]) {
         let colorui = UIColor(red: color[0], green: color[1], blue: color[2], alpha: 1)
         if let image = mergeImages(imageSB: imageNameArrayB, imageS: imageNameArray, color: colorui) {
-            setupDollPart(imageView: &dollParts[name], imageName: image)
+            DispatchQueue.main.async {
+                self.setupDollPart(imageView: &self.dollParts[name], imageName: image)
+                self.group.leave()
+                self.imageViewChanging.isHidden = true
+            }
         } else {
             print("圖片合成失敗")
+            DispatchQueue.main.async {
+                self.group.leave()
+                self.imageViewChanging.isHidden = true
+            }
         }
     }
     
