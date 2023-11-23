@@ -15,7 +15,6 @@ class ChangeClothesViewController: UIViewController {
     var imageArray: [UIImage] = []
     var currentIndex = 0
     var timer: Timer?
-    let group = DispatchGroup()
     
     let buttonTitle = ["Tops","Bottoms","Accessories"]
     var clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
@@ -208,7 +207,6 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("qq")
-        group.enter()
         if !(sections[indexPath.section].items[indexPath.row].cloth?.isEmpty ?? true) {
             imageViewChanging.isHidden = false
             removeImageViewFromDoll(name: (sections[indexPath.section].items[indexPath.row].subcategory ?? "") + (sections[indexPath.section].items[indexPath.row].item ?? ""))
@@ -224,13 +222,11 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
         if let image = mergeImages(imageSB: imageNameArrayB, imageS: imageNameArray, color: colorui) {
             DispatchQueue.main.async {
                 self.setupDollPart(imageView: &self.dollParts[name], imageName: image)
-                self.group.leave()
                 self.imageViewChanging.isHidden = true
             }
         } else {
             print("圖片合成失敗")
             DispatchQueue.main.async {
-                self.group.leave()
                 self.imageViewChanging.isHidden = true
             }
         }

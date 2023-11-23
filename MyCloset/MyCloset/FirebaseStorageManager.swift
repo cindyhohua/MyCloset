@@ -142,6 +142,25 @@ class FirebaseStorageManager {
         }
     }
     
+    func addAuth(uid: String, author: Author, completion: @escaping (Result<Void, Error>) -> Void) {
+        let auth = db.collection("auth")
+        let document = auth.document(uid)
+        let authorData = [
+            "email": author.email,
+            "id": author.id,
+            "name": author.name
+        ]
+
+        document.setData(authorData) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+
+    
     func uploadImageAndGetURL(_ image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
         guard let imageData = image.jpegData(compressionQuality: 0.8) else {
             completion(.failure(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to convert image to data"])))
