@@ -30,11 +30,16 @@ class SignupViewController: UIViewController {
             } else {
                 print("nice")
                 print(authResult?.user.uid)
-                let author = Author(email: email, id: authResult?.user.uid ?? "", name: nickName)
+                let author = Author(email: email, id: authResult?.user.uid ?? "", name: nickName, image: "", height: "", weight: "", privateOrNot: false, littleWords: "", following: [], followers: [])
                 FirebaseStorageManager.shared.addAuth(uid: authResult?.user.uid ?? "", author: author) { result in
                     switch result {
                     case .success(_) :
                         print("success")
+                        if let previousVC = self.presentingViewController?.presentingViewController {
+                            previousVC.dismiss(animated: true)
+                        } else {
+                            self.dismiss(animated: true)
+                        }
                     case .failure(let error):
                         self.showAlert(title: "Error", message: error.localizedDescription)
                     }

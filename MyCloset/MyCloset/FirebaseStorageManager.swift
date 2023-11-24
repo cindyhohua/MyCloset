@@ -23,6 +23,13 @@ struct Author {
     let email: String
     let id: String
     let name: String
+    let image: String?
+    let height: String?
+    let weight: String?
+    let privateOrNot: Bool
+    let littleWords: String?
+    let following: [String]?
+    let followers: [String]?
 }
 
 struct Position {
@@ -44,6 +51,26 @@ class FirebaseStorageManager {
     private let db = Firestore.firestore()
 
     private init() {}
+    
+    func getAuth(completion: @escaping (Author) -> Void) {
+        let auth = db.collection("auth").document(Auth.auth().currentUser?.uid ?? "")
+        auth.getDocument { (document, error) in
+            if let error = error {
+                print("Error getting document: \(error)")
+            } else {
+                if let document = document, document.exists {
+                    let data = document.data()
+                    let email = data?["email"] as? String ?? ""
+                    let id = data?["id"] as? String ?? ""
+                    let name = data?["name"] as? String ?? ""
+                    completion(Author(email: email, id: id, name: name, image: "", height: "", weight: "", privateOrNot: false, littleWords: "", following: [], followers: []))
+                    print("Document data: \(data)")
+                } else {
+                    print("Document does not exist")
+                }
+            }
+        }
+    }
 
     func fetchData(completion: @escaping ([Article]) -> Void) {
             let articlesCollection = db.collection("articles")
@@ -59,7 +86,15 @@ class FirebaseStorageManager {
                         let dataAuthor = data["author"] as? [String: String]
                         let author = Author(email: dataAuthor?["email"] as? String ?? "",
                                             id: dataAuthor?["id"] as? String ?? "",
-                                            name: dataAuthor?["name"] as? String ?? "")
+                                            name: dataAuthor?["name"] as? String ?? "",
+                                            image: dataAuthor?["image"] as? String ?? "",
+                                            height: dataAuthor?["height"] as? String ?? "",
+                                            weight: dataAuthor?["weight"] as? String ?? "",
+                                            privateOrNot: dataAuthor?["privateOrNot"] as? Bool ?? false,
+                                            littleWords: dataAuthor?["littleWords"] as? String ?? "",
+                                            following: dataAuthor?["following"] as? [String] ?? [],
+                                            followers: dataAuthor?["followers"] as? [String] ?? []
+                        )
                         
                         let content = data["content"] as? String ?? ""
                         let createdTime = data["createdTime"] as? Double ?? 0.0
@@ -148,8 +183,15 @@ class FirebaseStorageManager {
         let authorData = [
             "email": author.email,
             "id": author.id,
-            "name": author.name
-        ]
+            "name": author.name,
+            "image": "",
+            "height": "",
+            "weight": "",
+            "privateOrnot": false,
+            "littleWords": "",
+            "following": [],
+            "followers": []
+        ] as [String : Any]
 
         document.setData(authorData) { error in
             if let error = error {

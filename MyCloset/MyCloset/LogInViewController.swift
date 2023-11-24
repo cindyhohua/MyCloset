@@ -18,6 +18,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         passwordTextField.isSecureTextEntry = true
+        
     }
 
     @IBAction func loginButtonTapped(_ sender: Any) {
@@ -32,7 +33,7 @@ class LoginViewController: UIViewController {
             } else {
                 print("User signed in successfully!")
                 print(authResult?.user.uid)
-                // You can navigate to another screen or perform additional actions here
+                self.dismiss(animated: true)
             }
         }
     }
