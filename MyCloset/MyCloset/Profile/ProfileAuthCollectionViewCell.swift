@@ -54,16 +54,16 @@ class ProfileAuthCollectionViewCell: UICollectionReusableView {
         nameLabel.font = UIFont.boldSystemFont(ofSize: 18)
         wordLabel.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.top.equalTo(nameLabel.snp.bottom)
+            make.top.equalTo(nameLabel.snp.bottom).offset(8)
         }
         heightLabel.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.top.equalTo(wordLabel.snp.bottom)
+            make.top.equalTo(wordLabel.snp.bottom).offset(8)
         }
         weightLabel.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.top.equalTo(heightLabel.snp.bottom)
-            make.bottom.equalTo(self).offset(-16)
+            make.top.equalTo(heightLabel.snp.bottom).offset(8)
+            make.bottom.lessThanOrEqualTo(self.snp.bottom).offset(-8) 
         }
     }
     
@@ -82,7 +82,7 @@ class ProfileAuthCollectionViewCell: UICollectionReusableView {
         if let height = author?.height {
             heightLabel.text = height
         }
-        if let weight = author?.height {
+        if let weight = author?.weight {
             weightLabel.text = weight
         }
     }

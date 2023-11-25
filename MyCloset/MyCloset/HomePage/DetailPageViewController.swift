@@ -61,9 +61,9 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
                 fatalError("Cant find cell")
             }
             var position: [CGPoint] = []
-            if article?.positions.isEmpty == false {
-                for i in 0..<(article?.positions.count ?? 0) {
-                    position.append(CGPointMake(article?.positions[i].x ?? 0 , article?.positions[i].y ?? 0))
+            if article?.position.isEmpty == false {
+                for i in 0..<(article?.position.count ?? 0) {
+                    position.append(CGPointMake(article?.position[i].x ?? 0 , article?.position[i].y ?? 0))
                 }
             }
             cell.isUserInteractionEnabled = true

@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 class ProfileViewController: UIViewController {
     fileprivate let collectionView: UICollectionView = {
@@ -14,6 +15,7 @@ class ProfileViewController: UIViewController {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
         cv.register(ProfileAuthCollectionViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ProfileAuthHeader")
+        cv.register(ProfileCollectionViewCell.self, forCellWithReuseIdentifier: "ProfileCell")
         cv.backgroundColor = UIColor.white
         return cv
     }()
@@ -21,6 +23,9 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         FirebaseStorageManager.shared.getAuth { author in
             self.author = author
             self.collectionView.reloadData()
@@ -57,7 +62,17 @@ class ProfileViewController: UIViewController {
 
 extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: 200)
+        let itemsPerRow = CGFloat(2)
+        let sectionInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
+        let paddingSpace =  sectionInsets.left * (itemsPerRow + 1)
+        let availableWidth = view.frame.width - paddingSpace
+        let widthPerItem = availableWidth / itemsPerRow
+        return CGSize(width: widthPerItem, height: widthPerItem*1.4)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let sectionInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
+        return sectionInsets
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -67,11 +82,16 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
 
 extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
+        return author?.post?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "profileViewCell", for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProfileCell", for: indexPath) as? ProfileCollectionViewCell else {
+            fatalError("Unable to dequeue ProfileCell")
+        }
+        if let imageURL = author?.post?[indexPath.row].image {
+            cell.image.kf.setImage(with: URL(string: imageURL))
+        }
         return cell
     }
 
@@ -81,7 +101,15 @@ extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataS
         }
         headerView.author = self.author
         headerView.configure()
-
         return headerView
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        FirebaseStorageManager.shared.fetchSpecificData(id: author?.post?[indexPath.row].id ?? "") { article in
+            let secondViewController = DetailPageViewController()
+            secondViewController.article = article
+            self.navigationController?.pushViewController(secondViewController, animated: true)
+        }
+        
     }
 }

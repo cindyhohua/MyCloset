@@ -30,6 +30,7 @@ class HomePageTableCell: UITableViewCell {
         img.translatesAutoresizingMaskIntoConstraints = false
         img.clipsToBounds = true
         img.layer.borderWidth = 1
+        img.contentMode = .scaleAspectFill
         img.layer.borderColor = UIColor.white.cgColor
         return img
     }()
