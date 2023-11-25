@@ -83,6 +83,29 @@ class FirebaseStorageManager {
             }
         }
     }
+    
+    func getSpecificAuth(id:String,completion: @escaping (Author) -> Void) {
+        let auth = db.collection("auth").document(id)
+        auth.getDocument { (document, error) in
+            if let error = error {
+                print("Error getting document: \(error)")
+            } else {
+                do {
+                    if let document = document, document.exists, let data = document.data() {
+                        let jsonData = try JSONSerialization.data(withJSONObject: data)
+                        let decoder = JSONDecoder()
+                        let author = try decoder.decode(Author.self, from: jsonData)
+                        completion(author)
+                        print("Document data: \(data)")
+                    } else {
+                        print("Document does not exist")
+                    }
+                } catch {
+                    print("Error decoding author data: \(error)")
+                }
+            }
+        }
+    }
 
     
     func fetchData(completion: @escaping ([Article]) -> Void) {
@@ -137,6 +160,69 @@ class FirebaseStorageManager {
         }
     }
     
+    func getFollowingArticles(completion: @escaping ([Article]) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion([])
+            return
+        }
+        db.collection("auth").document(currentUserID).getDocument { (document, error) in
+            if let error = error {
+                print("Error getting document: \(error)")
+                completion([])
+                return
+            }
+            
+            guard let following = document?.data()?["following"] as? [String] else {
+                print("Following list not found.")
+                completion([])
+                return
+            }
+            var articles: [Article] = []
+            
+            let dispatchGroup = DispatchGroup()
+            
+            for followerID in following {
+                dispatchGroup.enter()
+                
+                self.db.collection("articles")
+                    .whereField("author.id", isEqualTo: followerID)
+//                    .whereField("createdTime", isGreaterThan: Date().addingTimeInterval(-30 * 24 * 60 * 60).timeIntervalSince1970)
+                    .getDocuments { (querySnapshot, error) in
+                        defer {
+                            dispatchGroup.leave()
+                        }
+                        
+                        guard error == nil else {
+                            print("Error getting documents for \(followerID): \(error!)")
+                            return
+                        }
+                        
+                        guard let querySnapshot = querySnapshot else {
+                            print("Query snapshot is nil for \(followerID)")
+                            return
+                        }
+                        
+                        do {
+                            for document in querySnapshot.documents {
+                                let data = document.data()
+                                let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
+                                let decoder = JSONDecoder()
+                                let article = try decoder.decode(Article.self, from: jsonData)
+                                articles.append(article)
+                            }
+                        } catch {
+                            print("Error decoding JSON for \(followerID): \(error)")
+                        }
+                    }
+            }
+            
+            dispatchGroup.notify(queue: .main) {
+                
+                let sortedArticles = articles.sorted(by: { $0.createdTime > $1.createdTime })
+                completion(sortedArticles)
+            }
+        }
+    }
     
     private func parsePositions(_ positionsData: [[String: Double]]) -> [Position] {
         var positions: [Position] = []
@@ -221,7 +307,7 @@ class FirebaseStorageManager {
             "weight": "",
             "privateOrnot": false,
             "littleWords": "",
-            "following": [],
+            "following": [author.id],
             "followers": [],
             "post": [],
             "saved": []

@@ -26,14 +26,27 @@ class ProfileViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        FirebaseStorageManager.shared.getAuth { author in
-            self.author = author
-            self.collectionView.reloadData()
+        if author == nil {
+            mySetup()
+            FirebaseStorageManager.shared.getAuth { author in
+                self.author = author
+                self.collectionView.reloadData()
+            }
         }
     }
     
-    func setup() {
-        view.backgroundColor = .white
+    func othersSetup() {
+        let followButton = UIBarButtonItem(title: "Follow", style: .plain, target: self, action: #selector(followButtonTapped))
+        followButton.tintColor = UIColor.lightBrown()
+        navigationItem.rightBarButtonItem = followButton
+        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
+        navigationItem.leftBarButtonItem = leftButton
+        leftButton.tintColor = UIColor.lightBrown()
+        navigationItem.title = author?.name
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+    }
+    
+    func mySetup() {
         let addButton = UIBarButtonItem(title: "+ add", style: .plain, target: self, action: #selector(addButtonTapped))
         addButton.tintColor = UIColor.lightBrown()
         navigationItem.rightBarButtonItem = addButton
@@ -42,7 +55,10 @@ class ProfileViewController: UIViewController {
         leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "My Profile"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
-
+    }
+    
+    func setup() {
+        view.backgroundColor = .white
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
@@ -57,6 +73,13 @@ class ProfileViewController: UIViewController {
     
     @objc func heartButtonTapped() {
         
+    }
+    
+    @objc func followButtonTapped() {
+        
+    }
+    @objc func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
 }
 
