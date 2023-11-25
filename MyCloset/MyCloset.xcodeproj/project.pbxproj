@@ -47,6 +47,8 @@
 		CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */; };
 		CABCC7CC2B0F3EB700FB38C5 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */; };
 		CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */; };
+		CAF701122B11E7A00053B12B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF701112B11E7A00053B12B /* SearchViewController.swift */; };
+		CAF701142B1222440053B12B /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF701132B1222440053B12B /* NotificationViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,6 +91,8 @@
 		CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAuthCollectionViewCell.swift; sourceTree = "<group>"; };
 		CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
+		CAF701112B11E7A00053B12B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		CAF701132B1222440053B12B /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +183,8 @@
 				CA016D3E2B05AF030066FBE7 /* NewPostViewController.swift */,
 				CA016D422B05BF120066FBE7 /* NewPostSecondStepViewController.swift */,
 				CA016D402B05B76C0066FBE7 /* NewPostCell.swift */,
+				CAF701112B11E7A00053B12B /* SearchViewController.swift */,
+				CAF701132B1222440053B12B /* NotificationViewController.swift */,
 			);
 			path = HomePage;
 			sourceTree = "<group>";
@@ -345,6 +351,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CAF701122B11E7A00053B12B /* SearchViewController.swift in Sources */,
 				CA016D362B04CB8D0066FBE7 /* AppDelegate.swift in Sources */,
 				CA016D5D2B07691A0066FBE7 /* AddMyClothesViewController.swift in Sources */,
 				CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */,
@@ -360,6 +367,7 @@
 				CA3B0FB12B08DE8B001B708E /* DollPageViewController.swift in Sources */,
 				CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */,
 				CA3B0FB32B09CF76001B708E /* DollPageCVCell.swift in Sources */,
+				CAF701142B1222440053B12B /* NotificationViewController.swift in Sources */,
 				CA016D432B05BF120066FBE7 /* NewPostSecondStepViewController.swift in Sources */,
 				CA016D3F2B05AF030066FBE7 /* NewPostViewController.swift in Sources */,
 				CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */,

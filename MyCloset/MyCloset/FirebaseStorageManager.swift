@@ -31,6 +31,7 @@ struct Author: Codable {
     let littleWords: String?
     let following: [String]?
     let followers: [String]?
+    let pending: [String]?
     let post: [Post]?
     let saved: [Post]?
 }
@@ -73,7 +74,6 @@ class FirebaseStorageManager {
                         let decoder = JSONDecoder()
                         let author = try decoder.decode(Author.self, from: jsonData)
                         completion(author)
-                        print("Document data: \(data)")
                     } else {
                         print("Document does not exist")
                     }
@@ -96,7 +96,6 @@ class FirebaseStorageManager {
                         let decoder = JSONDecoder()
                         let author = try decoder.decode(Author.self, from: jsonData)
                         completion(author)
-                        print("Document data: \(data)")
                     } else {
                         print("Document does not exist")
                     }
@@ -128,7 +127,6 @@ class FirebaseStorageManager {
                     let article = try decoder.decode(Article.self, from: jsonData)
                     articles.append(article)
                 }
-                print(articles)
                 completion(articles)
             } catch {
                 print("Error decoding JSON: \(error)")
@@ -149,7 +147,6 @@ class FirebaseStorageManager {
                         let decoder = JSONDecoder()
                         let article = try decoder.decode(Article.self, from: jsonData)
                         completion(article)
-                        print("Specific document data: \(data)")
                     } else {
                         print("Document does not exist")
                     }
@@ -186,7 +183,7 @@ class FirebaseStorageManager {
                 
                 self.db.collection("articles")
                     .whereField("author.id", isEqualTo: followerID)
-//                    .whereField("createdTime", isGreaterThan: Date().addingTimeInterval(-30 * 24 * 60 * 60).timeIntervalSince1970)
+//                    .whereField("createdTime", isGreaterThan: (Date().timeIntervalSince1970 - (30 * 24 * 60 * 60)))
                     .getDocuments { (querySnapshot, error) in
                         defer {
                             dispatchGroup.leave()
@@ -222,6 +219,39 @@ class FirebaseStorageManager {
                 completion(sortedArticles)
             }
         }
+    }
+    
+    func searchFriends(query: String, completion: @escaping ([Author]) -> Void) {
+        db.collection("auth")
+            .whereField("name", isGreaterThanOrEqualTo: query)
+            .whereField("name", isLessThan: query + "z")
+            .getDocuments { (querySnapshot, error) in
+                guard error == nil else {
+                    print("Error getting documents: \(error!)")
+                    completion([])
+                    return
+                }
+                
+                guard let querySnapshot = querySnapshot else {
+                    print("Query snapshot is nil.")
+                    completion([])
+                    return
+                }
+                
+                let searchResults: [Author] = querySnapshot.documents.compactMap { document in
+                    do {
+                        let data = document.data()
+                        let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
+                        let decoder = JSONDecoder()
+                        return try decoder.decode(Author.self, from: jsonData)
+                    } catch {
+                        print("Error decoding JSON: \(error)")
+                        return nil
+                    }
+                }
+                
+                completion(searchResults)
+            }
     }
     
     private func parsePositions(_ positionsData: [[String: Double]]) -> [Position] {
@@ -289,7 +319,6 @@ class FirebaseStorageManager {
             "image" : imageURL,
             "createdTime": Date().timeIntervalSince1970
         ]
-        print(post)
         db.collection("auth").document(auth.id).updateData([
             "post": FieldValue.arrayUnion([post])
         ])
@@ -310,7 +339,8 @@ class FirebaseStorageManager {
             "following": [author.id],
             "followers": [],
             "post": [],
-            "saved": []
+            "saved": [],
+            "pending": []
         ] as [String : Any]
 
         document.setData(authorData) { error in
@@ -346,4 +376,107 @@ class FirebaseStorageManager {
             }
         }
     }
+    
+    func sendFriendRequest(toUserID: String, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        
+        db.collection("auth").document(toUserID).updateData([
+            "pending": FieldValue.arrayUnion([currentUserID])
+        ]) { error in
+            completion(error)
+        }
+    }
+    
+    func cancelFriendRequest(toUserID: String, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        
+        db.collection("auth").document(toUserID).updateData([
+            "pending": FieldValue.arrayRemove([currentUserID])
+        ]) { error in
+            completion(error)
+        }
+    }
+    
+    func listenForPendingRequests(completion: @escaping ([Author]) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion([])
+            return
+        }
+        
+        db.collection("auth").document(currentUserID).addSnapshotListener { (documentSnapshot, error) in
+            guard let document = documentSnapshot else {
+                print("Error fetching document: \(error!)")
+                completion([])
+                return
+            }
+            
+            if let pendingRequests = document.data()?["pending"] as? [String] {
+                // Fetch details of users who sent pending requests
+                var pendingAuthors: [Author] = []
+                
+                let dispatchGroup = DispatchGroup()
+                
+                for pendingID in pendingRequests {
+                    dispatchGroup.enter()
+                    
+                    self.getSpecificAuth(id: pendingID) { author in
+                        pendingAuthors.append(author)
+                        dispatchGroup.leave()
+                    }
+                }
+                
+                dispatchGroup.notify(queue: .main) {
+                    completion(pendingAuthors)
+                }
+            } else {
+                completion([])
+            }
+        }
+    }
+    
+    func acceptFriendRequest(authorID: String, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        
+        db.collection("auth").document(currentUserID).updateData([
+            "following": FieldValue.arrayUnion([authorID]),
+            "pending": FieldValue.arrayRemove([authorID])
+        ]) { error in
+            completion(error)
+        }
+    }
+    
+    func rejectFriendRequest(authorID: String, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        
+        db.collection("auth").document(currentUserID).updateData([
+            "pending": FieldValue.arrayRemove([authorID])
+        ]) { error in
+            completion(error)
+        }
+    }
+    
+    func removeFriend(friendID: String, completion: @escaping (Error?) -> Void) {
+            guard let currentUserID = Auth.auth().currentUser?.uid else {
+                completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+                return
+            }
+
+            db.collection("auth").document(currentUserID).updateData([
+                "following": FieldValue.arrayRemove([friendID])
+            ]) { error in
+                completion(error)
+            }
+        }
 }

@@ -45,7 +45,9 @@ class HomePageViewController: UIViewController {
         navigationItem.leftBarButtonItem = leftButton
         leftButton.tintColor = UIColor.lightBrown()
         let rightButton = UIBarButtonItem(image: UIImage(systemName: "bell.fill"), style: .plain, target: self, action: #selector(rightButtonTapped))
-        navigationItem.rightBarButtonItem = rightButton
+        let rightButtonSearch = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
+        rightButtonSearch.tintColor = UIColor.lightBrown()
+        navigationItem.rightBarButtonItems = [rightButton,rightButtonSearch]
         rightButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "Home Page"
         view.addSubview(createPostButton)
@@ -73,7 +75,12 @@ class HomePageViewController: UIViewController {
     }
     
     @objc func rightButtonTapped() {
-        print("right")
+        let secondViewController = NotificationViewController()
+        navigationController?.pushViewController(secondViewController, animated: true)
+    }
+    @objc func searchButtonTapped() {
+        let secondViewController = SearchViewController()
+        navigationController?.pushViewController(secondViewController, animated: true)
     }
 }
 

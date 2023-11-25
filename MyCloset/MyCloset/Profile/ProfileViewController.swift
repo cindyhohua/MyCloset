@@ -8,8 +8,10 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import FirebaseAuth
 
 class ProfileViewController: UIViewController {
+    private var followButton = UIBarButtonItem(title: "Follow", style: .plain, target: self, action: #selector(followButtonTapped))
     fileprivate let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -19,24 +21,33 @@ class ProfileViewController: UIViewController {
         cv.backgroundColor = UIColor.white
         return cv
     }()
-    var author: Author?
+    var author: Author? {
+        didSet {
+            self.collectionView.reloadData()
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
     }
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if author == nil {
             mySetup()
             FirebaseStorageManager.shared.getAuth { author in
                 self.author = author
-                self.collectionView.reloadData()
             }
         }
     }
     
     func othersSetup() {
-        let followButton = UIBarButtonItem(title: "Follow", style: .plain, target: self, action: #selector(followButtonTapped))
+        if author?.followers?.contains(Auth.auth().currentUser?.uid ?? "qq") == true {
+            followButton = UIBarButtonItem(title: "Following", style: .plain, target: self, action: #selector(unfollowButtonTapped))
+        } else if author?.pending?.contains(Auth.auth().currentUser?.uid ?? "qq") == true {
+            followButton = UIBarButtonItem(title: "Requesting", style: .plain, target: self, action: #selector(unrequestButtonTapped))
+        } else {
+            followButton = UIBarButtonItem(title: "Follow", style: .plain, target: self, action: #selector(followButtonTapped))
+        }
         followButton.tintColor = UIColor.lightBrown()
         navigationItem.rightBarButtonItem = followButton
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
@@ -76,7 +87,40 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func followButtonTapped() {
-        
+        FirebaseStorageManager.shared.sendFriendRequest(toUserID: author?.id ?? "") { error in
+            if let error = error {
+                print("Error sending friend request: \(error)")
+            } else {
+                self.followButton = UIBarButtonItem(title: "Requesting", style: .plain, target: self, action: #selector(self.unrequestButtonTapped))
+                self.followButton.tintColor = UIColor.lightBrown()
+                self.navigationItem.rightBarButtonItem = self.followButton
+                print("Friend request sent successfully")
+            }
+        }
+    }
+    @objc func unfollowButtonTapped() {
+        FirebaseStorageManager.shared.removeFriend(friendID: author?.id ?? "") { error in
+            if let error = error {
+                print("Error sending friend request: \(error)")
+            } else {
+                self.followButton = UIBarButtonItem(title: "Follow", style: .plain, target: self, action: #selector(self.followButtonTapped))
+                self.followButton.tintColor = UIColor.lightBrown()
+                self.navigationItem.rightBarButtonItem = self.followButton
+                print("unfollow")
+            }
+        }
+    }
+    @objc func unrequestButtonTapped() {
+        FirebaseStorageManager.shared.cancelFriendRequest(toUserID: author?.id ?? "") { error in
+            if let error = error {
+                print("Error sending friend request: \(error)")
+            } else {
+                self.followButton = UIBarButtonItem(title: "Follow", style: .plain, target: self, action: #selector(self.followButtonTapped))
+                self.followButton.tintColor = UIColor.lightBrown()
+                self.navigationItem.rightBarButtonItem = self.followButton
+                print("unrequest")
+            }
+        }
     }
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
@@ -123,7 +167,6 @@ extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataS
             fatalError("Unable to dequeue ProfileAuthCollectionViewCell")
         }
         headerView.author = self.author
-        headerView.configure()
         return headerView
     }
     
