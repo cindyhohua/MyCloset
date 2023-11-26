@@ -31,11 +31,18 @@ class ProfileViewController: UIViewController {
         setup()
     }
     override func viewDidAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        super.viewDidAppear(animated)
         if author == nil {
             mySetup()
             FirebaseStorageManager.shared.getAuth { author in
                 self.author = author
+            }
+        }
+        if let profileID = self.author?.id {
+            if profileID == Auth.auth().currentUser?.uid ?? "" {
+                FirebaseStorageManager.shared.getAuth { author in
+                    self.author = author
+                }
             }
         }
     }
@@ -58,9 +65,9 @@ class ProfileViewController: UIViewController {
     }
     
     func mySetup() {
-        let addButton = UIBarButtonItem(title: "+ add", style: .plain, target: self, action: #selector(addButtonTapped))
-        addButton.tintColor = UIColor.lightBrown()
-        navigationItem.rightBarButtonItem = addButton
+        let setButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(setButtonTapped))
+        setButton.tintColor = UIColor.lightBrown()
+        navigationItem.rightBarButtonItem = setButton
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "heart"), style: .plain, target: self, action: #selector(heartButtonTapped))
         navigationItem.leftBarButtonItem = leftButton
         leftButton.tintColor = UIColor.lightBrown()
@@ -78,8 +85,10 @@ class ProfileViewController: UIViewController {
         collectionView.dataSource = self
     }
 
-    @objc func addButtonTapped() {
-        
+    @objc func setButtonTapped() {
+        let secondViewController = EditProfileViewController()
+        secondViewController.author = self.author
+        self.navigationController?.pushViewController(secondViewController, animated: true)
     }
     
     @objc func heartButtonTapped() {

@@ -90,7 +90,7 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
         }
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "download20231105155350")?.withTintColor(UIColor.lightLightBrown())
+        imageView.image = UIImage(named: "Image")
         
         // Name Text Field Constraints
         nameTextField.snp.makeConstraints { make in

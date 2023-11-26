@@ -377,6 +377,22 @@ class FirebaseStorageManager {
         }
     }
     
+    func updateAuth(image: String, name: String, littleWords: String, weight: String, height: String, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        db.collection("auth").document(currentUserID).updateData([
+            "name": name,
+            "littleWords": littleWords,
+            "weight": weight,
+            "height": height,
+            "image": image
+        ]) { error in
+            completion(error)
+        }
+    }
+    
     func sendFriendRequest(toUserID: String, completion: @escaping (Error?) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
