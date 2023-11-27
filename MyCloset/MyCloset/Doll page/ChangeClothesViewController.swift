@@ -253,13 +253,15 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
             button.widthAnchor.constraint(equalToConstant: titleWidth + 20).isActive = true
             let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
             button.addGestureRecognizer(longPressGesture)
+            button.layer.borderColor = UIColor.white.cgColor
+            button.layer.borderWidth = 2
             
             stackView.addArrangedSubview(button)
         }
         view.addSubview(stackView)
         stackView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin)
-            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailingMargin).offset(-16) 
+            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailingMargin).offset(-16)
         }
     }
     
