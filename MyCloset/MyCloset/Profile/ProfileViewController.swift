@@ -30,8 +30,8 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         setup()
     }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         if author == nil {
             mySetup()
             FirebaseStorageManager.shared.getAuth { author in
@@ -50,7 +50,6 @@ class ProfileViewController: UIViewController {
     }
     
     func othersSetup() {
-        print("qqqqq",author?.followers)
         if author?.followers?.contains(Auth.auth().currentUser?.uid ?? "qq") == true {
             followButton = UIBarButtonItem(title: "Following", style: .plain, target: self, action: #selector(unfollowButtonTapped))
         } else if author?.pending?.contains(Auth.auth().currentUser?.uid ?? "qq") == true {
