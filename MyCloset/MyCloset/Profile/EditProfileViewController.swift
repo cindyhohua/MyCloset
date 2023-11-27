@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import FirebaseAuth
 
 class EditProfileViewController: UIViewController {
     var author: Author? {
@@ -121,6 +122,20 @@ class EditProfileViewController: UIViewController {
             make.bottom.equalTo(deleteAccountButton.snp.top).offset(-20)
             make.width.equalTo(150)
             make.height.equalTo(40)
+        }
+        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func logoutButtonTapped() {
+        do {
+            try Auth.auth().signOut()
+            dismiss(animated: true) {
+                if let tabBarController = self.tabBarController {
+                    tabBarController.selectedIndex = 0 
+                }
+            }
+        } catch {
+            print("Error signing out: \(error.localizedDescription)")
         }
     }
     

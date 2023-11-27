@@ -49,6 +49,7 @@
 		CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */; };
 		CAF701122B11E7A00053B12B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF701112B11E7A00053B12B /* SearchViewController.swift */; };
 		CAF701142B1222440053B12B /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF701132B1222440053B12B /* NotificationViewController.swift */; };
+		CAF701162B1346E90053B12B /* TopRankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF701152B1346E90053B12B /* TopRankingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,6 +94,7 @@
 		CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
 		CAF701112B11E7A00053B12B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		CAF701132B1222440053B12B /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
+		CAF701152B1346E90053B12B /* TopRankingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopRankingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,6 +187,7 @@
 				CA016D402B05B76C0066FBE7 /* NewPostCell.swift */,
 				CAF701112B11E7A00053B12B /* SearchViewController.swift */,
 				CAF701132B1222440053B12B /* NotificationViewController.swift */,
+				CAF701152B1346E90053B12B /* TopRankingViewController.swift */,
 			);
 			path = HomePage;
 			sourceTree = "<group>";
@@ -372,6 +375,7 @@
 				CA016D3F2B05AF030066FBE7 /* NewPostViewController.swift in Sources */,
 				CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */,
 				CA016D592B074C4B0066FBE7 /* MyClosetPageViewController.swift in Sources */,
+				CAF701162B1346E90053B12B /* TopRankingViewController.swift in Sources */,
 				CA3B0FBD2B0C6C35001B708E /* ChangeClothesViewController.swift in Sources */,
 				CABCC7CC2B0F3EB700FB38C5 /* EditProfileViewController.swift in Sources */,
 				CA016D452B05FC510066FBE7 /* FirebaseStorageManager.swift in Sources */,

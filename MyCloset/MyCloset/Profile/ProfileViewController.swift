@@ -37,6 +37,8 @@ class ProfileViewController: UIViewController {
             FirebaseStorageManager.shared.getAuth { author in
                 self.author = author
             }
+        } else {
+            othersSetup()
         }
         if let profileID = self.author?.id {
             if profileID == Auth.auth().currentUser?.uid ?? "" {
@@ -48,6 +50,7 @@ class ProfileViewController: UIViewController {
     }
     
     func othersSetup() {
+        print("qqqqq",author?.followers)
         if author?.followers?.contains(Auth.auth().currentUser?.uid ?? "qq") == true {
             followButton = UIBarButtonItem(title: "Following", style: .plain, target: self, action: #selector(unfollowButtonTapped))
         } else if author?.pending?.contains(Auth.auth().currentUser?.uid ?? "qq") == true {

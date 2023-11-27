@@ -71,7 +71,8 @@ class HomePageViewController: UIViewController {
     }
     
     @objc func leftButtonTapped() {
-        print("left")
+        let secondViewController = TopRankingViewController()
+        navigationController?.pushViewController(secondViewController, animated: true)
     }
     
     @objc func rightButtonTapped() {

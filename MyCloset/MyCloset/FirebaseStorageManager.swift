@@ -463,8 +463,14 @@ class FirebaseStorageManager {
         }
         
         db.collection("auth").document(currentUserID).updateData([
-            "following": FieldValue.arrayUnion([authorID]),
+            "followers": FieldValue.arrayUnion([authorID]),
             "pending": FieldValue.arrayRemove([authorID])
+        ]) { error in
+            completion(error)
+        }
+        
+        db.collection("auth").document(authorID).updateData([
+            "following": FieldValue.arrayUnion([currentUserID])
         ]) { error in
             completion(error)
         }
@@ -494,5 +500,11 @@ class FirebaseStorageManager {
             ]) { error in
                 completion(error)
             }
+        
+        db.collection("auth").document(friendID).updateData([
+            "followers": FieldValue.arrayRemove([currentUserID])
+        ]) { error in
+            completion(error)
+        }
         }
 }
