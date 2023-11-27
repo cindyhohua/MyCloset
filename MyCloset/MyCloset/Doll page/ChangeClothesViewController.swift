@@ -126,11 +126,18 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
     }
     
     @objc func mineButtonTapped() {
-        print("mine")
+        let secondViewController = MineDollViewController()
+        self.navigationController?.pushViewController(secondViewController, animated: true)
     }
     
     @objc func saveButtonTapped() {
-        print("save")
+        if let dollImage = imageViewDoll.asImage() {
+            guard let imageData = dollImage.jpegData(compressionQuality: 0.3) else {
+                return
+            }
+            let name = UUID().uuidString
+            CoreDataManager.shared.saveMineData(image: imageData, selectedItem: self.selectedItems, uuid: name)
+        }
     }
     
     func setupConstraints(for imageView: UIImageView) {

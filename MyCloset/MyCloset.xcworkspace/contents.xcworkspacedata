@@ -2,6 +2,15 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Clothes+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
+      location = "group:Mine+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:Mine+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:MyCloset.xcodeproj">
    </FileRef>
    <FileRef

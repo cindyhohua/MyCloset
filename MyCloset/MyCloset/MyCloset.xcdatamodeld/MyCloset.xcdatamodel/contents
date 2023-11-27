@@ -12,4 +12,9 @@
         <attribute name="store" optional="YES" attributeType="String"/>
         <attribute name="subcategory" optional="YES" attributeType="String"/>
     </entity>
+    <entity name="Mine" representedClassName="Mine" syncable="YES" codeGenerationType="class">
+        <attribute name="myWearing" optional="YES" attributeType="Binary"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="wearing" optional="YES" attributeType="Transformable" customClassName="NSArray"/>
+    </entity>
 </model>

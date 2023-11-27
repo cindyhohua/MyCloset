@@ -39,7 +39,6 @@ class CoreDataManager {
         })
         return container
     }()
-    
 
     var managedObjectContext: NSManagedObjectContext {
         return persistentContainer.viewContext
@@ -83,8 +82,37 @@ class CoreDataManager {
             return []
         }
     }
-
     
+    func fetchSpecificClothes(name: String) -> ClothesStruct? {
+        let fetchRequest: NSFetchRequest<Clothes> = Clothes.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "item == %@", name)
+        
+        do {
+            let result = try managedObjectContext.fetch(fetchRequest)
+            
+            if let specificClothes = result.first {
+                return ClothesStruct(
+                    category: specificClothes.category,
+                    subcategory: specificClothes.subcategory,
+                    item: specificClothes.item,
+                    price: specificClothes.price,
+                    store: specificClothes.store,
+                    content: specificClothes.content,
+                    image: specificClothes.image,
+                    cloth: specificClothes.cloth as? [String],
+                    clothB: specificClothes.clothB as? [String],
+                    color: specificClothes.color as? [CGFloat]
+                )
+            } else {
+                print("Clothes with item name \(name) not found.")
+                return nil
+            }
+        } catch {
+            print("Error fetching specific clothes data: \(error.localizedDescription)")
+            return nil
+        }
+    }
+
     func fetchAllCategoriesAndSubcategories() -> [String: [String]] {
         var categoriesWithSubcategories = [String: [String]]()
 
@@ -145,9 +173,6 @@ class CoreDataManager {
         }
     }
 
-    
-    
-    
     // MARK: - Fetch Data
     
     func fetchData() -> [ClothesStruct] {
@@ -203,6 +228,77 @@ class CoreDataManager {
         managedObjectContext.delete(clothes)
         saveContext()
     }
+    
+    func deleteMine(uuid: String) {
+        let fetchRequest: NSFetchRequest<Mine> = Mine.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "name == %@", uuid)
+        
+        do {
+            let result = try managedObjectContext.fetch(fetchRequest)
+            
+            if let mineToDelete = result.first {
+                managedObjectContext.delete(mineToDelete)
+                saveContext()
+            } else {
+                print("Mine object with UUID \(uuid) not found for deletion.")
+            }
+        } catch {
+            print("Error fetching Mine data for deletion: \(error.localizedDescription)")
+        }
+    }
+
+    
+    // MARK: - Mine
+    func saveMineData(image: Data, selectedItem: [String], uuid: String) {
+        let fetchRequest: NSFetchRequest<Mine> = Mine.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "name == %@", uuid)
+        
+        do {
+            let result = try managedObjectContext.fetch(fetchRequest)
+            
+            if let existingMine = result.first {
+                existingMine.myWearing = image
+                existingMine.wearing = selectedItem as NSArray
+            } else {
+                let newMine = Mine(context: managedObjectContext)
+                newMine.myWearing = image
+                newMine.wearing = selectedItem as NSArray
+                newMine.name = uuid
+            }
+            
+            saveContext()
+        } catch {
+            print("Error fetching data: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchAllMineData() -> [Mine] {
+        let fetchRequest: NSFetchRequest<Mine> = Mine.fetchRequest()
+
+        do {
+            let mineData = try managedObjectContext.fetch(fetchRequest)
+            return mineData
+        } catch {
+            print("Error fetching Mine data: \(error.localizedDescription)")
+            return []
+        }
+    }
+
+    
+//    func fetchMineData(forName name: String) -> Mine? {
+//        let fetchRequest: NSFetchRequest<Mine> = Mine.fetchRequest()
+//        fetchRequest.predicate = NSPredicate(format: "name == %@", name)
+//
+//        do {
+//            let result = try managedObjectContext.fetch(fetchRequest)
+//            return result.first
+//        } catch {
+//            print("Error fetching mine data: \(error.localizedDescription)")
+//            return nil
+//        }
+//    }
+
+
     
 
 }
