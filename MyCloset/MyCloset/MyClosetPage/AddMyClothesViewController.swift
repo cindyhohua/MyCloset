@@ -9,7 +9,7 @@ import SnapKit
 
 
 class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
+    var clothes: ClothesStruct?
     var categoryPicker = UIPickerView()
     var subcategoryPicker = UIPickerView()
     var imageView = UIImageView()
@@ -90,7 +90,9 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
         }
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "Image")
+        if clothes == nil {
+            imageView.image = UIImage(named: "Image")
+        }
         
         // Name Text Field Constraints
         nameTextField.snp.makeConstraints { make in
@@ -208,11 +210,39 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
         let storeName = storeTextField.text ?? ""
         let price = priceTextField.text ?? ""
         let content = contentTextField.text ?? ""
-        let image = imageView.image?.jpegData(compressionQuality: 0.5)
+        let image = imageView.image?.jpegData(compressionQuality: 0.3)
         
         CoreDataManager.shared.addClothes(category: categoryName, subcategory: subcategoryName, item: itemName, price: price, store: storeName, content: content, image: image)
-
-        
-        navigationController?.popViewController(animated: true)
+        guard let viewControllers = self.navigationController?.viewControllers else { return }
+        for controller in viewControllers {
+            if controller is MyClosetPageViewController {
+            self.navigationController?.popToViewController(controller, animated: true)
+            }
+        }
+    }
+    
+    func clothesEdit() {
+        if let clothe = clothes {
+            imageView.image = UIImage(data: clothe.image!)
+            categoryPicker.isHidden = true
+            subcategoryPicker.isHidden = true
+            nameTextField.text = clothe.item
+            nameTextField.isEnabled = false
+            nameTextField.textColor = .gray
+            storeTextField.text = clothe.store
+            priceTextField.text = clothe.price
+            contentTextField.text = clothe.content
+            imageView.snp.makeConstraints { make in
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(100)
+                make.bottom.equalTo(nameTextField.snp.top).offset(-10)
+                make.centerX.equalToSuperview()
+                make.width.equalTo(imageView.snp.height)
+            }
+            contentTextField.snp.makeConstraints { make in
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-100)
+                make.leading.trailing.equalToSuperview().inset(20)
+                make.height.equalTo(40)
+            }
+        }
     }
 }

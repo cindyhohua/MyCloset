@@ -204,16 +204,49 @@ class CoreDataManager {
     // MARK: - Add Data
 
     func addClothes(category: String, subcategory: String, item: String, price: String, store: String, content: String, image: Data?) {
-        let newClothes = Clothes(context: managedObjectContext)
-        newClothes.category = category
-        newClothes.subcategory = subcategory
-        newClothes.item = item
-        newClothes.price = price
-        newClothes.store = store
-        newClothes.content = content
-        newClothes.image = image
-
+        let fetchRequest: NSFetchRequest<Clothes> = Clothes.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "item == %@", item)
+        
+        do {
+            let result = try CoreDataManager.shared.managedObjectContext.fetch(fetchRequest)
+            if let existingClothes = result.first {
+                existingClothes.item = item
+                existingClothes.price = price
+                existingClothes.store = store
+                existingClothes.content = content
+                existingClothes.image = image
+            } else {
+                let newClothes = Clothes(context: managedObjectContext)
+                newClothes.category = category
+                newClothes.subcategory = subcategory
+                newClothes.item = item
+                newClothes.price = price
+                newClothes.store = store
+                newClothes.content = content
+                newClothes.image = image
+            }
+        } catch {
+            print("Error fetching data: \(error.localizedDescription)")
+        }
         saveContext()
+    }
+    
+    func deleteCloth(item: String) {
+        let fetchRequest: NSFetchRequest<Clothes> = Clothes.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "item == %@", item)
+        
+        do {
+            let result = try managedObjectContext.fetch(fetchRequest)
+            
+            if let mineToDelete = result.first {
+                managedObjectContext.delete(mineToDelete)
+                saveContext()
+            } else {
+                print("Mine object with UUID \(item) not found for deletion.")
+            }
+        } catch {
+            print("Error fetching Mine data for deletion: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Update Data

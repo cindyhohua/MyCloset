@@ -32,7 +32,7 @@ class ProfileViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if author == nil {
+        if author == nil || author?.id == Auth.auth().currentUser?.uid {
             mySetup()
             FirebaseStorageManager.shared.getAuth { author in
                 self.author = author

@@ -24,14 +24,29 @@ class MyClosetDetailPageViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
+//        let likeButton = UIBarButtonItem(image: UIImage(systemName: "heart"), style: .plain, target: self, action: #selector(heartButtonTapped))
+//        likeButton.tintColor = UIColor.brown
         navigationItem.leftBarButtonItem = leftButton
         leftButton.tintColor = UIColor.brown
         let rightButton = UIBarButtonItem(image: UIImage(systemName: "pencil.circle"), style: .plain, target: self, action: #selector(editButtonTapped))
-        navigationItem.rightBarButtonItem = rightButton
+        let deleteButton = UIBarButtonItem(image: UIImage(systemName: "trash"), style: .plain, target: self, action: #selector(trashButtonTapped))
+        navigationItem.rightBarButtonItems = [deleteButton, rightButton]
+
         rightButton.tintColor = UIColor.brown
+        deleteButton.tintColor = UIColor.brown
         navigationItem.title = (cloth?.category)! + "/" + (cloth?.subcategory)!
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.brown, NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         setup()
+    }
+
+//    @objc func heartButtonTapped() {
+//        print("like")
+//    }
+    
+    @objc func trashButtonTapped() {
+        print("delete")
+        CoreDataManager.shared.deleteCloth(item: (cloth?.item)!)
+        navigationController?.popViewController(animated: true)
     }
 
     @objc func backButtonTapped() {
@@ -40,6 +55,10 @@ class MyClosetDetailPageViewController: UIViewController {
     
     @objc func editButtonTapped() {
         print("edit")
+        let secondVC = AddMyClosetViewController()
+        secondVC.clothes = self.cloth
+        secondVC.clothesEdit()
+        self.navigationController?.pushViewController(secondVC, animated: true)
     }
     
     func setup() {

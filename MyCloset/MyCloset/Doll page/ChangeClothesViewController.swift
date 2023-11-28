@@ -132,7 +132,7 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
     
     @objc func saveButtonTapped() {
         if let dollImage = imageViewDoll.asImage() {
-            guard let imageData = dollImage.jpegData(compressionQuality: 0.3) else {
+            guard let imageData = dollImage.jpegData(compressionQuality: 0.5) else {
                 return
             }
             let name = UUID().uuidString

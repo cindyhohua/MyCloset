@@ -41,6 +41,15 @@ class MineDollViewController: UIViewController {
         }
         collectionView.delegate = self
         collectionView.dataSource = self
+        navigationItem.title = "Mine"
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
+            navigationItem.leftBarButtonItem = leftButton
+            leftButton.tintColor = UIColor.lightBrown()
+    }
+    
+    @objc func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
     
 }

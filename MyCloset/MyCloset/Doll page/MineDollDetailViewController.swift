@@ -55,8 +55,8 @@ class MineDollDetailViewController: UIViewController, UITableViewDelegate, UITab
         saveToAlbum.tintColor = UIColor.lightBrown()
         navigationItem.rightBarButtonItems = [saveToAlbum, saveButton, deleteButton]
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
-            navigationItem.leftBarButtonItem = leftButton
-            leftButton.tintColor = UIColor.lightBrown()
+        navigationItem.leftBarButtonItem = leftButton
+        leftButton.tintColor = UIColor.lightBrown()
     }
     
     @objc func backButtonTapped() {
