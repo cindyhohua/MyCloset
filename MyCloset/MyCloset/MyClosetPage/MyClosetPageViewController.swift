@@ -30,17 +30,13 @@ class MyClosetPageViewController: UIViewController, UITabBarControllerDelegate {
         clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
         makeSectionArray()
         tableView.reloadData()
-//        do {
-//            try Auth.auth().signOut()
-//        } catch {
-//            print("error")
-//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         sections = []
         sectionAll = []
+        setup()
         clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
         makeSectionArray()
         tableView.reloadData()
@@ -172,7 +168,7 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
         secondViewController.cloth = sections[indexPath.section].items[indexPath.row]
         navigationController?.pushViewController(secondViewController, animated: true)
     }
-
+    
     @objc func headerTapped(_ sender: UITapGestureRecognizer) {
         if let section = sender.view?.tag {
             sections[section].isExpanded.toggle()
@@ -183,10 +179,8 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
 
 extension MyClosetPageViewController: SegmentControlDelegate {
     func changeToIndex(_ manager: SegmentView, index: Int) {
-//        if index >= 0 && index < sectionAll.count && !self.sectionAll[index].isEmpty {
-            self.sections = self.sectionAll[index]
-            self.tableView.reloadData()
-//        }
+        self.sections = self.sectionAll[index]
+        self.tableView.reloadData()
     }
 }
 

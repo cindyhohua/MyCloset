@@ -120,7 +120,10 @@ class MyClosetDetailPageViewController: UIViewController {
             let secondViewController = PaperDollBottomsViewController()
             secondViewController.cloth = cloth
             navigationController?.pushViewController(secondViewController, animated: true)
-        case "Accessories": print("Accessories")
+        case "Accessories":
+            let secondViewController = PaperDollAccessoriesViewController()
+            secondViewController.cloth = cloth
+            navigationController?.pushViewController(secondViewController, animated: true)
         default: print("default")
         }
         
