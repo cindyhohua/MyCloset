@@ -1,11 +1,13 @@
 PODS:
   - Alamofire (5.8.0)
+  - IQKeyboardManager (6.5.16)
   - Kingfisher (7.9.1)
   - SnapKit (5.6.0)
   - SwiftLint (0.54.0)
 
 DEPENDENCIES:
   - Alamofire
+  - IQKeyboardManager
   - Kingfisher
   - SnapKit (~> 5.6.0)
   - SwiftLint
@@ -13,16 +15,18 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - IQKeyboardManager
     - Kingfisher
     - SnapKit
     - SwiftLint
 
 SPEC CHECKSUMS:
   Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
+  IQKeyboardManager: 024b54d7dcb765c5bc99882cb4d5ea24a8cb7c3c
   Kingfisher: 1d14e9f59cbe19389f591c929000332bf70efd32
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   SwiftLint: c1de071d9d08c8aba837545f6254315bc900e211
 
-PODFILE CHECKSUM: f481c40e0899009ada3f88ad4bb8565b425c0087
+PODFILE CHECKSUM: 872904959da281ed59726dec5ddbca8c2c7a7553
 
 COCOAPODS: 1.13.0

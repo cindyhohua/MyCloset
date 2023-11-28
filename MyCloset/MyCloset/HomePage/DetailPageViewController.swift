@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 class DetailPageViewController: UIViewController {
     var article: Article?
     var tableView = UITableView()
@@ -23,12 +24,26 @@ class DetailPageViewController: UIViewController {
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
             leftButton.tintColor = UIColor.brown
+        let rightButton = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle.fill"), style: .plain, target: self, action: #selector(profileButtonTapped))
+            navigationItem.rightBarButtonItem = rightButton
+            rightButton.tintColor = UIColor.brown
         navigationItem.title = article?.author.name
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.brown, NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         setupTableView()
     }
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func profileButtonTapped() {
+        let secondViewController = ProfileViewController()
+        if article?.author.id != Auth.auth().currentUser?.uid {
+            FirebaseStorageManager.shared.getSpecificAuth(id: article?.author.id ?? "") { author in
+                secondViewController.author = author
+                secondViewController.othersSetup()
+            }
+        }
+        self.navigationController?.pushViewController(secondViewController, animated: true)
     }
 }
 
@@ -61,9 +76,9 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
                 fatalError("Cant find cell")
             }
             var position: [CGPoint] = []
-            if article?.positions.isEmpty == false {
-                for i in 0..<(article?.positions.count ?? 0) {
-                    position.append(CGPointMake(article?.positions[i].x ?? 0 , article?.positions[i].y ?? 0))
+            if article?.position.isEmpty == false {
+                for i in 0..<(article?.position.count ?? 0) {
+                    position.append(CGPointMake(article?.position[i].x ?? 0 , article?.position[i].y ?? 0))
                 }
             }
             cell.isUserInteractionEnabled = true

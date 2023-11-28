@@ -11,5 +11,6 @@ pod 'SwiftLint'
 pod 'SnapKit', '~> 5.6.0'
 pod 'Alamofire'
 pod 'Kingfisher'
+pod 'IQKeyboardManager'
 
 end

@@ -21,3 +21,12 @@ extension UIColor {
         return UIColor(red: 2.24/2.55, green: 2.16/2.55, blue: 2.07/2.55, alpha: 1)
         }
 }
+
+extension UIView {
+    func asImage() -> UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: bounds.size)
+        return renderer.image { context in
+            layer.render(in: context.cgContext)
+        }
+    }
+}

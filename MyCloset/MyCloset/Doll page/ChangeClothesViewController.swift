@@ -15,7 +15,6 @@ class ChangeClothesViewController: UIViewController {
     var imageArray: [UIImage] = []
     var currentIndex = 0
     var timer: Timer?
-    let group = DispatchGroup()
     
     let buttonTitle = ["Tops","Bottoms","Accessories"]
     var clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
@@ -23,7 +22,8 @@ class ChangeClothesViewController: UIViewController {
     var sections: [Section] = []
     var dollParts: [String: UIImageView] = [:]
     var segmentesIndex: Int = 0
-    var selectedItems: [(Int, IndexPath)] = []
+    var selectedItems: [String] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -36,22 +36,16 @@ class ChangeClothesViewController: UIViewController {
     }
     
     @objc func switchImage() {
-            // Update the imageView with the current image
             imageViewChanging.image = imageArray[currentIndex]
-
-            // Move to the next image in the array
             currentIndex += 1
-
-            // If currentIndex exceeds the array bounds, reset it to 0
             if currentIndex >= imageArray.count {
                 currentIndex = 0
             }
         }
-
         deinit {
-            // Invalidate the timer when the view controller is deallocated
             timer?.invalidate()
         }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         sections = []
@@ -121,6 +115,28 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
             make.top.equalTo(codeSegmented.snp.bottom).offset(1)
             make.leading.trailing.equalTo(view)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        let MineButton = UIBarButtonItem(title: "Mine", style: .plain, target: self, action: #selector(mineButtonTapped))
+        MineButton.tintColor = UIColor.lightBrown()
+        navigationItem.leftBarButtonItem = MineButton
+        let saveButton = UIBarButtonItem(title: "save", style: .plain, target: self, action: #selector(saveButtonTapped))
+        navigationItem.rightBarButtonItem = saveButton
+        saveButton.tintColor = UIColor.lightBrown()
+    }
+    
+    @objc func mineButtonTapped() {
+        let secondViewController = MineDollViewController()
+        self.navigationController?.pushViewController(secondViewController, animated: true)
+    }
+    
+    @objc func saveButtonTapped() {
+        if let dollImage = imageViewDoll.asImage() {
+            guard let imageData = dollImage.jpegData(compressionQuality: 0.5) else {
+                return
+            }
+            let name = UUID().uuidString
+            CoreDataManager.shared.saveMineData(image: imageData, selectedItem: self.selectedItems, uuid: name)
         }
     }
     
@@ -207,14 +223,74 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("qq")
-        group.enter()
         if !(sections[indexPath.section].items[indexPath.row].cloth?.isEmpty ?? true) {
             imageViewChanging.isHidden = false
-            removeImageViewFromDoll(name: (sections[indexPath.section].items[indexPath.row].subcategory ?? "") + (sections[indexPath.section].items[indexPath.row].item ?? ""))
-            
+            let name = sections[indexPath.section].items[indexPath.row].item ?? ""
+            removeImageViewFromDoll(name: name)
+            if selectedItems.contains(name) == false {
+                selectedItems.append(name)
+            }
+            print(selectedItems)
+            addButtonTag(items: selectedItems)
             DispatchQueue.global().async {
-                self.addImageViewToDoll(name: (self.sections[indexPath.section].items[indexPath.row].subcategory ?? "") + (self.sections[indexPath.section].items[indexPath.row].item ?? ""), imageNameArrayB: self.sections[indexPath.section].items[indexPath.row].clothB ?? [], imageNameArray: self.sections[indexPath.section].items[indexPath.row].cloth ?? [], color: self.sections[indexPath.section].items[indexPath.row].color ?? [1.0, 1.0, 1.0])
+                self.addImageViewToDoll(name: name,
+                     imageNameArrayB: self.sections[indexPath.section].items[indexPath.row].clothB ?? [],
+                     imageNameArray: self.sections[indexPath.section].items[indexPath.row].cloth ?? [],
+                     color: self.sections[indexPath.section].items[indexPath.row].color ?? [1.0, 1.0, 1.0])
+            }
+        }
+    }
+    
+    func addButtonTag(items: [String]) {
+        clearButtons()
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .trailing
+        stackView.spacing = 8
+        
+        for item in items {
+            let button = UIButton()
+            button.setTitle(item, for: .normal)
+            button.setTitleColor(.brown, for: .normal)
+            button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+            button.backgroundColor = UIColor.lightLightBrown()
+            button.layer.cornerRadius = 15
+            let titleWidth = button.titleLabel?.intrinsicContentSize.width ?? 0
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.widthAnchor.constraint(equalToConstant: titleWidth + 20).isActive = true
+            let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
+            button.addGestureRecognizer(longPressGesture)
+            button.layer.borderColor = UIColor.white.cgColor
+            button.layer.borderWidth = 2
+            
+            stackView.addArrangedSubview(button)
+        }
+        view.addSubview(stackView)
+        stackView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin)
+            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailingMargin).offset(-16)
+        }
+    }
+    
+    @objc func longPress(_ gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .began {
+            guard let button = gesture.view as? UIButton else {
+                return
+            }
+            selectedItems.removeAll { $0 == button.currentTitle }
+            removeImageViewFromDoll(name: button.currentTitle!)
+            addButtonTag(items: selectedItems)
+        }
+    }
+    
+    @objc func buttonTapped(_ sender: UIButton) {
+        imageViewDoll.bringSubviewToFront(dollParts[sender.currentTitle ?? ""]! )
+    }
+    
+    func clearButtons() {
+        for subview in view.subviews {
+            if let stackView = subview as? UIStackView {
+                stackView.removeFromSuperview()
             }
         }
     }
@@ -224,13 +300,11 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
         if let image = mergeImages(imageSB: imageNameArrayB, imageS: imageNameArray, color: colorui) {
             DispatchQueue.main.async {
                 self.setupDollPart(imageView: &self.dollParts[name], imageName: image)
-                self.group.leave()
                 self.imageViewChanging.isHidden = true
             }
         } else {
             print("圖片合成失敗")
             DispatchQueue.main.async {
-                self.group.leave()
                 self.imageViewChanging.isHidden = true
             }
         }

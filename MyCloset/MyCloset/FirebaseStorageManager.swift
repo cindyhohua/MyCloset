@@ -10,27 +10,44 @@ import UIKit
 import Firebase
 import FirebaseStorage
 
-struct Article {
+
+struct Article: Codable {
     let author: Author
     let content: String
     let createdTime: Double
     let id: String
     let imageURL: String
     let productList: [Product]
-    let positions: [Position]
+    let position: [Position]
 }
-struct Author {
+struct Author: Codable {
     let email: String
     let id: String
     let name: String
+    let image: String?
+    let height: String?
+    let weight: String?
+    let privateOrNot: Bool?
+    let littleWords: String?
+    let following: [String]?
+    let followers: [String]?
+    let pending: [String]?
+    let post: [Post]?
+    let saved: [Post]?
 }
 
-struct Position {
+struct Post: Codable{
+    let id: String
+    let image: String
+    let createdTime: Double
+}
+
+struct Position: Codable {
     let x: Double
     let y: Double
 }
 
-struct Product {
+struct Product: Codable {
     let productName: String
     let productStore: String
     let productPrice: String
@@ -44,76 +61,231 @@ class FirebaseStorageManager {
     private let db = Firestore.firestore()
 
     private init() {}
-
-    func fetchData(completion: @escaping ([Article]) -> Void) {
-            let articlesCollection = db.collection("articles")
-            articlesCollection.order(by: "createdTime", descending: true).getDocuments { (querySnapshot, error) in
-                if let error = error {
-                    print("Error getting documents: \(error)")
-                    completion([])
-                } else {
-                    var articles: [Article] = []
-                    for document in querySnapshot!.documents {
-                        let data = document.data()
-                        let imageURL = data["imageURL"] as? String ?? ""
-                        let dataAuthor = data["author"] as? [String: String]
-                        let author = Author(email: dataAuthor?["email"] as? String ?? "",
-                                            id: dataAuthor?["id"] as? String ?? "",
-                                            name: dataAuthor?["name"] as? String ?? "")
-                        
-                        let content = data["content"] as? String ?? ""
-                        let createdTime = data["createdTime"] as? Double ?? 0.0
-                        let id = document.documentID
-                        let positions = self.parsePositions(data["position"] as? [[String: Double]] ?? [])
-                        let productList = self.parseProducts(data["productList"] as? [[String: String]] ?? [])
-                        
-                        let article = Article(author: author,
-                                              content: content,
-                                              createdTime: createdTime,
-                                              id: id,
-                                              imageURL: imageURL,
-                                              productList: productList,
-                                              positions: positions)
-                        
-                        articles.append(article)
+    
+    func getAuth(completion: @escaping (Author) -> Void) {
+        let auth = db.collection("auth").document(Auth.auth().currentUser?.uid ?? "")
+        auth.getDocument { (document, error) in
+            if let error = error {
+                print("Error getting document: \(error)")
+            } else {
+                do {
+                    if let document = document, document.exists, let data = document.data() {
+                        let jsonData = try JSONSerialization.data(withJSONObject: data)
+                        let decoder = JSONDecoder()
+                        let author = try decoder.decode(Author.self, from: jsonData)
+                        completion(author)
+                    } else {
+                        print("Document does not exist")
                     }
-                    completion(articles)
+                } catch {
+                    print("Error decoding author data: \(error)")
                 }
             }
         }
-        
-        private func parsePositions(_ positionsData: [[String: Double]]) -> [Position] {
-            var positions: [Position] = []
-            for positionData in positionsData {
-                if let x = positionData["x"],
-                   let y = positionData["y"] {
-                    let position = Position(x: x, y: y)
-                    positions.append(position)
+    }
+    
+    func getSpecificAuth(id:String,completion: @escaping (Author) -> Void) {
+        let auth = db.collection("auth").document(id)
+        auth.getDocument { (document, error) in
+            if let error = error {
+                print("Error getting document: \(error)")
+            } else {
+                do {
+                    if let document = document, document.exists, let data = document.data() {
+                        let jsonData = try JSONSerialization.data(withJSONObject: data)
+                        let decoder = JSONDecoder()
+                        let author = try decoder.decode(Author.self, from: jsonData)
+                        completion(author)
+                    } else {
+                        print("Document does not exist")
+                    }
+                } catch {
+                    print("Error decoding author data: \(error)")
                 }
             }
-            return positions
         }
-        
-        private func parseProducts(_ productsData: [[String: String]]) -> [Product] {
-            var products: [Product] = []
-            for productData in productsData {
-                let productName = productData["productName"] ?? ""
-                let productStore = productData["productStore"] ?? ""
-                let productPrice = productData["productPrice"] ?? ""
-                let productComment = productData["productComment"] ?? ""
-                
-                let product = Product(productName: productName,
-                                      productStore: productStore,
-                                      productPrice: productPrice,
-                                      productComment: productComment)
-                
-                products.append(product)
+    }
+
+    
+    func fetchData(completion: @escaping ([Article]) -> Void) {
+        let articlesCollection = db.collection("articles")
+
+        articlesCollection.order(by: "createdTime", descending: true).getDocuments { (querySnapshot, error) in
+            guard error == nil else {
+                print("Error getting documents: \(error!)")
+                completion([])
+                return
             }
-            return products
+
+            var articles: [Article] = []
+
+            do {
+                for document in querySnapshot!.documents {
+                    let data = document.data()
+                    let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
+                    let decoder = JSONDecoder()
+                    let article = try decoder.decode(Article.self, from: jsonData)
+                    articles.append(article)
+                }
+                completion(articles)
+            } catch {
+                print("Error decoding JSON: \(error)")
+                completion([])
+            }
         }
+    }
+    
+    func fetchSpecificData(id: String, completion: @escaping (Article) -> Void) {
+        let auth = db.collection("articles").document(id)
+        auth.getDocument { (document, error) in
+            if let error = error {
+                print("Error getting document: \(error)")
+            } else {
+                do {
+                    if let document = document, document.exists, let data = document.data() {
+                        let jsonData = try JSONSerialization.data(withJSONObject: data)
+                        let decoder = JSONDecoder()
+                        let article = try decoder.decode(Article.self, from: jsonData)
+                        completion(article)
+                    } else {
+                        print("Document does not exist")
+                    }
+                } catch {
+                    print("Error decoding author data: \(error)")
+                }
+            }
+        }
+    }
+    
+    func getFollowingArticles(completion: @escaping ([Article]) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion([])
+            return
+        }
+        db.collection("auth").document(currentUserID).getDocument { (document, error) in
+            if let error = error {
+                print("Error getting document: \(error)")
+                completion([])
+                return
+            }
+            
+            guard let following = document?.data()?["following"] as? [String] else {
+                print("Following list not found.")
+                completion([])
+                return
+            }
+            var articles: [Article] = []
+            
+            let dispatchGroup = DispatchGroup()
+            
+            for followerID in following {
+                dispatchGroup.enter()
+                
+                self.db.collection("articles")
+                    .whereField("author.id", isEqualTo: followerID)
+//                    .whereField("createdTime", isGreaterThan: (Date().timeIntervalSince1970 - (30 * 24 * 60 * 60)))
+                    .getDocuments { (querySnapshot, error) in
+                        defer {
+                            dispatchGroup.leave()
+                        }
+                        
+                        guard error == nil else {
+                            print("Error getting documents for \(followerID): \(error!)")
+                            return
+                        }
+                        
+                        guard let querySnapshot = querySnapshot else {
+                            print("Query snapshot is nil for \(followerID)")
+                            return
+                        }
+                        
+                        do {
+                            for document in querySnapshot.documents {
+                                let data = document.data()
+                                let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
+                                let decoder = JSONDecoder()
+                                let article = try decoder.decode(Article.self, from: jsonData)
+                                articles.append(article)
+                            }
+                        } catch {
+                            print("Error decoding JSON for \(followerID): \(error)")
+                        }
+                    }
+            }
+            
+            dispatchGroup.notify(queue: .main) {
+                
+                let sortedArticles = articles.sorted(by: { $0.createdTime > $1.createdTime })
+                completion(sortedArticles)
+            }
+        }
+    }
+    
+    func searchFriends(query: String, completion: @escaping ([Author]) -> Void) {
+        db.collection("auth")
+            .whereField("name", isGreaterThanOrEqualTo: query)
+            .whereField("name", isLessThan: query + "z")
+            .getDocuments { (querySnapshot, error) in
+                guard error == nil else {
+                    print("Error getting documents: \(error!)")
+                    completion([])
+                    return
+                }
+                
+                guard let querySnapshot = querySnapshot else {
+                    print("Query snapshot is nil.")
+                    completion([])
+                    return
+                }
+                
+                let searchResults: [Author] = querySnapshot.documents.compactMap { document in
+                    do {
+                        let data = document.data()
+                        let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
+                        let decoder = JSONDecoder()
+                        return try decoder.decode(Author.self, from: jsonData)
+                    } catch {
+                        print("Error decoding JSON: \(error)")
+                        return nil
+                    }
+                }
+                
+                completion(searchResults)
+            }
+    }
+    
+    private func parsePositions(_ positionsData: [[String: Double]]) -> [Position] {
+        var positions: [Position] = []
+        for positionData in positionsData {
+            if let x = positionData["x"],
+               let y = positionData["y"] {
+                let position = Position(x: x, y: y)
+                positions.append(position)
+            }
+        }
+        return positions
+    }
+    
+    private func parseProducts(_ productsData: [[String: String]]) -> [Product] {
+        var products: [Product] = []
+        for productData in productsData {
+            let productName = productData["productName"] ?? ""
+            let productStore = productData["productStore"] ?? ""
+            let productPrice = productData["productPrice"] ?? ""
+            let productComment = productData["productComment"] ?? ""
+            
+            let product = Product(productName: productName,
+                                  productStore: productStore,
+                                  productPrice: productPrice,
+                                  productComment: productComment)
+            
+            products.append(product)
+        }
+        return products
+    }
     
     
-    func addArticle(imageURL: String, content: String, positions: [CGPoint] , productList: [Product], completion: @escaping (Error?) -> Void) {
+    func addArticle(auth: Author,imageURL: String, content: String, positions: [CGPoint] , productList: [Product], completion: @escaping (Error?) -> Void) {
         let convertedPositions: [[String: CGFloat]] = positions.map { point in
             return ["x": point.x, "y": point.y]
         }
@@ -124,9 +296,10 @@ class FirebaseStorageManager {
         let articles = db.collection("articles")
         let document = articles.document()
         let author = [
-            "email": "cindyhohua.tw",
-            "id": "cindyhohuahahaha",
-            "name": "白花油點馬啾"
+            "email": auth.email,
+            "id": auth.id,
+            "name": auth.name,
+            "image": auth.image
         ]
         let data: [String: Any] = [
             "author": author,
@@ -140,10 +313,48 @@ class FirebaseStorageManager {
         document.setData(data) { error in
             completion(error)
         }
+        
+        let post : [String: Any] = [
+            "id" : document.documentID,
+            "image" : imageURL,
+            "createdTime": Date().timeIntervalSince1970
+        ]
+        db.collection("auth").document(auth.id).updateData([
+            "post": FieldValue.arrayUnion([post])
+        ])
     }
     
+    func addAuth(uid: String, author: Author, completion: @escaping (Result<Void, Error>) -> Void) {
+        let auth = db.collection("auth")
+        let document = auth.document(uid)
+        let authorData = [
+            "email": author.email,
+            "id": author.id,
+            "name": author.name,
+            "image": "",
+            "height": "",
+            "weight": "",
+            "privateOrnot": false,
+            "littleWords": "",
+            "following": [author.id],
+            "followers": [],
+            "post": [],
+            "saved": [],
+            "pending": []
+        ] as [String : Any]
+
+        document.setData(authorData) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+
+    
     func uploadImageAndGetURL(_ image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
-        guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
             completion(.failure(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to convert image to data"])))
             return
         }
@@ -165,4 +376,135 @@ class FirebaseStorageManager {
             }
         }
     }
+    
+    func updateAuth(image: String, name: String, littleWords: String, weight: String, height: String, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        db.collection("auth").document(currentUserID).updateData([
+            "name": name,
+            "littleWords": littleWords,
+            "weight": weight,
+            "height": height,
+            "image": image
+        ]) { error in
+            completion(error)
+        }
+    }
+    
+    func sendFriendRequest(toUserID: String, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        
+        db.collection("auth").document(toUserID).updateData([
+            "pending": FieldValue.arrayUnion([currentUserID])
+        ]) { error in
+            completion(error)
+        }
+    }
+    
+    func cancelFriendRequest(toUserID: String, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        
+        db.collection("auth").document(toUserID).updateData([
+            "pending": FieldValue.arrayRemove([currentUserID])
+        ]) { error in
+            completion(error)
+        }
+    }
+    
+    func listenForPendingRequests(completion: @escaping ([Author]) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion([])
+            return
+        }
+        
+        db.collection("auth").document(currentUserID).addSnapshotListener { (documentSnapshot, error) in
+            guard let document = documentSnapshot else {
+                print("Error fetching document: \(error!)")
+                completion([])
+                return
+            }
+            
+            if let pendingRequests = document.data()?["pending"] as? [String] {
+                // Fetch details of users who sent pending requests
+                var pendingAuthors: [Author] = []
+                
+                let dispatchGroup = DispatchGroup()
+                
+                for pendingID in pendingRequests {
+                    dispatchGroup.enter()
+                    
+                    self.getSpecificAuth(id: pendingID) { author in
+                        pendingAuthors.append(author)
+                        dispatchGroup.leave()
+                    }
+                }
+                
+                dispatchGroup.notify(queue: .main) {
+                    completion(pendingAuthors)
+                }
+            } else {
+                completion([])
+            }
+        }
+    }
+    
+    func acceptFriendRequest(authorID: String, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        
+        db.collection("auth").document(currentUserID).updateData([
+            "followers": FieldValue.arrayUnion([authorID]),
+            "pending": FieldValue.arrayRemove([authorID])
+        ]) { error in
+            completion(error)
+        }
+        
+        db.collection("auth").document(authorID).updateData([
+            "following": FieldValue.arrayUnion([currentUserID])
+        ]) { error in
+            completion(error)
+        }
+    }
+    
+    func rejectFriendRequest(authorID: String, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        
+        db.collection("auth").document(currentUserID).updateData([
+            "pending": FieldValue.arrayRemove([authorID])
+        ]) { error in
+            completion(error)
+        }
+    }
+    
+    func removeFriend(friendID: String, completion: @escaping (Error?) -> Void) {
+            guard let currentUserID = Auth.auth().currentUser?.uid else {
+                completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+                return
+            }
+
+            db.collection("auth").document(currentUserID).updateData([
+                "following": FieldValue.arrayRemove([friendID])
+            ]) { error in
+                completion(error)
+            }
+        
+        db.collection("auth").document(friendID).updateData([
+            "followers": FieldValue.arrayRemove([currentUserID])
+        ]) { error in
+            completion(error)
+        }
+        }
 }

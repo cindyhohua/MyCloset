@@ -13,6 +13,7 @@ class NewPostSecondStepViewController: UIViewController {
     var selectedImage: UIImage?
     var tableView = UITableView()
     var actualPositions: [CGPoint] = []
+    var author: Author?
     
     func convertToActualPosition(_ relativePosition: CGPoint) -> CGPoint {
         let actualX = relativePosition.x * (view.bounds.width-32)
@@ -34,6 +35,9 @@ class NewPostSecondStepViewController: UIViewController {
         navigationItem.rightBarButtonItem?.isEnabled = true
         actualPositions = position.map { convertToActualPosition($0) }
         setupTableView()
+        FirebaseStorageManager.shared.getAuth { author in
+            self.author = author
+        }
     }
     
     @objc func postButtonTapped() {
@@ -56,7 +60,8 @@ class NewPostSecondStepViewController: UIViewController {
         FirebaseStorageManager.shared.uploadImageAndGetURL(selectedImage!) { [weak self] result in
             switch result {
             case .success(let downloadURL):
-                FirebaseStorageManager.shared.addArticle(imageURL: downloadURL.absoluteString, content: content, positions: self?.position ?? [CGPoint(x: -10,y: -10)], productList: productList) { _ in
+                guard let auth = self?.author else {return}
+                FirebaseStorageManager.shared.addArticle(auth: auth, imageURL: downloadURL.absoluteString, content: content, positions: self?.position ?? [CGPoint(x: -10,y: -10)], productList: productList) { _ in
                     guard let viewControllers = self?.navigationController?.viewControllers else { return }
                     for controller in viewControllers {
                         if controller is HomePageViewController {

@@ -8,13 +8,15 @@
 import UIKit
 import SnapKit
 import CoreData
+import FirebaseAuth
+
 struct Section {
     var title: String
     var isExpanded: Bool
     var items: [ClothesStruct]
 }
 
-class MyClosetPageViewController: UIViewController {
+class MyClosetPageViewController: UIViewController, UITabBarControllerDelegate {
     var tableView = UITableView()
     let buttonTitle = ["Tops","Bottoms","Accessories"]
     var clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
@@ -22,18 +24,37 @@ class MyClosetPageViewController: UIViewController {
     var sections: [Section] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tabBarController = self.tabBarController
+        tabBarController?.delegate = self
         setup()
         clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
         makeSectionArray()
         tableView.reloadData()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         sections = []
         sectionAll = []
+        setup()
         clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
         makeSectionArray()
         tableView.reloadData()
+    }
+    
+    func tabBarController( _ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if viewController.tabBarItem.tag == 2 || viewController.tabBarItem.tag == 3 {
+            if Auth.auth().currentUser == nil {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let loginViewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
+                present(loginViewController, animated: true)
+                return false
+            } else {
+                return true
+            }
+        } else {
+            return true
+        }
     }
     
     @objc func addButtonTapped() {
@@ -147,7 +168,7 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
         secondViewController.cloth = sections[indexPath.section].items[indexPath.row]
         navigationController?.pushViewController(secondViewController, animated: true)
     }
-
+    
     @objc func headerTapped(_ sender: UITapGestureRecognizer) {
         if let section = sender.view?.tag {
             sections[section].isExpanded.toggle()
@@ -158,10 +179,8 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
 
 extension MyClosetPageViewController: SegmentControlDelegate {
     func changeToIndex(_ manager: SegmentView, index: Int) {
-//        if index >= 0 && index < sectionAll.count && !self.sectionAll[index].isEmpty {
-            self.sections = self.sectionAll[index]
-            self.tableView.reloadData()
-//        }
+        self.sections = self.sectionAll[index]
+        self.tableView.reloadData()
     }
 }
 
