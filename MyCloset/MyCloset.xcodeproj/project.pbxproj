@@ -48,6 +48,7 @@
 		CA61D5C32B148B000028FB39 /* MineDollDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA61D5C22B148B000028FB39 /* MineDollDetailViewController.swift */; };
 		CA61D5C52B15BC870028FB39 /* AccessoriesChosenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA61D5C42B15BC870028FB39 /* AccessoriesChosenViewController.swift */; };
 		CA61D5C72B17422C0028FB39 /* SavedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA61D5C62B17422C0028FB39 /* SavedViewController.swift */; };
+		CA795B042B1888D200D5584E /* AppleLoginSetProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B032B1888D200D5584E /* AppleLoginSetProfileViewController.swift */; };
 		CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */; };
 		CABCC7CC2B0F3EB700FB38C5 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */; };
 		CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */; };
@@ -97,6 +98,7 @@
 		CA61D5C22B148B000028FB39 /* MineDollDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineDollDetailViewController.swift; sourceTree = "<group>"; };
 		CA61D5C42B15BC870028FB39 /* AccessoriesChosenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoriesChosenViewController.swift; sourceTree = "<group>"; };
 		CA61D5C62B17422C0028FB39 /* SavedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedViewController.swift; sourceTree = "<group>"; };
+		CA795B032B1888D200D5584E /* AppleLoginSetProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginSetProfileViewController.swift; sourceTree = "<group>"; };
 		CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAuthCollectionViewCell.swift; sourceTree = "<group>"; };
 		CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				CA016D2C2B04CB880066FBE7 /* AppDelegate.swift */,
 				CA016D2F2B04CB8B0066FBE7 /* SceneDelegate.swift */,
 				CA3B0FBE2B0DEA99001B708E /* LogInViewController.swift */,
+				CA795B032B1888D200D5584E /* AppleLoginSetProfileViewController.swift */,
 				CA3B0FC02B0DF221001B708E /* SignUpViewController.swift */,
 				CA016D272B04CB860066FBE7 /* Extensions.swift */,
 				CA016D442B05FC510066FBE7 /* FirebaseStorageManager.swift */,
@@ -367,6 +370,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CAF701122B11E7A00053B12B /* SearchViewController.swift in Sources */,
+				CA795B042B1888D200D5584E /* AppleLoginSetProfileViewController.swift in Sources */,
 				CA016D362B04CB8D0066FBE7 /* AppDelegate.swift in Sources */,
 				CA016D5D2B07691A0066FBE7 /* AddMyClothesViewController.swift in Sources */,
 				CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */,
