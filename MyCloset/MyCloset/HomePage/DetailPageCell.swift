@@ -9,6 +9,31 @@ import UIKit
 import SnapKit
 class DetailPageImageCell: UITableViewCell {
     var labelTexts: [Product]?
+    var isLiked: Bool? {
+        didSet {
+            if isLiked == true {
+                self.likeButton.tintColor = .brown
+            } else {
+                self.likeButton.tintColor = .lightLightBrown()
+            }
+        }
+    }
+    var postId: String? {
+        didSet {
+            FirebaseStorageManager.shared.fetchLike(postId: postId ?? "") { result in
+                switch result {
+                case .success(let likeInfo):
+                    let likeCount = likeInfo.likeCount
+                    let isLiked = likeInfo.isLiked
+                    print("Like Count: \(likeCount), Is Liked: \(isLiked)")
+                    self.isLiked = isLiked
+                case .failure(let error):
+                    print("Error fetching like info: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    var likeButton = UIButton()
     lazy var imageViewCell: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 5
@@ -36,7 +61,31 @@ class DetailPageImageCell: UITableViewCell {
             make.height.equalTo(imageViewCell.snp.width).multipliedBy(1.4)
             make.bottom.equalTo(contentView).offset(-16)
         }
+        contentView.addSubview(likeButton)
+        likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        likeButton.imageView?.contentMode = .scaleAspectFit
+        likeButton.snp.makeConstraints { make in
+            make.bottom.equalTo(imageViewCell.snp.bottom).offset(-16)
+            make.leading.equalTo(imageViewCell.snp.leading).offset(16)
+            make.width.height.equalTo(50)
+        }
+        likeButton.tintColor = .lightBrown()
+        likeButton.backgroundColor = .white
+        likeButton.layer.cornerRadius = 25
+        likeButton.addTarget(self, action: #selector(likeTapped), for: .touchUpInside)
     }
+    
+    @objc func likeTapped() {
+        FirebaseStorageManager.shared.toggleLike(postId: postId ?? "") { error in
+                if let error = error {
+                    print("Error toggling like: \(error.localizedDescription)")
+                } else {
+                    print("Like toggled successfully")
+                    self.isLiked = !(self.isLiked ?? false)
+                }
+            }
+    }
+    
 
     func configure(with image: String, buttonPosition: [CGPoint]) {
         imageViewCell.kf.setImage(with: URL(string: image))
@@ -74,8 +123,8 @@ class DetailPageImageCell: UITableViewCell {
         tagLabel.backgroundColor = .white
         tagLabel.textColor = UIColor.brown
         tagLabel.clipsToBounds = true
-        tagLabel.layer.cornerRadius = 10
-        tagLabel.font = UIFont.systemFont(ofSize: 20)
+        tagLabel.layer.cornerRadius = 18
+        tagLabel.font = UIFont.systemFont(ofSize: 28)
         tagLabel.sizeToFit()
         tagLabel.frame.origin = CGPoint(x: imageViewCell.bounds.width - tagLabel.bounds.width - 8, y: 8)
         imageViewCell.addSubview(tagLabel)

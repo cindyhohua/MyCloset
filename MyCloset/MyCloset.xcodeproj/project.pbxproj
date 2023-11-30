@@ -47,6 +47,7 @@
 		CA61D5C12B14873A0028FB39 /* MineDollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA61D5C02B14873A0028FB39 /* MineDollViewController.swift */; };
 		CA61D5C32B148B000028FB39 /* MineDollDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA61D5C22B148B000028FB39 /* MineDollDetailViewController.swift */; };
 		CA61D5C52B15BC870028FB39 /* AccessoriesChosenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA61D5C42B15BC870028FB39 /* AccessoriesChosenViewController.swift */; };
+		CA61D5C72B17422C0028FB39 /* SavedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA61D5C62B17422C0028FB39 /* SavedViewController.swift */; };
 		CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */; };
 		CABCC7CC2B0F3EB700FB38C5 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */; };
 		CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */; };
@@ -95,6 +96,7 @@
 		CA61D5C02B14873A0028FB39 /* MineDollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineDollViewController.swift; sourceTree = "<group>"; };
 		CA61D5C22B148B000028FB39 /* MineDollDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineDollDetailViewController.swift; sourceTree = "<group>"; };
 		CA61D5C42B15BC870028FB39 /* AccessoriesChosenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoriesChosenViewController.swift; sourceTree = "<group>"; };
+		CA61D5C62B17422C0028FB39 /* SavedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedViewController.swift; sourceTree = "<group>"; };
 		CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAuthCollectionViewCell.swift; sourceTree = "<group>"; };
 		CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				CA519DF92B0EEF5E00892AC4 /* ProfileViewController.swift */,
+				CA61D5C62B17422C0028FB39 /* SavedViewController.swift */,
 				CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */,
 				CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */,
 				CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */,
@@ -393,6 +396,7 @@
 				CA016D322B04CB8D0066FBE7 /* Extensions.swift in Sources */,
 				CA016D1B2B04C93D0066FBE7 /* MyCloset.xcdatamodeld in Sources */,
 				CA3B0FBF2B0DEA99001B708E /* LogInViewController.swift in Sources */,
+				CA61D5C72B17422C0028FB39 /* SavedViewController.swift in Sources */,
 				CA61D5C32B148B000028FB39 /* MineDollDetailViewController.swift in Sources */,
 				CA016D412B05B76C0066FBE7 /* NewPostCell.swift in Sources */,
 				CA3B0FB52B0B1CD2001B708E /* DollModel.swift in Sources */,

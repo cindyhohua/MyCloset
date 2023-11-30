@@ -70,7 +70,7 @@ class ProfileViewController: UIViewController {
         let setButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(setButtonTapped))
         setButton.tintColor = UIColor.lightBrown()
         navigationItem.rightBarButtonItem = setButton
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "heart"), style: .plain, target: self, action: #selector(heartButtonTapped))
+        let leftButton = UIBarButtonItem(image: UIImage(systemName: "bookmark"), style: .plain, target: self, action: #selector(heartButtonTapped))
         navigationItem.leftBarButtonItem = leftButton
         leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "My Profile"
@@ -94,7 +94,8 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func heartButtonTapped() {
-        
+        let secondViewController = SavedViewController()
+        self.navigationController?.pushViewController(secondViewController, animated: true)
     }
     
     @objc func followButtonTapped() {

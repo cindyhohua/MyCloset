@@ -18,6 +18,7 @@ class DetailPageViewController: UIViewController {
         imageView.clipsToBounds = true
         return imageView
     }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -25,14 +26,28 @@ class DetailPageViewController: UIViewController {
             navigationItem.leftBarButtonItem = leftButton
             leftButton.tintColor = UIColor.brown
         let rightButton = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle.fill"), style: .plain, target: self, action: #selector(profileButtonTapped))
-            navigationItem.rightBarButtonItem = rightButton
-            rightButton.tintColor = UIColor.brown
+        rightButton.tintColor = UIColor.brown
+        let saveButton = UIBarButtonItem(image: UIImage(systemName: "bookmark"), style: .plain, target: self, action: #selector(saveButtonTapped))
+        saveButton.tintColor = .brown
+            navigationItem.rightBarButtonItems = [rightButton, saveButton]
+            
         navigationItem.title = article?.author.name
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.brown, NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         setupTableView()
     }
+    
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func saveButtonTapped() {
+        FirebaseStorageManager.shared.savePost(postId: article!.id, imageURL: article!.imageURL, time: article?.createdTime ?? 0) { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("save success")
+            }
+        }
     }
     
     @objc func profileButtonTapped() {
@@ -84,6 +99,7 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
             cell.isUserInteractionEnabled = true
             cell.labelTexts = article?.productList
             cell.configure(with: article?.imageURL ?? "", buttonPosition: position)
+            cell.postId = article?.id
             cell.selectionStyle = .none
             return cell
         case 1:

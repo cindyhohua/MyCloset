@@ -19,7 +19,18 @@ struct Article: Codable {
     let imageURL: String
     let productList: [Product]
     let position: [Position]
+    let like: Int
+    let whoLiked: [String]
+    let comment: [Comment]
 }
+
+struct Comment: Codable {
+    let comment: String
+    let authName: String
+    let authId: String
+    let createdTime: Double
+}
+
 struct Author: Codable {
     let email: String
     let id: String
@@ -309,6 +320,9 @@ class FirebaseStorageManager {
             "productList": convertedProductList,
             "createdTime": Date().timeIntervalSince1970,
             "id": document.documentID,
+            "like": 0,
+            "whoLiked": [],
+            "comment": []
         ]
         document.setData(data) { error in
             completion(error)
@@ -321,6 +335,21 @@ class FirebaseStorageManager {
         ]
         db.collection("auth").document(auth.id).updateData([
             "post": FieldValue.arrayUnion([post])
+        ])
+    }
+    
+    func savePost(postId: String, imageURL: String, time: Double, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        let post : [String: Any] = [
+            "id" : postId,
+            "image" : imageURL,
+            "createdTime": time
+        ]
+        db.collection("auth").document(currentUserID).updateData([
+            "saved": FieldValue.arrayUnion([post])
         ])
     }
     
@@ -342,7 +371,7 @@ class FirebaseStorageManager {
             "saved": [],
             "pending": []
         ] as [String : Any]
-
+        
         document.setData(authorData) { error in
             if let error = error {
                 completion(.failure(error))
@@ -351,17 +380,17 @@ class FirebaseStorageManager {
             }
         }
     }
-
+    
     
     func uploadImageAndGetURL(_ image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
         guard let imageData = image.jpegData(compressionQuality: 0.5) else {
             completion(.failure(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to convert image to data"])))
             return
         }
-
-        let filename = UUID().uuidString 
+        
+        let filename = UUID().uuidString
         let storageRef = Storage.storage().reference().child("images").child(filename)
-
+        
         storageRef.putData(imageData, metadata: nil) { (metadata, error) in
             if let error = error {
                 completion(.failure(error))
@@ -490,21 +519,85 @@ class FirebaseStorageManager {
     }
     
     func removeFriend(friendID: String, completion: @escaping (Error?) -> Void) {
-            guard let currentUserID = Auth.auth().currentUser?.uid else {
-                completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
-                return
-            }
-
-            db.collection("auth").document(currentUserID).updateData([
-                "following": FieldValue.arrayRemove([friendID])
-            ]) { error in
-                completion(error)
-            }
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        
+        db.collection("auth").document(currentUserID).updateData([
+            "following": FieldValue.arrayRemove([friendID])
+        ]) { error in
+            completion(error)
+        }
         
         db.collection("auth").document(friendID).updateData([
             "followers": FieldValue.arrayRemove([currentUserID])
         ]) { error in
             completion(error)
         }
+    }
+    
+    func fetchLike(postId: String, completion: @escaping (Result<(likeCount: Int, isLiked: Bool), Error>) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(.failure(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])))
+            return
         }
+        
+        let postRef = db.collection("articles").document(postId)
+        postRef.getDocument { (document, error) in
+            if let error = error {
+                completion(.failure(error))
+            } else if let document = document, document.exists {
+                let isLiked = (document.data()?["whoLiked"] as? [String] ?? []).contains(currentUserID)
+                let likeCount = document.data()?["like"] as? Int ?? 0
+                
+                completion(.success((likeCount, isLiked)))
+            } else {
+                completion(.failure(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "Document does not exist"])))
+            }
+        }
+    }
+
+    func toggleLike(postId: String, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        
+        let postRef = db.collection("articles").document(postId)
+        postRef.getDocument { (document, error) in
+            if let error = error {
+                completion(error)
+            } else if let document = document, document.exists {
+                let isLiked = document.data()?["whoLiked"] as? [String] ?? []
+                
+                if isLiked.contains(currentUserID) {
+                    self.unlikePost(postRef: postRef, currentUserID: currentUserID, completion: completion)
+                } else {
+                    self.likePost(postRef: postRef, currentUserID: currentUserID, completion: completion)
+                }
+            } else {
+                completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "Document does not exist"]))
+            }
+        }
+    }
+    
+    func likePost(postRef: DocumentReference, currentUserID: String, completion: @escaping (Error?) -> Void) {
+        postRef.updateData([
+            "like": FieldValue.increment(Int64(1)),
+            "whoLiked": FieldValue.arrayUnion([currentUserID])
+        ]) { error in
+            completion(error)
+        }
+    }
+    
+    func unlikePost(postRef: DocumentReference, currentUserID: String, completion: @escaping (Error?) -> Void) {
+        postRef.updateData([
+            "like": FieldValue.increment(Int64(-1)),
+            "whoLiked": FieldValue.arrayRemove([currentUserID])
+        ]) { error in
+            completion(error)
+        }
+    }
+    
 }
