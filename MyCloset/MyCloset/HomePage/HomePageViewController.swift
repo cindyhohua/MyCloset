@@ -63,6 +63,7 @@ class HomePageViewController: UIViewController {
         createPostButton.layer.cornerRadius = 35
         createPostButton.backgroundColor = UIColor.lightBrown()
         createPostButton.addTarget(self, action: #selector(createPost), for: .touchUpInside)
+        
     }
     
     @objc func createPost() {

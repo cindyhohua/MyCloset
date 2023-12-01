@@ -599,5 +599,27 @@ class FirebaseStorageManager {
             completion(error)
         }
     }
-    
+
+    func addComment(postId: String, comment: String, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+
+        let postRef = db.collection("articles").document(postId)
+
+        getAuth { author in
+            let commentData: [String: Any] = [
+                "comment": comment,
+                "authName": author.name,
+                "authId": currentUserID,
+                "createdTime": Date().timeIntervalSince1970
+            ]
+            postRef.updateData([
+                "comment": FieldValue.arrayUnion([commentData])
+            ]) { error in
+                completion(error)
+            }
+        }
+    }
 }
