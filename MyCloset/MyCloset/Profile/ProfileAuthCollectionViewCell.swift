@@ -98,7 +98,9 @@ class ProfileAuthCollectionViewCell: UICollectionReusableView {
 
     private func updateUI() {
         // Update UI elements based on the 'author' property
-        profileImageView.kf.setImage(with: URL(string: author?.image ?? "https://firebasestorage.googleapis.com/v0/b/mycloset-e2492.appspot.com/o/%E6%88%AA%E5%9C%96%202023-11-25%20%E4%B8%8B%E5%8D%882.17.11.png?alt=media&token=5c303478-6b4c-402a-9c04-c9317a36e469"))
+        if let imageURL = author?.image {
+            profileImageView.kf.setImage(with: URL(string: imageURL))
+        }
         nameLabel.text = author?.name
         wordLabel.text = author?.littleWords
         heightLabel.text = author?.height

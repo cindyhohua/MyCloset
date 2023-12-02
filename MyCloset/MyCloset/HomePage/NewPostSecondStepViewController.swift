@@ -61,7 +61,9 @@ class NewPostSecondStepViewController: UIViewController {
             switch result {
             case .success(let downloadURL):
                 guard let auth = self?.author else {return}
-                FirebaseStorageManager.shared.addArticle(auth: auth, imageURL: downloadURL.absoluteString, content: content, positions: self?.position ?? [CGPoint(x: -10,y: -10)], productList: productList) { _ in
+                FirebaseStorageManager.shared.addArticle(auth: auth, imageURL: downloadURL.absoluteString, content: content,
+                    positions: self?.position ?? [CGPoint(x: -10,y: -10)],
+                    productList: productList) { _ in
                     guard let viewControllers = self?.navigationController?.viewControllers else { return }
                     for controller in viewControllers {
                         if controller is HomePageViewController {

@@ -144,7 +144,10 @@ class PaperDollTopsViewController: UIViewController{
         print(red, green, blue)
         print(cloth)
         print(clothB)
-        CoreDataManager.shared.addClothAndColor(category: (self.cloth?.category)!, subcategory: (self.cloth?.subcategory)!, item: (self.cloth?.item)!, clothArray: cloth, clothBArray: clothB, color: [red, green, blue])
+        CoreDataManager.shared.addClothAndColor(category: (self.cloth?.category)!,
+                                                subcategory: (self.cloth?.subcategory)!,
+                                                item: (self.cloth?.item)!, clothArray: cloth,
+                                                clothBArray: clothB, color: [red, green, blue])
         guard let viewControllers = self.navigationController?.viewControllers else { return }
         for controller in viewControllers {
             if controller is MyClosetDetailPageViewController {
@@ -271,7 +274,9 @@ extension PaperDollTopsViewController: UICollectionViewDataSource, UICollectionV
         let cellWidth = (UIScreen.main.bounds.width - layout.minimumInteritemSpacing * 2 - layout.sectionInset.left - layout.sectionInset.right) / 3
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
 
-        layout.sectionInset = UIEdgeInsets(top: 10, left: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2, bottom: 10, right: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2)
+        layout.sectionInset = UIEdgeInsets(top: 10,
+                                           left: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2,
+                                           bottom: 10, right: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2)
 
         collectionView.collectionViewLayout = layout
     }
@@ -284,11 +289,15 @@ extension PaperDollTopsViewController: UICollectionViewDataSource, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier, for: indexPath) as! OutfitCollectionViewCell
-        if let outfit = outfits?[indexPath.item] {
-            cell.configure(with: outfit)
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier, for: indexPath) as? OutfitCollectionViewCell {
+            if let outfit = outfits?[indexPath.item] {
+                cell.configure(with: outfit)
+            }
+            return cell
+        } else {
+            let defaultCell = collectionView.dequeueReusableCell(withReuseIdentifier: "DefaultCell", for: indexPath)
+            return defaultCell
         }
-        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

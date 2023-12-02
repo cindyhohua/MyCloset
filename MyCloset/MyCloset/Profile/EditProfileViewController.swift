@@ -156,7 +156,11 @@ class EditProfileViewController: UIViewController {
             FirebaseStorageManager.shared.uploadImageAndGetURL(imageView.image!) { [weak self] result in
                 switch result {
                 case .success(let downloadURL):
-                    FirebaseStorageManager.shared.updateAuth(image: downloadURL.absoluteString, name: self?.nameTextField.text ?? "", littleWords: self?.littleWordsTextField.text ?? "", weight: self?.weightTextField.text ?? "", height: self?.heightTextField.text ?? "") { _ in
+                    FirebaseStorageManager.shared.updateAuth(image: downloadURL.absoluteString,
+                                                             name: self?.nameTextField.text ?? "",
+                                                             littleWords: self?.littleWordsTextField.text ?? "",
+                                                             weight: self?.weightTextField.text ?? "",
+                                                             height: self?.heightTextField.text ?? "") { _ in
                         self?.navigationController?.popViewController(animated: true)
                     }
                 case .failure(let error):

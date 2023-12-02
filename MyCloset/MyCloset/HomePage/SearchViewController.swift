@@ -92,13 +92,11 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let secondViewController = ProfileViewController()
-        if searchResults[indexPath.row].id != Auth.auth().currentUser?.uid {
-            secondViewController.author = searchResults[indexPath.row]
-            secondViewController.othersSetup()
+        FirebaseStorageManager.shared.getSpecificAuth(id: searchResults[indexPath.row].id) { author in
+            secondViewController.author = author
+            self.navigationController?.pushViewController(secondViewController, animated: true)
         }
-        self.navigationController?.pushViewController(secondViewController, animated: true)
     }
-
 }
 
 

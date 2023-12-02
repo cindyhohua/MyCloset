@@ -9,6 +9,8 @@ import UIKit
 import SnapKit
 class DetailPageImageCell: UITableViewCell {
     var labelTexts: [Product]?
+    var likeCount: Int?
+    var authorId: String?
     var isLiked: Bool? {
         didSet {
             if isLiked == true {
@@ -23,9 +25,9 @@ class DetailPageImageCell: UITableViewCell {
             FirebaseStorageManager.shared.fetchLike(postId: postId ?? "") { result in
                 switch result {
                 case .success(let likeInfo):
-                    let likeCount = likeInfo.likeCount
+                    self.likeCount = likeInfo.likeCount
                     let isLiked = likeInfo.isLiked
-                    print("Like Count: \(likeCount), Is Liked: \(isLiked)")
+                    print("Like Count: \(self.likeCount), Is Liked: \(isLiked)")
                     self.isLiked = isLiked
                 case .failure(let error):
                     print("Error fetching like info: \(error.localizedDescription)")
@@ -76,22 +78,55 @@ class DetailPageImageCell: UITableViewCell {
     }
     
     @objc func likeTapped() {
-        FirebaseStorageManager.shared.toggleLike(postId: postId ?? "") { error in
+        FirebaseStorageManager.shared.toggleLike(postId: postId ?? "", authorId: authorId ?? "") { error in
                 if let error = error {
                     print("Error toggling like: \(error.localizedDescription)")
                 } else {
                     print("Like toggled successfully")
+                    if self.isLiked == false {
+                        self.playHeartAnimation()
+                        print("play animation")
+                    }
                     self.isLiked = !(self.isLiked ?? false)
                 }
             }
     }
     
+    func playHeartAnimation() {
+        let heartImageView = UIImageView(image: UIImage(systemName: "heart.fill"))
+        let heartAmountLabel = UILabel()
+        heartAmountLabel.text = "\((self.likeCount ?? 0) + 1)"
+        heartAmountLabel.textColor = .white
+        heartAmountLabel.font = UIFont.roundedFont(ofSize: 16)
+        heartImageView.tintColor = .red
+        heartImageView.contentMode = .scaleAspectFit
+        heartImageView.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        heartImageView.center = likeButton.center
+        
+        imageViewCell.addSubview(heartImageView)
+        heartImageView.addSubview(heartAmountLabel)
+        heartImageView.snp.makeConstraints { make in
+            make.center.equalTo(imageViewCell)
+            make.width.height.equalTo(100)
+        }
+        heartAmountLabel.snp.makeConstraints { make in
+            make.center.equalTo(imageViewCell)
+        }
 
+        UIView.animate(withDuration: 0.5, animations: {
+            heartImageView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+            heartImageView.alpha = 0.0
+        }
+        ) { _ in
+            heartImageView.removeFromSuperview()
+        }
+    }
+    
     func configure(with image: String, buttonPosition: [CGPoint]) {
         imageViewCell.kf.setImage(with: URL(string: image))
         var actualPositions: [CGPoint] = []
         actualPositions = buttonPosition.map { convertToActualPosition($0) }
-        var x = 0
+        var xPosition = 0
         for position in actualPositions {
             let button = UIButton(type: .system)
             button.frame = CGRect(x: position.x - 10, y: position.y - 10, width: 20, height: 20)
@@ -99,11 +134,11 @@ class DetailPageImageCell: UITableViewCell {
             button.layer.cornerRadius = 10
             button.layer.borderWidth = 1
             button.layer.borderColor = UIColor.lightGray.cgColor
-            button.tag = x
+            button.tag = xPosition
             button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
             button.setTitle("", for: .normal)
             imageViewCell.addSubview(button)
-            x += 1
+            xPosition += 1
         }
     }
     

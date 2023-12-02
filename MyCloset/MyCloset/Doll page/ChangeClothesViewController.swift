@@ -117,9 +117,9 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
-        let MineButton = UIBarButtonItem(title: "Mine", style: .plain, target: self, action: #selector(mineButtonTapped))
-        MineButton.tintColor = UIColor.lightBrown()
-        navigationItem.leftBarButtonItem = MineButton
+        let mineButton = UIBarButtonItem(title: "Mine", style: .plain, target: self, action: #selector(mineButtonTapped))
+        mineButton.tintColor = UIColor.lightBrown()
+        navigationItem.leftBarButtonItem = mineButton
         let saveButton = UIBarButtonItem(title: "save", style: .plain, target: self, action: #selector(saveButtonTapped))
         navigationItem.rightBarButtonItem = saveButton
         saveButton.tintColor = UIColor.lightBrown()

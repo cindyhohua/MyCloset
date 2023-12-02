@@ -10,7 +10,6 @@ import UIKit
 import Firebase
 import FirebaseStorage
 
-
 struct Article: Codable {
     let author: Author
     let content: String
@@ -45,17 +44,39 @@ struct Author: Codable {
     let pending: [String]?
     let post: [Post]?
     let saved: [Post]?
+    let notification: [NotificationStruct]?
 }
 
-struct Post: Codable{
+struct NotificationStruct: Codable {
+    let name: String
+    let postId: String?
+    let authId: String?
+    let comment: String
+    let createdTime: Double
+    let seen: Bool
+}
+
+enum NotifyWord: String {
+    case like = "liked your post"
+    case comment = "leave a comment on your post"
+    case reject = "rejected your follow request"
+    case accept = "accepted your follow request, you can see their post on your home page now"
+    case deleteFriend = "doesn't wants to follow you anymore, what a shame :("
+}
+
+struct Post: Codable {
     let id: String
     let image: String
     let createdTime: Double
 }
 
 struct Position: Codable {
-    let x: Double
-    let y: Double
+    let xPosition: Double
+    let yPosition: Double
+    enum CodingKeys: String, CodingKey {
+            case xPosition = "x"
+            case yPosition = "y"
+        }
 }
 
 struct Product: Codable {
@@ -65,16 +86,13 @@ struct Product: Codable {
     let productComment: String
 }
 
+// auth
 class FirebaseStorageManager {
-
     static let shared = FirebaseStorageManager()
-    
-    private let db = Firestore.firestore()
-
+    let firebaseDb = Firestore.firestore()
     private init() {}
-    
     func getAuth(completion: @escaping (Author) -> Void) {
-        let auth = db.collection("auth").document(Auth.auth().currentUser?.uid ?? "")
+        let auth = firebaseDb.collection("auth").document(Auth.auth().currentUser?.uid ?? "")
         auth.getDocument { (document, error) in
             if let error = error {
                 print("Error getting document: \(error)")
@@ -95,8 +113,8 @@ class FirebaseStorageManager {
         }
     }
     
-    func getSpecificAuth(id:String,completion: @escaping (Author) -> Void) {
-        let auth = db.collection("auth").document(id)
+    func getSpecificAuth(id: String, completion: @escaping (Author) -> Void) {
+        let auth = firebaseDb.collection("auth").document(id)
         auth.getDocument { (document, error) in
             if let error = error {
                 print("Error getting document: \(error)")
@@ -116,20 +134,92 @@ class FirebaseStorageManager {
             }
         }
     }
+    
+    func addAuth(uid: String, author: Author, completion: @escaping (Result<Void, Error>) -> Void) {
+        let auth = firebaseDb.collection("auth")
+        let document = auth.document(uid)
+        let authorData = [
+            "email": author.email,
+            "id": author.id,
+            "name": author.name,
+            "image": "",
+            "height": "",
+            "weight": "",
+            "privateOrnot": false,
+            "littleWords": "",
+            "following": [author.id],
+            "followers": [],
+            "post": [],
+            "saved": [],
+            "pending": []
+        ] as [String: Any]
+        
+        document.setData(authorData) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+    
+    func updateAuth(image: String, name: String, littleWords: String, weight: String, height: String, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1,
+                               userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        firebaseDb.collection("auth").document(currentUserID).updateData([
+            "name": name,
+            "littleWords": littleWords,
+            "weight": weight,
+            "height": height,
+            "image": image
+        ]) { error in
+            completion(error)
+        }
+    }
+    
+    func getAuthorNameById(authorId: String, completion: @escaping (String?) -> Void) {
+        let authDocument = firebaseDb.collection("auth").document(authorId)
+        
+        authDocument.getDocument { (document, error) in
+            if let error = error {
+                print("Error getting document: \(error)")
+                completion(nil)
+            } else {
+                do {
+                    if let document = document, document.exists, let data = document.data() {
+                        guard let name = data["name"] as? String else {
+                            print("Name not found in document data")
+                            completion(nil)
+                            return
+                        }
+                        completion(name)
+                    } else {
+                        print("Document does not exist")
+                        completion(nil)
+                    }
+                } 
+            }
+        }
+    }
+}
 
-    
+// post
+extension FirebaseStorageManager {
     func fetchData(completion: @escaping ([Article]) -> Void) {
-        let articlesCollection = db.collection("articles")
-
+        let articlesCollection = firebaseDb.collection("articles")
+        
         articlesCollection.order(by: "createdTime", descending: true).getDocuments { (querySnapshot, error) in
             guard error == nil else {
                 print("Error getting documents: \(error!)")
                 completion([])
                 return
             }
-
+            
             var articles: [Article] = []
-
+            
             do {
                 for document in querySnapshot!.documents {
                     let data = document.data()
@@ -147,7 +237,7 @@ class FirebaseStorageManager {
     }
     
     func fetchSpecificData(id: String, completion: @escaping (Article) -> Void) {
-        let auth = db.collection("articles").document(id)
+        let auth = firebaseDb.collection("articles").document(id)
         auth.getDocument { (document, error) in
             if let error = error {
                 print("Error getting document: \(error)")
@@ -173,7 +263,7 @@ class FirebaseStorageManager {
             completion([])
             return
         }
-        db.collection("auth").document(currentUserID).getDocument { (document, error) in
+        firebaseDb.collection("auth").document(currentUserID).getDocument { (document, error) in
             if let error = error {
                 print("Error getting document: \(error)")
                 completion([])
@@ -192,9 +282,9 @@ class FirebaseStorageManager {
             for followerID in following {
                 dispatchGroup.enter()
                 
-                self.db.collection("articles")
+                self.firebaseDb.collection("articles")
                     .whereField("author.id", isEqualTo: followerID)
-//                    .whereField("createdTime", isGreaterThan: (Date().timeIntervalSince1970 - (30 * 24 * 60 * 60)))
+                // .whereField("createdTime", isGreaterThan: (Date().timeIntervalSince1970 - (30 * 24 * 60 * 60)))
                     .getDocuments { (querySnapshot, error) in
                         defer {
                             dispatchGroup.leave()
@@ -232,8 +322,109 @@ class FirebaseStorageManager {
         }
     }
     
+    private func parsePositions(_ positionsData: [[String: Double]]) -> [Position] {
+        var positions: [Position] = []
+        for positionData in positionsData {
+            if let xPosition = positionData["x"],
+               let yPosition = positionData["y"] {
+                let position = Position(xPosition: xPosition, yPosition: yPosition)
+                positions.append(position)
+            }
+        }
+        return positions
+    }
+    
+    private func parseProducts(_ productsData: [[String: String]]) -> [Product] {
+        var products: [Product] = []
+        for productData in productsData {
+            let productName = productData["productName"] ?? ""
+            let productStore = productData["productStore"] ?? ""
+            let productPrice = productData["productPrice"] ?? ""
+            let productComment = productData["productComment"] ?? ""
+            
+            let product = Product(productName: productName,
+                                  productStore: productStore,
+                                  productPrice: productPrice,
+                                  productComment: productComment)
+            
+            products.append(product)
+        }
+        return products
+    }
+    
+    func addArticle(auth: Author,imageURL: String, content: String, positions: [CGPoint] , productList: [Product], completion: @escaping (Error?) -> Void) {
+        let convertedPositions: [[String: CGFloat]] = positions.map { point in
+            return ["x": point.x, "y": point.y]
+        }
+        let convertedProductList: [[String: String]] = productList.map { product in
+            return ["productName": product.productName, "productStore": product.productStore,
+                    "productPrice": product.productPrice, "productComment": product.productComment]
+        }
+        
+        let articles = firebaseDb.collection("articles")
+        let document = articles.document()
+        let author = [
+            "email": auth.email,
+            "id": auth.id,
+            "name": auth.name,
+            "image": auth.image
+        ]
+        let data: [String: Any] = [
+            "author": author,
+            "imageURL": imageURL,
+            "position": convertedPositions,
+            "content": content,
+            "productList": convertedProductList,
+            "createdTime": Date().timeIntervalSince1970,
+            "id": document.documentID,
+            "like": 0,
+            "whoLiked": [],
+            "comment": []
+        ]
+        document.setData(data) { error in
+            completion(error)
+        }
+        
+        let post: [String: Any] = [
+            "id": document.documentID,
+            "image": imageURL,
+            "createdTime": Date().timeIntervalSince1970
+        ]
+        firebaseDb.collection("auth").document(auth.id).updateData([
+            "post": FieldValue.arrayUnion([post])
+        ])
+    }
+    
+    func uploadImageAndGetURL(_ image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
+            completion(.failure(NSError(domain: "YourAppErrorDomain", code: -1,
+                                        userInfo: [NSLocalizedDescriptionKey: "Failed to convert image to data"])))
+            return
+        }
+        
+        let filename = UUID().uuidString
+        let storageRef = Storage.storage().reference().child("images").child(filename)
+        
+        storageRef.putData(imageData, metadata: nil) { (_, error) in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                storageRef.downloadURL { (url, error) in
+                    if let downloadURL = url {
+                        completion(.success(downloadURL))
+                    } else if let error = error {
+                        completion(.failure(error))
+                    }
+                }
+            }
+        }
+    }
+}
+
+// friend
+extension FirebaseStorageManager {
     func searchFriends(query: String, completion: @escaping ([Author]) -> Void) {
-        db.collection("auth")
+        firebaseDb.collection("auth")
             .whereField("name", isGreaterThanOrEqualTo: query)
             .whereField("name", isLessThan: query + "z")
             .getDocuments { (querySnapshot, error) in
@@ -265,183 +456,35 @@ class FirebaseStorageManager {
             }
     }
     
-    private func parsePositions(_ positionsData: [[String: Double]]) -> [Position] {
-        var positions: [Position] = []
-        for positionData in positionsData {
-            if let x = positionData["x"],
-               let y = positionData["y"] {
-                let position = Position(x: x, y: y)
-                positions.append(position)
-            }
-        }
-        return positions
-    }
-    
-    private func parseProducts(_ productsData: [[String: String]]) -> [Product] {
-        var products: [Product] = []
-        for productData in productsData {
-            let productName = productData["productName"] ?? ""
-            let productStore = productData["productStore"] ?? ""
-            let productPrice = productData["productPrice"] ?? ""
-            let productComment = productData["productComment"] ?? ""
-            
-            let product = Product(productName: productName,
-                                  productStore: productStore,
-                                  productPrice: productPrice,
-                                  productComment: productComment)
-            
-            products.append(product)
-        }
-        return products
-    }
-    
-    
-    func addArticle(auth: Author,imageURL: String, content: String, positions: [CGPoint] , productList: [Product], completion: @escaping (Error?) -> Void) {
-        let convertedPositions: [[String: CGFloat]] = positions.map { point in
-            return ["x": point.x, "y": point.y]
-        }
-        let convertedProductList: [[String:String]] = productList.map { product in
-            return ["productName": product.productName, "productStore": product.productStore, "productPrice": product.productPrice, "productComment": product.productComment]
-        }
-        
-        let articles = db.collection("articles")
-        let document = articles.document()
-        let author = [
-            "email": auth.email,
-            "id": auth.id,
-            "name": auth.name,
-            "image": auth.image
-        ]
-        let data: [String: Any] = [
-            "author": author,
-            "imageURL": imageURL,
-            "position": convertedPositions,
-            "content": content,
-            "productList": convertedProductList,
-            "createdTime": Date().timeIntervalSince1970,
-            "id": document.documentID,
-            "like": 0,
-            "whoLiked": [],
-            "comment": []
-        ]
-        document.setData(data) { error in
-            completion(error)
-        }
-        
-        let post : [String: Any] = [
-            "id" : document.documentID,
-            "image" : imageURL,
-            "createdTime": Date().timeIntervalSince1970
-        ]
-        db.collection("auth").document(auth.id).updateData([
-            "post": FieldValue.arrayUnion([post])
-        ])
-    }
-    
-    func savePost(postId: String, imageURL: String, time: Double, completion: @escaping (Error?) -> Void) {
-        guard let currentUserID = Auth.auth().currentUser?.uid else {
-            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
-            return
-        }
-        let post : [String: Any] = [
-            "id" : postId,
-            "image" : imageURL,
-            "createdTime": time
-        ]
-        db.collection("auth").document(currentUserID).updateData([
-            "saved": FieldValue.arrayUnion([post])
-        ])
-    }
-    
-    func addAuth(uid: String, author: Author, completion: @escaping (Result<Void, Error>) -> Void) {
-        let auth = db.collection("auth")
-        let document = auth.document(uid)
-        let authorData = [
-            "email": author.email,
-            "id": author.id,
-            "name": author.name,
-            "image": "",
-            "height": "",
-            "weight": "",
-            "privateOrnot": false,
-            "littleWords": "",
-            "following": [author.id],
-            "followers": [],
-            "post": [],
-            "saved": [],
-            "pending": []
-        ] as [String : Any]
-        
-        document.setData(authorData) { error in
-            if let error = error {
-                completion(.failure(error))
-            } else {
-                completion(.success(()))
-            }
-        }
-    }
-    
-    
-    func uploadImageAndGetURL(_ image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
-        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
-            completion(.failure(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to convert image to data"])))
-            return
-        }
-        
-        let filename = UUID().uuidString
-        let storageRef = Storage.storage().reference().child("images").child(filename)
-        
-        storageRef.putData(imageData, metadata: nil) { (metadata, error) in
-            if let error = error {
-                completion(.failure(error))
-            } else {
-                storageRef.downloadURL { (url, error) in
-                    if let downloadURL = url {
-                        completion(.success(downloadURL))
-                    } else if let error = error {
-                        completion(.failure(error))
-                    }
-                }
-            }
-        }
-    }
-    
-    func updateAuth(image: String, name: String, littleWords: String, weight: String, height: String, completion: @escaping (Error?) -> Void) {
-        guard let currentUserID = Auth.auth().currentUser?.uid else {
-            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
-            return
-        }
-        db.collection("auth").document(currentUserID).updateData([
-            "name": name,
-            "littleWords": littleWords,
-            "weight": weight,
-            "height": height,
-            "image": image
-        ]) { error in
-            completion(error)
-        }
-    }
-    
     func sendFriendRequest(toUserID: String, completion: @escaping (Error?) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
-            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            completion(NSError(domain: "YourAppErrorDomain", code: -1,
+                               userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
             return
         }
         
-        db.collection("auth").document(toUserID).updateData([
+        firebaseDb.collection("auth").document(toUserID).updateData([
             "pending": FieldValue.arrayUnion([currentUserID])
         ]) { error in
             completion(error)
         }
+//        sendNotification(authorId: toUserID, postId: "", notifyType: .friendRequest) { error in
+//            if let error = error {
+//                print(error.localizedDescription)
+//            } else {
+//                print("send notification success")
+//            }
+//        }
     }
     
     func cancelFriendRequest(toUserID: String, completion: @escaping (Error?) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
-            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            completion(NSError(domain: "YourAppErrorDomain", code: -1,
+                               userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
             return
         }
         
-        db.collection("auth").document(toUserID).updateData([
+        firebaseDb.collection("auth").document(toUserID).updateData([
             "pending": FieldValue.arrayRemove([currentUserID])
         ]) { error in
             completion(error)
@@ -454,7 +497,7 @@ class FirebaseStorageManager {
             return
         }
         
-        db.collection("auth").document(currentUserID).addSnapshotListener { (documentSnapshot, error) in
+        firebaseDb.collection("auth").document(currentUserID).addSnapshotListener { (documentSnapshot, error) in
             guard let document = documentSnapshot else {
                 print("Error fetching document: \(error!)")
                 completion([])
@@ -487,138 +530,94 @@ class FirebaseStorageManager {
     
     func acceptFriendRequest(authorID: String, completion: @escaping (Error?) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
-            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            completion(NSError(domain: "YourAppErrorDomain", code: -1,
+                               userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
             return
         }
         
-        db.collection("auth").document(currentUserID).updateData([
+        firebaseDb.collection("auth").document(currentUserID).updateData([
             "followers": FieldValue.arrayUnion([authorID]),
             "pending": FieldValue.arrayRemove([authorID])
         ]) { error in
             completion(error)
         }
         
-        db.collection("auth").document(authorID).updateData([
+        firebaseDb.collection("auth").document(authorID).updateData([
             "following": FieldValue.arrayUnion([currentUserID])
         ]) { error in
             completion(error)
         }
+        
+        sendNotification(authorId: authorID, postId: "", notifyType: .accept) { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("Send successfully")
+            }
+        }
+//
+//        updateNotificationArray(authorId: authorID, postId: "", updatedComment: .tapAccept, originComment: .friendRequest) { error in
+//            if let error = error {
+//                print(error.localizedDescription)
+//            } else {
+//                print("update success")
+//            }
+//        }
     }
     
     func rejectFriendRequest(authorID: String, completion: @escaping (Error?) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
-            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            completion(NSError(domain: "YourAppErrorDomain", code: -1,
+                               userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
             return
         }
         
-        db.collection("auth").document(currentUserID).updateData([
+        firebaseDb.collection("auth").document(currentUserID).updateData([
             "pending": FieldValue.arrayRemove([authorID])
         ]) { error in
             completion(error)
         }
+        
+        sendNotification(authorId: authorID, postId: "", notifyType: .reject) { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("Send successfully")
+            }
+        }
+//        updateNotificationArray(authorId: authorID, postId: "", updatedComment: .tapReject, originComment: .friendRequest) { error in
+//            if let error = error {
+//                print(error.localizedDescription)
+//            } else {
+//                print("update success")
+//            }
+//        }
     }
     
     func removeFriend(friendID: String, completion: @escaping (Error?) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
-            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            completion(NSError(domain: "YourAppErrorDomain", code: -1,
+                               userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
             return
         }
         
-        db.collection("auth").document(currentUserID).updateData([
+        firebaseDb.collection("auth").document(currentUserID).updateData([
             "following": FieldValue.arrayRemove([friendID])
         ]) { error in
             completion(error)
         }
         
-        db.collection("auth").document(friendID).updateData([
+        firebaseDb.collection("auth").document(friendID).updateData([
             "followers": FieldValue.arrayRemove([currentUserID])
         ]) { error in
             completion(error)
         }
-    }
-    
-    func fetchLike(postId: String, completion: @escaping (Result<(likeCount: Int, isLiked: Bool), Error>) -> Void) {
-        guard let currentUserID = Auth.auth().currentUser?.uid else {
-            completion(.failure(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])))
-            return
-        }
         
-        let postRef = db.collection("articles").document(postId)
-        postRef.getDocument { (document, error) in
+        sendNotification(authorId: friendID, postId: "", notifyType: .deleteFriend) { error in
             if let error = error {
-                completion(.failure(error))
-            } else if let document = document, document.exists {
-                let isLiked = (document.data()?["whoLiked"] as? [String] ?? []).contains(currentUserID)
-                let likeCount = document.data()?["like"] as? Int ?? 0
-                
-                completion(.success((likeCount, isLiked)))
+                print(error.localizedDescription)
             } else {
-                completion(.failure(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "Document does not exist"])))
-            }
-        }
-    }
-
-    func toggleLike(postId: String, completion: @escaping (Error?) -> Void) {
-        guard let currentUserID = Auth.auth().currentUser?.uid else {
-            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
-            return
-        }
-        
-        let postRef = db.collection("articles").document(postId)
-        postRef.getDocument { (document, error) in
-            if let error = error {
-                completion(error)
-            } else if let document = document, document.exists {
-                let isLiked = document.data()?["whoLiked"] as? [String] ?? []
-                
-                if isLiked.contains(currentUserID) {
-                    self.unlikePost(postRef: postRef, currentUserID: currentUserID, completion: completion)
-                } else {
-                    self.likePost(postRef: postRef, currentUserID: currentUserID, completion: completion)
-                }
-            } else {
-                completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "Document does not exist"]))
-            }
-        }
-    }
-    
-    func likePost(postRef: DocumentReference, currentUserID: String, completion: @escaping (Error?) -> Void) {
-        postRef.updateData([
-            "like": FieldValue.increment(Int64(1)),
-            "whoLiked": FieldValue.arrayUnion([currentUserID])
-        ]) { error in
-            completion(error)
-        }
-    }
-    
-    func unlikePost(postRef: DocumentReference, currentUserID: String, completion: @escaping (Error?) -> Void) {
-        postRef.updateData([
-            "like": FieldValue.increment(Int64(-1)),
-            "whoLiked": FieldValue.arrayRemove([currentUserID])
-        ]) { error in
-            completion(error)
-        }
-    }
-
-    func addComment(postId: String, comment: String, completion: @escaping (Error?) -> Void) {
-        guard let currentUserID = Auth.auth().currentUser?.uid else {
-            completion(NSError(domain: "YourAppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
-            return
-        }
-
-        let postRef = db.collection("articles").document(postId)
-
-        getAuth { author in
-            let commentData: [String: Any] = [
-                "comment": comment,
-                "authName": author.name,
-                "authId": currentUserID,
-                "createdTime": Date().timeIntervalSince1970
-            ]
-            postRef.updateData([
-                "comment": FieldValue.arrayUnion([commentData])
-            ]) { error in
-                completion(error)
+                print("Send successfully")
             }
         }
     }

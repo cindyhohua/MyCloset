@@ -139,22 +139,26 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "friendRequestCell", for: indexPath) as! FriendRequestCell
-        let author = pendingAuthors[indexPath.row]
-
-        cell.nameLabel.text = author.name
-        cell.emailLabel.text = author.email
-        cell.tag = indexPath.row
-
-        if let imageURLString = author.image, let imageURL = URL(string: imageURLString) {
-            cell.profileImageView.kf.setImage(with: imageURL)
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "friendRequestCell", for: indexPath) as? FriendRequestCell {
+            let author = pendingAuthors[indexPath.row]
+            
+            cell.nameLabel.text = author.name
+            cell.emailLabel.text = author.email
+            cell.tag = indexPath.row
+            
+            if let imageURLString = author.image, let imageURL = URL(string: imageURLString) {
+                cell.profileImageView.kf.setImage(with: imageURL)
+            }
+            
+            cell.acceptButton.addTarget(self, action: #selector(acceptButtonTapped(_:)), for: .touchUpInside)
+            cell.acceptButton.isUserInteractionEnabled = true
+            cell.rejectButton.addTarget(self, action: #selector(rejectButtonTapped(_:)), for: .touchUpInside)
+            cell.rejectButton.isUserInteractionEnabled = true
+            return cell
+        } else {
+            let defaultCell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
+            return defaultCell
         }
-
-        cell.acceptButton.addTarget(self, action: #selector(acceptButtonTapped(_:)), for: .touchUpInside)
-        cell.acceptButton.isUserInteractionEnabled = true
-        cell.rejectButton.addTarget(self, action: #selector(rejectButtonTapped(_:)), for: .touchUpInside)
-        cell.rejectButton.isUserInteractionEnabled = true
-        return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -163,9 +167,8 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let secondViewController = ProfileViewController()
-        FirebaseStorageManager.shared.getSpecificAuth(id: pendingAuthors[indexPath.row].id ) { author in
-            secondViewController.author = self.pendingAuthors[indexPath.row]
-            secondViewController.othersSetup()
+        FirebaseStorageManager.shared.getSpecificAuth(id: pendingAuthors[indexPath.row].id) { author in
+            secondViewController.author = author
         }
         self.navigationController?.pushViewController(secondViewController, animated: true)
     }

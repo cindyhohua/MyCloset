@@ -8,7 +8,26 @@
 import UIKit
 import FirebaseAuth
 class DetailPageViewController: UIViewController {
-    var article: Article?
+    private var saveButton: UIBarButtonItem!
+    var article: Article? {
+        didSet {
+            FirebaseStorageManager.shared.getAuth { author in
+                self.saveOrNot = author.saved?.contains {$0.id == self.article?.id}
+            }
+            commentInput.postId = article?.id
+            commentInput.posterId = article?.author.id
+        }
+    }
+    var saveOrNot: Bool? {
+        didSet {
+            if saveOrNot == true {
+                saveButton.tintColor = .brown
+            } else {
+                saveButton.tintColor = .lightLightBrown()
+            }
+            
+        }
+    }
     var tableView = UITableView()
     var commentInput = DetailPageInputCommentView()
     lazy var imageView: UIImageView = {
@@ -22,14 +41,14 @@ class DetailPageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        saveButton = UIBarButtonItem(image: UIImage(systemName: "bookmark.fill"), style: .plain, target: self, action: #selector(saveButtonTapped))
         view.backgroundColor = .white
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
             leftButton.tintColor = UIColor.brown
         let rightButton = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle.fill"), style: .plain, target: self, action: #selector(profileButtonTapped))
         rightButton.tintColor = UIColor.brown
-        let saveButton = UIBarButtonItem(image: UIImage(systemName: "bookmark"), style: .plain, target: self, action: #selector(saveButtonTapped))
-        saveButton.tintColor = .brown
+        
             navigationItem.rightBarButtonItems = [rightButton, saveButton]
             
         navigationItem.title = article?.author.name
@@ -42,6 +61,8 @@ class DetailPageViewController: UIViewController {
     }
     
     @objc func saveButtonTapped() {
+        print("save")
+        self.saveOrNot = !(saveOrNot ?? false)
         FirebaseStorageManager.shared.savePost(postId: article!.id, imageURL: article!.imageURL, time: article?.createdTime ?? 0) { error in
             if let error = error {
                 print(error.localizedDescription)
@@ -53,11 +74,8 @@ class DetailPageViewController: UIViewController {
     
     @objc func profileButtonTapped() {
         let secondViewController = ProfileViewController()
-        if article?.author.id != Auth.auth().currentUser?.uid {
-            FirebaseStorageManager.shared.getSpecificAuth(id: article?.author.id ?? "") { author in
-                secondViewController.author = author
-                secondViewController.othersSetup()
-            }
+        FirebaseStorageManager.shared.getSpecificAuth(id: article?.author.id ?? "") { author in
+            secondViewController.author = author
         }
         self.navigationController?.pushViewController(secondViewController, animated: true)
     }
@@ -67,7 +85,6 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
     func setupTableView() {
         view.addSubview(commentInput)
         commentInput.delegate = self
-        commentInput.postId = article?.id
         commentInput.snp.makeConstraints { make in
             make.height.equalTo(44)
             make.leading.equalTo(view)
@@ -116,8 +133,8 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
                 }
                 var position: [CGPoint] = []
                 if article?.position.isEmpty == false {
-                    for i in 0..<(article?.position.count ?? 0) {
-                        position.append(CGPointMake(article?.position[i].x ?? 0 , article?.position[i].y ?? 0))
+                    for indexI in 0..<(article?.position.count ?? 0) {
+                        position.append(CGPointMake(article?.position[indexI].xPosition ?? 0 , article?.position[indexI].yPosition ?? 0))
                     }
                 }
                 cell.isUserInteractionEnabled = true
@@ -125,6 +142,7 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.configure(with: article?.imageURL ?? "", buttonPosition: position)
                 cell.postId = article?.id
                 cell.selectionStyle = .none
+                cell.authorId = article?.author.id
                 return cell
             case 1:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "commentCell", for: indexPath) as? DetailPageCommentCell else {
@@ -157,6 +175,15 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+            let secondVC = ProfileViewController()
+            FirebaseStorageManager.shared.getSpecificAuth(id: article?.comment[indexPath.row].authId ?? "") { author in
+                secondVC.author = author
+                self.navigationController?.pushViewController(secondVC, animated: true)
+            }
+        }
+    }
 }
 
 extension DetailPageViewController: DetailPageInputCommentDelegate {

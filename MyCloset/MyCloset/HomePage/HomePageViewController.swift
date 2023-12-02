@@ -98,7 +98,9 @@ extension HomePageViewController: UITableViewDelegate, UITableViewDataSource {
         cell.isUserInteractionEnabled = true
         cell.nameLabel.text = articles[indexPath.row].author.name
         cell.cellImageView.kf.setImage(with: URL(string: articles[indexPath.row].imageURL))
-        cell.profileImage.kf.setImage(with: URL(string: articles[indexPath.row].author.image ?? "https://firebasestorage.googleapis.com/v0/b/mycloset-e2492.appspot.com/o/%E6%88%AA%E5%9C%96%202023-11-25%20%E4%B8%8B%E5%8D%882.17.11.png?alt=media&token=5c303478-6b4c-402a-9c04-c9317a36e469"))
+        if let imageURL = articles[indexPath.row].author.image {
+            cell.profileImage.kf.setImage(with: URL(string: imageURL))
+        }
         cell.selectionStyle = .none
         return cell
     }

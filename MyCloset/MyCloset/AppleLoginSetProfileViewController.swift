@@ -44,7 +44,10 @@ class AppleLoginSetProfileViewController: UIViewController {
     @objc private func submitButtonTapped() {
         if let email = emailTextField.text, let fullName = fullNameTextField.text, let id = userId {
             print("Email: \(email), Full Name: \(fullName)")
-            FirebaseStorageManager.shared.addAuth(uid: id, author: Author(email: email, id: id, name: fullName, image: "", height: "", weight: "", privateOrNot: false, littleWords: "", following: [], followers: [], pending: [], post: [], saved: [])) { result in
+            FirebaseStorageManager.shared.addAuth(uid: id, author: Author(email: email, id: id,
+                                                                          name: fullName, image: "", height: "", weight: "",
+                                                                          privateOrNot: false, littleWords: "", following: [],
+                                                                          followers: [], pending: [], post: [], saved: [], notification: [])) { result in
                 switch result {
                 case .success(_) :
                     print("success")
@@ -60,7 +63,6 @@ class AppleLoginSetProfileViewController: UIViewController {
             }
         }
     }
-    
     
     private func setupConstraints() {
         view.addSubview(emailTextField)
@@ -83,51 +85,3 @@ class AppleLoginSetProfileViewController: UIViewController {
         ])
     }
 }
-
-
-//import SwiftUI
-//
-//struct RegistrationView: View {
-//    @State private var email: String = ""
-//    @State private var fullName: String = ""
-//
-//    var body: some View {
-//        VStack {
-//            TextField("Email", text: $email)
-//                .textFieldStyle(RoundedBorderTextFieldStyle())
-//                .padding()
-//
-//            TextField("Full Name", text: $fullName)
-//                .textFieldStyle(RoundedBorderTextFieldStyle())
-//                .padding()
-//
-//            Button(action: {
-//                // 在這裡執行提交資料的操作，可以使用 email 和 fullName 這兩個 State 變數
-//                // 你可以在這裡呼叫一個函數，處理用戶提交的資料
-//                submitUserData()
-//            }) {
-//                Text("Submit")
-//                    .padding()
-//                    .foregroundColor(.white)
-//                    .background(Color.brown)
-//                    .cornerRadius(10)
-//            }
-//        }
-//        .padding()
-//    }
-//
-//    func submitUserData() {
-//        // 在這裡執行提交資料的操作
-//        // 可以使用 email 和 fullName 這兩個變數來獲取用戶輸入的值
-//        print("Email: \(email), Full Name: \(fullName)")
-//
-//        // 在這裡添加適當的邏輯，比如將資料發送到伺服器或進行本地保存等
-//    }
-//}
-//
-//struct RegistrationView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        RegistrationView()
-//    }
-//}
-

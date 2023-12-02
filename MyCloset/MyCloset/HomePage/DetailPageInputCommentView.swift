@@ -14,6 +14,7 @@ protocol DetailPageInputCommentDelegate: AnyObject {
 
 class DetailPageInputCommentView: UIView {
     var postId: String?
+    var posterId: String?
     weak var delegate: DetailPageInputCommentDelegate?
     
     private let commentTextField: UITextField = {
@@ -61,7 +62,7 @@ class DetailPageInputCommentView: UIView {
         guard let comment = commentTextField.text, !comment.isEmpty else {
             return
         }
-        FirebaseStorageManager.shared.addComment(postId: self.postId ?? "", comment: comment) { error in
+        FirebaseStorageManager.shared.addComment(postId: self.postId ?? "", comment: comment, posterId: posterId ?? "") { error in
             if let error = error {
                 print(error.localizedDescription)
             }

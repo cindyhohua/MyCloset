@@ -39,15 +39,15 @@ class NewPostImageCell: UITableViewCell {
 
     func configure(with image: UIImage, buttonPosition: [CGPoint]) {
         imageViewCell.image = image
-        var x = 1
+        var xPosition = 1
         for position in buttonPosition {
             let button = UIButton(type: .system)
             button.frame = CGRect(x: position.x - 10, y: position.y - 10, width: 20, height: 20)
             button.backgroundColor = .white
             button.layer.cornerRadius = 10
-            button.setTitle("\(x)", for: .normal)
+            button.setTitle("\(xPosition)", for: .normal)
             imageViewCell.addSubview(button)
-            x += 1
+            xPosition += 1
         }
     }
 }
