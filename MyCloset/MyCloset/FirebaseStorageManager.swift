@@ -45,6 +45,7 @@ struct Author: Codable {
     let post: [Post]?
     let saved: [Post]?
     let notification: [NotificationStruct]?
+    let notificationNotSeen: Int?
 }
 
 struct NotificationStruct: Codable {

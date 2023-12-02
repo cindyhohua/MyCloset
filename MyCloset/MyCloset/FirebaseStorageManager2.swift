@@ -191,29 +191,71 @@ extension FirebaseStorageManager {
         }
     }
     
-//    func updateNotificationArray(authorId: String, postId: String, updatedComment: NotifyWord, originComment: NotifyWord, completion: @escaping (Error?) -> Void) {
-//        let documentReference = firebaseDb.collection("auth").document(authorId)
-//        guard let currentUserID = Auth.auth().currentUser?.uid else {
-//            completion(NSError(domain: "YourAppErrorDomain", code: -1,
-//                               userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
-//            return
-//        }
-//        documentReference.getDocument { (document, error) in
-//            if let error = error {
-//                completion(error)
-//                return
-//            }
-//            do {
-//                var currentNotificationArray = document?.get("notification") as? [[String: Any]] ?? []
-//
-//                if let index = currentNotificationArray.firstIndex(where: { $0["comment"] as? String == originComment.rawValue && $0["authId"] as? String == currentUserID }) {
-//                    currentNotificationArray[index]["comment"] = updatedComment.rawValue
-//                }
-//
-//                documentReference.updateData(["notification": currentNotificationArray]) { error in
-//                    completion(error)
-//                }
-//            }
-//        }
-//    }
+    func fetchNotifications(completion: @escaping ([NotificationStruct]?, Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            let error = NSError(domain: "YourAppErrorDomain", code: -1,
+                                userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])
+            completion(nil, error)
+            return
+        }
+        
+        firebaseDb.collection("auth").document(currentUserID).getDocument { (document, error) in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+            
+            do {
+                if let document = document, document.exists, let data = document.data(),
+                   let notificationsData = data["notification"] as? [[String: Any]] {
+                    
+                    var notifications = [NotificationStruct]()
+                    
+                    for notificationData in notificationsData {
+                        if let jsonData = try? JSONSerialization.data(withJSONObject: notificationData),
+                           let notification = try? JSONDecoder().decode(NotificationStruct.self, from: jsonData) {
+                            notifications.append(notification)
+                        }
+                    }
+                    
+                    // 倒序排列
+                    notifications.sort { $0.createdTime > $1.createdTime }
+                    
+                    completion(notifications, nil)
+                } else {
+                    completion([], nil)  // 沒有通知
+                }
+            } catch {
+                completion(nil, error)
+            }
+        }
+    }
+    
+
+    
+    //    func updateNotificationArray(authorId: String, postId: String, updatedComment: NotifyWord, originComment: NotifyWord, completion: @escaping (Error?) -> Void) {
+    //        let documentReference = firebaseDb.collection("auth").document(authorId)
+    //        guard let currentUserID = Auth.auth().currentUser?.uid else {
+    //            completion(NSError(domain: "YourAppErrorDomain", code: -1,
+    //                               userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+    //            return
+    //        }
+    //        documentReference.getDocument { (document, error) in
+    //            if let error = error {
+    //                completion(error)
+    //                return
+    //            }
+    //            do {
+    //                var currentNotificationArray = document?.get("notification") as? [[String: Any]] ?? []
+    //
+    //                if let index = currentNotificationArray.firstIndex(where: { $0["comment"] as? String == originComment.rawValue && $0["authId"] as? String == currentUserID }) {
+    //                    currentNotificationArray[index]["comment"] = updatedComment.rawValue
+    //                }
+    //
+    //                documentReference.updateData(["notification": currentNotificationArray]) { error in
+    //                    completion(error)
+    //                }
+    //            }
+    //        }
+    //    }
 }

@@ -34,7 +34,8 @@ class SignupViewController: UIViewController {
                                     name: nickName, image: "", height: "", weight: "",
                                     privateOrNot: false,
                                     littleWords: "", following: [],
-                                    followers: [], pending: [], post: [], saved: [], notification: [])
+                                    followers: [], pending: [], post: [],
+                                    saved: [], notification: [], notificationNotSeen: 0)
                 FirebaseStorageManager.shared.addAuth(uid: authResult?.user.uid ?? "", author: author) { result in
                     switch result {
                     case .success(_):

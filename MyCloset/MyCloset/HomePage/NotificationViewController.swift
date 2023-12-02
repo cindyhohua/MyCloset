@@ -67,13 +67,13 @@ class FriendRequestCell: UITableViewCell {
         }
 
         nameLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(contentView)
+            make.centerY.equalTo(contentView).offset(-10)
             make.leading.equalTo(profileImageView.snp.trailing).offset(8)
         }
 
         emailLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(contentView)
-            make.leading.equalTo(nameLabel.snp.trailing).offset(8)
+            make.centerY.equalTo(contentView).offset(10)
+            make.leading.equalTo(profileImageView.snp.trailing).offset(8)
         }
 
         acceptButton.snp.makeConstraints { make in
@@ -93,9 +93,17 @@ class FriendRequestCell: UITableViewCell {
 class NotificationViewController: UIViewController {
     var pendingAuthors: [Author] = []
     let tableView = UITableView()
-
+    var notifications: [NotificationStruct]? {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        FirebaseStorageManager.shared.fetchNotifications { notifies, error  in
+            self.notifications = notifies
+            print(self.notifications)
+        }
         setupTableView()
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
@@ -122,6 +130,7 @@ class NotificationViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(FriendRequestCell.self, forCellReuseIdentifier: "friendRequestCell")
+        tableView.register(NotificationTableViewCell.self, forCellReuseIdentifier: NotificationTableViewCell.reuseIdentifier)
     }
 
     func fetchPendingAuthors() {
@@ -134,43 +143,77 @@ class NotificationViewController: UIViewController {
 }
 
 extension NotificationViewController: UITableViewDataSource, UITableViewDelegate {
+   
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return pendingAuthors.count
+        switch section{
+        case 0:
+            return pendingAuthors.count
+        case 1:
+            return notifications?.count ?? 0
+        default:
+            return 0
+        }
+        
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "friendRequestCell", for: indexPath) as? FriendRequestCell {
-            let author = pendingAuthors[indexPath.row]
-            
-            cell.nameLabel.text = author.name
-            cell.emailLabel.text = author.email
-            cell.tag = indexPath.row
-            
-            if let imageURLString = author.image, let imageURL = URL(string: imageURLString) {
-                cell.profileImageView.kf.setImage(with: imageURL)
+        if indexPath.section == 0 {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: "friendRequestCell", for: indexPath) as? FriendRequestCell {
+                let author = pendingAuthors[indexPath.row]
+                
+                cell.nameLabel.text = author.name
+                cell.emailLabel.text = author.email
+                cell.tag = indexPath.row
+                
+                if let imageURLString = author.image, let imageURL = URL(string: imageURLString) {
+                    cell.profileImageView.kf.setImage(with: imageURL)
+                }
+                
+                cell.acceptButton.addTarget(self, action: #selector(acceptButtonTapped(_:)), for: .touchUpInside)
+                cell.acceptButton.isUserInteractionEnabled = true
+                cell.rejectButton.addTarget(self, action: #selector(rejectButtonTapped(_:)), for: .touchUpInside)
+                cell.rejectButton.isUserInteractionEnabled = true
+                return cell
+            } else {
+                let defaultCell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
+                return defaultCell
+            }
+        } else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: NotificationTableViewCell.reuseIdentifier, for: indexPath) as? NotificationTableViewCell else {
+                fatalError("Unable to dequeue NotificationTableViewCell")
             }
             
-            cell.acceptButton.addTarget(self, action: #selector(acceptButtonTapped(_:)), for: .touchUpInside)
-            cell.acceptButton.isUserInteractionEnabled = true
-            cell.rejectButton.addTarget(self, action: #selector(rejectButtonTapped(_:)), for: .touchUpInside)
-            cell.rejectButton.isUserInteractionEnabled = true
+            if let notification = self.notifications?[indexPath.row] {
+                cell.configure(with: notification)
+            }
+            
             return cell
-        } else {
-            let defaultCell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
-            return defaultCell
+            
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        if indexPath.section == 0 {
+            return 60
+        } else {
+            return tableView.estimatedRowHeight
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let secondViewController = ProfileViewController()
-        FirebaseStorageManager.shared.getSpecificAuth(id: pendingAuthors[indexPath.row].id) { author in
-            secondViewController.author = author
+        if indexPath.section == 0 {
+            let secondViewController = ProfileViewController()
+            FirebaseStorageManager.shared.getSpecificAuth(id: pendingAuthors[indexPath.row].id) { author in
+                secondViewController.author = author
+            }
+            self.navigationController?.pushViewController(secondViewController, animated: true)
+        } else {
+            
         }
-        self.navigationController?.pushViewController(secondViewController, animated: true)
+        
     }
 
     @objc func acceptButtonTapped(_ sender: UIButton) {
@@ -187,3 +230,58 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
         }
     }
 }
+
+class NotificationTableViewCell: UITableViewCell {
+    static let reuseIdentifier = "NotificationCell"
+
+    private let commentLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.numberOfLines = 0
+        return label
+    }()
+
+    private let timeLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12, weight: .light)
+        label.textColor = .gray
+        return label
+    }()
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setupUI()
+    }
+
+    private func setupUI() {
+        contentView.addSubview(commentLabel)
+        contentView.addSubview(timeLabel)
+
+        commentLabel.snp.makeConstraints { make in
+            make.top.leading.trailing.equalTo(contentView).inset(16)
+        }
+
+        timeLabel.snp.makeConstraints { make in
+            make.top.equalTo(commentLabel.snp.bottom).offset(8)
+            make.leading.trailing.equalTo(contentView).inset(16)
+            make.bottom.lessThanOrEqualTo(contentView).inset(16)
+        }
+    }
+    
+    func configure(with notification: NotificationStruct) {
+        commentLabel.text = notification.name + " " + notification.comment
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd HH:mm"
+        let date = Date(timeIntervalSince1970: notification.createdTime)
+        let dateString = dateFormatter.string(from: date)
+
+        timeLabel.text = dateString
+    }
+}
+
