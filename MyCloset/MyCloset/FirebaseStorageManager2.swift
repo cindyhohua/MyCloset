@@ -126,16 +126,16 @@ extension FirebaseStorageManager {
         }
         
     }
-
+    
     func addComment(postId: String, comment: String, posterId: String, completion: @escaping (Error?) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             completion(NSError(domain: "YourAppErrorDomain", code: -1,
                                userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
             return
         }
-
+        
         let postRef = firebaseDb.collection("articles").document(postId)
-
+        
         getAuth { author in
             let commentData: [String: Any] = [
                 "comment": comment,
@@ -161,13 +161,15 @@ extension FirebaseStorageManager {
     }
 }
 
+// notification
 extension FirebaseStorageManager {
     func sendNotification(authorId: String, postId: String, notifyType: NotifyWord, completion: @escaping (Error?) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             completion(NSError(domain: "YourAppErrorDomain", code: -1,
-                               userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+             userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
             return
         }
+        
         getAuthorNameById(authorId: currentUserID) { name in
             if let name = name {
                 let commentNotify: [String: Any] = [
@@ -178,9 +180,46 @@ extension FirebaseStorageManager {
                     "seen": false,
                     "createdTime": Date().timeIntervalSince1970
                 ]
-                self.firebaseDb.collection("auth").document(authorId).updateData([
+                
+                let updatedData: [String: Any] = [
+                    "notification": FieldValue.arrayUnion([commentNotify]),
+                    "notificationNotSeen": FieldValue.increment(Int64(1))
+                ]
+                
+                self.firebaseDb.collection("auth").document(authorId).updateData(updatedData) { error in
+                    completion(error)
+                }
+            } else {
+                let error = NSError(domain: "YourAppErrorDomain", code: -1,
+                                    userInfo: [NSLocalizedDescriptionKey: "Error retrieving author name"])
+                completion(error)
+            }
+        }
+    }
+    
+    func sendNotificationMyAcception(authorId: String, postId: String, notifyType: NotifyWord, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "YourAppErrorDomain", code: -1,
+             userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        
+        getAuthorNameById(authorId: authorId) { name in
+            if let name = name {
+                let commentNotify: [String: Any] = [
+                    "name": name,
+                    "postId": postId,
+                    "authId": authorId,
+                    "comment": notifyType.rawValue,
+                    "seen": false,
+                    "createdTime": Date().timeIntervalSince1970
+                ]
+                
+                let updatedData: [String: Any] = [
                     "notification": FieldValue.arrayUnion([commentNotify])
-                ]) { error in
+                ]
+                
+                self.firebaseDb.collection("auth").document(currentUserID).updateData(updatedData) { error in
                     completion(error)
                 }
             } else {
@@ -218,44 +257,67 @@ extension FirebaseStorageManager {
                         }
                     }
                     
-                    // 倒序排列
                     notifications.sort { $0.createdTime > $1.createdTime }
                     
                     completion(notifications, nil)
                 } else {
-                    completion([], nil)  // 沒有通知
+                    completion([], nil)
                 }
-            } catch {
-                completion(nil, error)
             }
         }
     }
     
-
+    func startListeningForNotifications() {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            let error = NSError(domain: "YourAppErrorDomain", code: -1,
+                                userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])
+            return
+        }
+        let docRef = firebaseDb.collection("auth").document(currentUserID)
+        
+        docRef.addSnapshotListener { documentSnapshot, error in
+            guard let document = documentSnapshot else {
+                print("Error fetching document: \(error!)")
+                return
+            }
+            
+            guard document.exists else {
+                print("Document does not exist")
+                return
+            }
+            
+            if let notifications = document["notification"] as? [[String: Any]] {
+                if !self.isFirstLoad {
+                    print("xxx", notifications)
+                    self.handleNotificationsChange(notifications: notifications)
+                } else {
+                    self.isFirstLoad = false
+                }
+            }
+        }
+    }
     
-    //    func updateNotificationArray(authorId: String, postId: String, updatedComment: NotifyWord, originComment: NotifyWord, completion: @escaping (Error?) -> Void) {
-    //        let documentReference = firebaseDb.collection("auth").document(authorId)
-    //        guard let currentUserID = Auth.auth().currentUser?.uid else {
-    //            completion(NSError(domain: "YourAppErrorDomain", code: -1,
-    //                               userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
-    //            return
-    //        }
-    //        documentReference.getDocument { (document, error) in
-    //            if let error = error {
-    //                completion(error)
-    //                return
-    //            }
-    //            do {
-    //                var currentNotificationArray = document?.get("notification") as? [[String: Any]] ?? []
-    //
-    //                if let index = currentNotificationArray.firstIndex(where: { $0["comment"] as? String == originComment.rawValue && $0["authId"] as? String == currentUserID }) {
-    //                    currentNotificationArray[index]["comment"] = updatedComment.rawValue
-    //                }
-    //
-    //                documentReference.updateData(["notification": currentNotificationArray]) { error in
-    //                    completion(error)
-    //                }
-    //            }
-    //        }
-    //    }
+    func handleNotificationsChange(notifications: [[String: Any]]) {
+        print("cccccc",notifications.last?["name"], notifications.last?["comment"])
+        if let name = notifications.last?["name"] as? String, let comment = notifications.last?["comment"] as? String {
+            displayLocalNotification(contentString: name + " " + comment)
+        }
+    }
+    
+    func displayLocalNotification(contentString: String) {
+        let content = UNMutableNotificationContent()
+            content.title = "MyCloset"
+            content.body = contentString
+
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+            UNUserNotificationCenter.current().add(request) { error in
+                if let error = error {
+                    print("Error displaying notification: \(error)")
+                }
+            }
+        }
+    
 }

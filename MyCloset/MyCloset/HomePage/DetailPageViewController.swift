@@ -115,9 +115,9 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0 :
+        case 0:
             return 2 + (article?.productList.count ?? 0)
-        case 1 :
+        case 1:
             return article?.comment.count ?? 0
         default:
             return 0

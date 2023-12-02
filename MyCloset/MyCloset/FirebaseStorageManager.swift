@@ -63,6 +63,7 @@ enum NotifyWord: String {
     case reject = "rejected your follow request"
     case accept = "accepted your follow request, you can see their post on your home page now"
     case deleteFriend = "doesn't wants to follow you anymore, what a shame :("
+    case myAcception = "started to follow you"
 }
 
 struct Post: Codable {
@@ -91,6 +92,7 @@ struct Product: Codable {
 class FirebaseStorageManager {
     static let shared = FirebaseStorageManager()
     let firebaseDb = Firestore.firestore()
+    var isFirstLoad = true
     private init() {}
     func getAuth(completion: @escaping (Author) -> Void) {
         let auth = firebaseDb.collection("auth").document(Auth.auth().currentUser?.uid ?? "")
@@ -556,6 +558,14 @@ extension FirebaseStorageManager {
                 print("Send successfully")
             }
         }
+        sendNotificationMyAcception(authorId: authorID, postId: "", notifyType: .myAcception) { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("Send successfully")
+            }
+        }
+        
 //
 //        updateNotificationArray(authorId: authorID, postId: "", updatedComment: .tapAccept, originComment: .friendRequest) { error in
 //            if let error = error {

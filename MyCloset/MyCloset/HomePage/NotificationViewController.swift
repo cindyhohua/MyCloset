@@ -108,7 +108,7 @@ class NotificationViewController: UIViewController {
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
             leftButton.tintColor = UIColor.lightBrown()
-        navigationItem.title = "Friend Request"
+        navigationItem.title = "Notifications"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
     }
     
@@ -208,18 +208,34 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
             let secondViewController = ProfileViewController()
             FirebaseStorageManager.shared.getSpecificAuth(id: pendingAuthors[indexPath.row].id) { author in
                 secondViewController.author = author
+                self.navigationController?.pushViewController(secondViewController, animated: true)
             }
-            self.navigationController?.pushViewController(secondViewController, animated: true)
         } else {
-            
+            if self.notifications?[indexPath.row].postId == "" {
+                let secondViewController = ProfileViewController()
+                FirebaseStorageManager.shared.getSpecificAuth(id: self.notifications?[indexPath.row].authId ?? "")
+                { author in
+                    secondViewController.author = author
+                    self.navigationController?.pushViewController(secondViewController, animated: true)
+                }
+            } else {
+                let secondViewController = DetailPageViewController()
+                FirebaseStorageManager.shared.fetchSpecificData(id: self.notifications?[indexPath.row].postId ?? "")
+                { article in
+                    secondViewController.article = article
+                    self.navigationController?.pushViewController(secondViewController, animated: true)
+                }
+            }
         }
-        
     }
 
     @objc func acceptButtonTapped(_ sender: UIButton) {
         let author = pendingAuthors[sender.tag]
         FirebaseStorageManager.shared.acceptFriendRequest(authorID: author.id) {_ in
-            self.tableView.reloadData()
+            FirebaseStorageManager.shared.fetchNotifications { notifies, error  in
+                self.notifications = notifies
+                self.tableView.reloadData()
+            }
         }
     }
 
