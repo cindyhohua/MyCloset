@@ -267,7 +267,7 @@ extension FirebaseStorageManager {
         }
     }
     
-    func startListeningForNotifications() {
+    func startListeningForAuthChanges() {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             let error = NSError(domain: "YourAppErrorDomain", code: -1,
                                 userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])
@@ -286,23 +286,88 @@ extension FirebaseStorageManager {
                 return
             }
             
-            if let notifications = document["notification"] as? [[String: Any]] {
-                if !self.isFirstLoad {
-                    print("xxx", notifications)
-                    self.handleNotificationsChange(notifications: notifications)
-                } else {
+            if self.isFirstLoad == true {
+                if let notifications = document["notification"] as? [[String: Any]],
+                   let pendingRequests = document["pending"] as? [String] {
+                    self.currentNotificationCount = notifications.count
+                    self.currentPendingCount = pendingRequests.count
                     self.isFirstLoad = false
                 }
             }
+            
+            if let oldNotificationCount = self.currentNotificationCount,
+               let oldPendingCount = self.currentPendingCount,
+               let notifications = document["notification"] as? [[String: Any]],
+               let pendingRequests = document["pending"] as? [String],
+               !self.isFirstLoad {
+                
+                let newNotificationCount = notifications.count
+                let newPendingCount = pendingRequests.count
+                
+                if newNotificationCount > oldNotificationCount {
+                    print("Notification change:", notifications)
+                    self.handleNotificationsChange(notifications: notifications)
+                } else if newPendingCount > oldPendingCount {
+                    print("Pending requests change:", pendingRequests)
+                    self.handlePendingRequestsChange(pendingRequests: pendingRequests)
+                }
+                self.currentNotificationCount = notifications.count
+                self.currentPendingCount = pendingRequests.count
+            } else {
+                self.isFirstLoad = false
+            }
         }
     }
-    
+
     func handleNotificationsChange(notifications: [[String: Any]]) {
-        print("cccccc",notifications.last?["name"], notifications.last?["comment"])
         if let name = notifications.last?["name"] as? String, let comment = notifications.last?["comment"] as? String {
             displayLocalNotification(contentString: name + " " + comment)
         }
     }
+
+    func handlePendingRequestsChange(pendingRequests: [String]) {
+        getAuthorNameById(authorId: pendingRequests.last ?? "") { name in
+            self.displayLocalNotification(contentString: (name ?? "") + " requested to follow you")
+        }
+    }
+
+    
+//    func startListeningForNotifications() {
+//        guard let currentUserID = Auth.auth().currentUser?.uid else {
+//            let error = NSError(domain: "YourAppErrorDomain", code: -1,
+//                                userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])
+//            return
+//        }
+//        let docRef = firebaseDb.collection("auth").document(currentUserID)
+//
+//        docRef.addSnapshotListener { documentSnapshot, error in
+//            guard let document = documentSnapshot else {
+//                print("Error fetching document: \(error!)")
+//                return
+//            }
+//
+//            guard document.exists else {
+//                print("Document does not exist")
+//                return
+//            }
+//
+//            if let notifications = document["notification"] as? [[String: Any]] {
+//                if !self.isFirstLoad {
+//                    print("xxx", notifications)
+//                    self.handleNotificationsChange(notifications: notifications)
+//                } else {
+//                    self.isFirstLoad = false
+//                }
+//            }
+//        }
+//    }
+//
+//    func handleNotificationsChange(notifications: [[String: Any]]) {
+//        print("cccccc",notifications.last?["name"], notifications.last?["comment"])
+//        if let name = notifications.last?["name"] as? String, let comment = notifications.last?["comment"] as? String {
+//            displayLocalNotification(contentString: name + " " + comment)
+//        }
+//    }
     
     func displayLocalNotification(contentString: String) {
         let content = UNMutableNotificationContent()

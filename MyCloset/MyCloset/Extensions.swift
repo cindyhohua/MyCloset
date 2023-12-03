@@ -30,3 +30,34 @@ extension UIView {
         }
     }
 }
+
+extension UIButton {
+    func addBadge(number: Int) {
+        let badgeLabel = UILabel()
+        badgeLabel.text = "\(number)"
+        badgeLabel.textColor = .white
+        badgeLabel.font = UIFont.systemFont(ofSize: 12)
+        badgeLabel.textAlignment = .center
+        badgeLabel.sizeToFit()
+        
+        let badgeSize = CGSize(width: badgeLabel.frame.width + 10, height: badgeLabel.frame.height + 4)
+        
+        let badgeView = UIView()
+        badgeView.frame = CGRect(x: self.frame.width + 12, y: -4, width: badgeSize.width, height: badgeSize.height)
+        badgeView.backgroundColor = .red
+        badgeView.layer.cornerRadius = badgeSize.height / 2
+        
+        badgeLabel.center = CGPoint(x: badgeSize.width / 2, y: badgeSize.height / 2)
+        badgeView.addSubview(badgeLabel)
+        
+        self.addSubview(badgeView)
+    }
+    
+    func removeBadge() {
+        for subview in self.subviews {
+            if subview is UIView {
+                subview.removeFromSuperview()
+            }
+        }
+    }
+}

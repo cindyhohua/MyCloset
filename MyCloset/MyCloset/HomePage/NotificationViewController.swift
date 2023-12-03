@@ -134,7 +134,7 @@ class NotificationViewController: UIViewController {
     }
 
     func fetchPendingAuthors() {
-        FirebaseStorageManager.shared.listenForPendingRequests { [weak self] pendingAuthors in
+        FirebaseStorageManager.shared.fetchPendingRequests { [weak self] pendingAuthors in
             self?.pendingAuthors = pendingAuthors
             self?.tableView.reloadData()
             print("Pending friend requests: \(pendingAuthors)")

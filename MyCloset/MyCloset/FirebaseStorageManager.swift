@@ -93,6 +93,8 @@ class FirebaseStorageManager {
     static let shared = FirebaseStorageManager()
     let firebaseDb = Firestore.firestore()
     var isFirstLoad = true
+    var currentNotificationCount: Int?
+    var currentPendingCount: Int?
     private init() {}
     func getAuth(completion: @escaping (Author) -> Void) {
         let auth = firebaseDb.collection("auth").document(Auth.auth().currentUser?.uid ?? "")
@@ -494,42 +496,38 @@ extension FirebaseStorageManager {
         }
     }
     
-    func listenForPendingRequests(completion: @escaping ([Author]) -> Void) {
+    func fetchPendingRequests(completion: @escaping ([Author]) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             completion([])
             return
         }
         
-        firebaseDb.collection("auth").document(currentUserID).addSnapshotListener { (documentSnapshot, error) in
-            guard let document = documentSnapshot else {
-                print("Error fetching document: \(error!)")
+        firebaseDb.collection("auth").document(currentUserID).getDocument { (documentSnapshot, error) in
+            guard let document = documentSnapshot, document.exists,
+                  let pendingRequests = document.data()?["pending"] as? [String] else {
                 completion([])
                 return
             }
             
-            if let pendingRequests = document.data()?["pending"] as? [String] {
-                // Fetch details of users who sent pending requests
-                var pendingAuthors: [Author] = []
+            var pendingAuthors: [Author] = []
+            
+            let dispatchGroup = DispatchGroup()
+            
+            for pendingID in pendingRequests {
+                dispatchGroup.enter()
                 
-                let dispatchGroup = DispatchGroup()
-                
-                for pendingID in pendingRequests {
-                    dispatchGroup.enter()
-                    
-                    self.getSpecificAuth(id: pendingID) { author in
-                        pendingAuthors.append(author)
-                        dispatchGroup.leave()
-                    }
+                self.getSpecificAuth(id: pendingID) { author in
+                    pendingAuthors.append(author)
+                    dispatchGroup.leave()
                 }
-                
-                dispatchGroup.notify(queue: .main) {
-                    completion(pendingAuthors)
-                }
-            } else {
-                completion([])
+            }
+            
+            dispatchGroup.notify(queue: .main) {
+                completion(pendingAuthors)
             }
         }
     }
+    
     
     func acceptFriendRequest(authorID: String, completion: @escaping (Error?) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {

@@ -13,6 +13,16 @@ class HomePageViewController: UIViewController {
     let tableView = UITableView()
     let createPostButton = UIButton()
     var articles: [Article] = []
+    
+    private lazy var notificationButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(systemName: "bell.fill"), for: .normal)
+        button.tintColor = .lightBrown()
+        button.addTarget(self, action: #selector(rightButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -44,11 +54,13 @@ class HomePageViewController: UIViewController {
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "crown.fill"), style: .plain, target: self, action: #selector(leftButtonTapped))
         navigationItem.leftBarButtonItem = leftButton
         leftButton.tintColor = UIColor.lightBrown()
-        let rightButton = UIBarButtonItem(image: UIImage(systemName: "bell.fill"), style: .plain, target: self, action: #selector(rightButtonTapped))
-        let rightButtonSearch = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
+        let rightBarButton = UIBarButtonItem(customView: notificationButton)
+        let rightButtonSearch = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"),
+           style: .plain, target: self, action: #selector(searchButtonTapped))
         rightButtonSearch.tintColor = UIColor.lightBrown()
-        navigationItem.rightBarButtonItems = [rightButton,rightButtonSearch]
-        rightButton.tintColor = UIColor.lightBrown()
+        updateBadge(count: 5)
+        navigationItem.rightBarButtonItems = [rightBarButton, rightButtonSearch]
+        rightBarButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "Home Page"
         view.addSubview(createPostButton)
         createPostButton.setTitle("+", for: .normal)
@@ -66,6 +78,14 @@ class HomePageViewController: UIViewController {
         
     }
     
+    func updateBadge(count: Int) {
+        if count > 0 {
+            notificationButton.addBadge(number: count)
+        } else {
+            notificationButton.removeBadge()
+        }
+    }
+    
     @objc func createPost() {
         let secondViewController = NewPostViewController()
         navigationController?.pushViewController(secondViewController, animated: true)
@@ -77,6 +97,7 @@ class HomePageViewController: UIViewController {
     }
     
     @objc func rightButtonTapped() {
+        print("tapped")
         let secondViewController = NotificationViewController()
         navigationController?.pushViewController(secondViewController, animated: true)
     }
