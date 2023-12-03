@@ -119,6 +119,11 @@ class NotificationViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchPendingAuthors()
+        FirebaseStorageManager.shared.resetNotificationNotSeen { error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
     }
 
     func setupTableView() {

@@ -40,10 +40,11 @@ extension UIButton {
         badgeLabel.textAlignment = .center
         badgeLabel.sizeToFit()
         
-        let badgeSize = CGSize(width: badgeLabel.frame.width + 10, height: badgeLabel.frame.height + 4)
+        let badgeSize = CGSize(width: badgeLabel.frame.width + 12, height: badgeLabel.frame.height + 4)
         
         let badgeView = UIView()
-        badgeView.frame = CGRect(x: self.frame.width + 12, y: -4, width: badgeSize.width, height: badgeSize.height)
+        badgeView.tag = 999
+        badgeView.frame = CGRect(x: self.frame.width - 6, y: -4, width: badgeSize.width, height: badgeSize.height)
         badgeView.backgroundColor = .red
         badgeView.layer.cornerRadius = badgeSize.height / 2
         
@@ -55,7 +56,7 @@ extension UIButton {
     
     func removeBadge() {
         for subview in self.subviews {
-            if subview is UIView {
+            if subview is UIView && subview.tag == 999 {
                 subview.removeFromSuperview()
             }
         }

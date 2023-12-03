@@ -95,6 +95,7 @@ class FirebaseStorageManager {
     var isFirstLoad = true
     var currentNotificationCount: Int?
     var currentPendingCount: Int?
+    var currentNotificationNotSeen: Int?
     private init() {}
     func getAuth(completion: @escaping (Author) -> Void) {
         let auth = firebaseDb.collection("auth").document(Auth.auth().currentUser?.uid ?? "")
@@ -469,17 +470,11 @@ extension FirebaseStorageManager {
         }
         
         firebaseDb.collection("auth").document(toUserID).updateData([
-            "pending": FieldValue.arrayUnion([currentUserID])
+            "pending": FieldValue.arrayUnion([currentUserID]),
+            "notificationNotSeen": FieldValue.increment(Int64(1))
         ]) { error in
             completion(error)
         }
-//        sendNotification(authorId: toUserID, postId: "", notifyType: .friendRequest) { error in
-//            if let error = error {
-//                print(error.localizedDescription)
-//            } else {
-//                print("send notification success")
-//            }
-//        }
     }
     
     func cancelFriendRequest(toUserID: String, completion: @escaping (Error?) -> Void) {

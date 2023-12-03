@@ -288,31 +288,42 @@ extension FirebaseStorageManager {
             
             if self.isFirstLoad == true {
                 if let notifications = document["notification"] as? [[String: Any]],
-                   let pendingRequests = document["pending"] as? [String] {
+                   let pendingRequests = document["pending"] as? [String],
+                   let notificationNotSeen = document["notificationNotSeen"] as? Int {
                     self.currentNotificationCount = notifications.count
                     self.currentPendingCount = pendingRequests.count
+                    self.currentNotificationNotSeen = notificationNotSeen
                     self.isFirstLoad = false
                 }
             }
             
             if let oldNotificationCount = self.currentNotificationCount,
                let oldPendingCount = self.currentPendingCount,
+               let oldNotificationNotSeen = self.currentNotificationNotSeen,
                let notifications = document["notification"] as? [[String: Any]],
                let pendingRequests = document["pending"] as? [String],
+               let newNotificationNotSeen = document["notificationNotSeen"] as? Int,
                !self.isFirstLoad {
                 
                 let newNotificationCount = notifications.count
                 let newPendingCount = pendingRequests.count
                 
                 if newNotificationCount > oldNotificationCount {
-                    print("Notification change:", notifications)
+                    print("Notification change:", notifications.last)
                     self.handleNotificationsChange(notifications: notifications)
                 } else if newPendingCount > oldPendingCount {
-                    print("Pending requests change:", pendingRequests)
+                    print("Pending requests change:", pendingRequests.last)
                     self.handlePendingRequestsChange(pendingRequests: pendingRequests)
                 }
-                self.currentNotificationCount = notifications.count
-                self.currentPendingCount = pendingRequests.count
+                
+                if newNotificationNotSeen != oldNotificationNotSeen {
+                    print("NotificationNotSeen change:", newNotificationNotSeen)
+                    NotificationCenter.default.post(name: Notification.Name("NotificationUpdate"), object: nil)
+                }
+                
+                self.currentNotificationCount = newNotificationCount
+                self.currentPendingCount = newPendingCount
+                self.currentNotificationNotSeen = newNotificationNotSeen
             } else {
                 self.isFirstLoad = false
             }
@@ -331,44 +342,6 @@ extension FirebaseStorageManager {
         }
     }
 
-    
-//    func startListeningForNotifications() {
-//        guard let currentUserID = Auth.auth().currentUser?.uid else {
-//            let error = NSError(domain: "YourAppErrorDomain", code: -1,
-//                                userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])
-//            return
-//        }
-//        let docRef = firebaseDb.collection("auth").document(currentUserID)
-//
-//        docRef.addSnapshotListener { documentSnapshot, error in
-//            guard let document = documentSnapshot else {
-//                print("Error fetching document: \(error!)")
-//                return
-//            }
-//
-//            guard document.exists else {
-//                print("Document does not exist")
-//                return
-//            }
-//
-//            if let notifications = document["notification"] as? [[String: Any]] {
-//                if !self.isFirstLoad {
-//                    print("xxx", notifications)
-//                    self.handleNotificationsChange(notifications: notifications)
-//                } else {
-//                    self.isFirstLoad = false
-//                }
-//            }
-//        }
-//    }
-//
-//    func handleNotificationsChange(notifications: [[String: Any]]) {
-//        print("cccccc",notifications.last?["name"], notifications.last?["comment"])
-//        if let name = notifications.last?["name"] as? String, let comment = notifications.last?["comment"] as? String {
-//            displayLocalNotification(contentString: name + " " + comment)
-//        }
-//    }
-    
     func displayLocalNotification(contentString: String) {
         let content = UNMutableNotificationContent()
             content.title = "MyCloset"
@@ -384,5 +357,47 @@ extension FirebaseStorageManager {
                 }
             }
         }
+}
+
+// badge
+extension FirebaseStorageManager {
+    func fetchNotSeen(completion: @escaping (Int) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(0)
+            return
+        }
+
+        firebaseDb.collection("auth").document(currentUserID).getDocument { (document, error) in
+            if let error = error {
+                print("Error fetching document: \(error)")
+                completion(0)
+                return
+            }
+
+            guard let document = document, document.exists,
+                  let data = document.data(),
+                  let notificationNotSeen = data["notificationNotSeen"] as? Int else {
+                completion(0)
+                return
+            }
+            completion(notificationNotSeen)
+        }
+    }
     
+    func resetNotificationNotSeen(completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            let error = NSError(domain: "YourAppErrorDomain", code: -1,
+                                userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])
+            completion(error)
+            return
+        }
+        
+        let updatedData: [String: Any] = [
+            "notificationNotSeen": 0
+        ]
+        
+        firebaseDb.collection("auth").document(currentUserID).updateData(updatedData) { error in
+            completion(error)
+        }
+    }
 }

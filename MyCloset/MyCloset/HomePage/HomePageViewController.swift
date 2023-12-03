@@ -22,10 +22,17 @@ class HomePageViewController: UIViewController {
         return button
     }()
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        NotificationCenter.default.addObserver(self,
+           selector: #selector(observerTrigger),
+           name: Notification.Name("NotificationUpdate"),
+           object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -33,6 +40,15 @@ class HomePageViewController: UIViewController {
         FirebaseStorageManager.shared.getFollowingArticles { articles in
             self.articles = articles
             self.tableView.reloadData()
+        }
+        FirebaseStorageManager.shared.fetchNotSeen { notSeenNumber in
+            self.updateBadge(count: notSeenNumber)
+        }
+    }
+    
+    @objc func observerTrigger() {
+        FirebaseStorageManager.shared.fetchNotSeen { notSeenNumber in
+            self.updateBadge(count: notSeenNumber)
         }
     }
     
@@ -58,7 +74,6 @@ class HomePageViewController: UIViewController {
         let rightButtonSearch = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"),
            style: .plain, target: self, action: #selector(searchButtonTapped))
         rightButtonSearch.tintColor = UIColor.lightBrown()
-        updateBadge(count: 5)
         navigationItem.rightBarButtonItems = [rightBarButton, rightButtonSearch]
         rightBarButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "Home Page"
