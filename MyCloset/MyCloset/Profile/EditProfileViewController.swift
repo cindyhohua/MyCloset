@@ -56,7 +56,7 @@ class EditProfileViewController: UIViewController {
         
         view.addSubview(uploadImageButton)
         uploadImageButton.setTitle("選擇照片", for: .normal)
-        uploadImageButton.setTitleColor(.white, for: .normal)
+        uploadImageButton.setTitleColor(UIColor.lightBrown(), for: .normal)
         uploadImageButton.snp.makeConstraints { make in
             make.centerX.centerY.equalTo(imageView)
         }
@@ -104,6 +104,7 @@ class EditProfileViewController: UIViewController {
         
         view.addSubview(deleteAccountButton)
         deleteAccountButton.setTitle("刪除帳號", for: .normal)
+        deleteAccountButton.addTarget(self, action: #selector(deleteAccount), for: .touchUpInside)
         deleteAccountButton.backgroundColor = .gray
         deleteAccountButton.layer.cornerRadius = 5
         deleteAccountButton.snp.makeConstraints { make in
@@ -124,6 +125,32 @@ class EditProfileViewController: UIViewController {
             make.height.equalTo(40)
         }
         logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func deleteAccount() {
+        FirebaseStorageManager.shared.deleteUser { result in
+            switch result {
+            case .success:
+                print("yyyy")
+                if let currentUser = Auth.auth().currentUser {
+                    currentUser.delete { error in
+                        if let error = error {
+                            print(error)
+                        } else {
+                            self.dismiss(animated: true) {
+                                if let tabBarController = self.tabBarController {
+                                    tabBarController.selectedIndex = 0
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    print("nono")
+                }
+            case .failure:
+                print("nnn")
+            }
+        }
     }
     
     @objc func logoutButtonTapped() {
@@ -157,10 +184,10 @@ class EditProfileViewController: UIViewController {
                 switch result {
                 case .success(let downloadURL):
                     FirebaseStorageManager.shared.updateAuth(image: downloadURL.absoluteString,
-                                                             name: self?.nameTextField.text ?? "",
-                                                             littleWords: self?.littleWordsTextField.text ?? "",
-                                                             weight: self?.weightTextField.text ?? "",
-                                                             height: self?.heightTextField.text ?? "") { _ in
+                       name: self?.nameTextField.text ?? "",
+                       littleWords: self?.littleWordsTextField.text ?? "",
+                       weight: self?.weightTextField.text ?? "",
+                       height: self?.heightTextField.text ?? "") { _ in
                         self?.navigationController?.popViewController(animated: true)
                     }
                 case .failure(let error):

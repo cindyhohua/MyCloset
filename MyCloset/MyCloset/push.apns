@@ -1,0 +1,13 @@
+{
+    "Simulator Target Bundle": "com.cindyhohua.MyCloset",
+    "aps": {
+        "alert": {
+            "title": "急事",
+            "subtitle" : "快點開始寫 SwiftUI 作業",
+            "body" : "不可以遲交唷"
+        },
+        "sound": "default",
+        "badge": 99
+    }
+}
+

@@ -8,11 +8,24 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import FirebaseMessaging
+import PullToRefreshKit
 
 class HomePageViewController: UIViewController {
     let tableView = UITableView()
     let createPostButton = UIButton()
     var articles: [Article] = []
+//    var token: String? {
+//        didSet {
+//            let tokenLable = UILabel()
+//            tokenLable.text = token
+//            view.addSubview(tokenLable)
+//            tokenLable.numberOfLines = 0
+//            tokenLable.snp.makeConstraints { make in
+//                make.center.leading.trailing.equalToSuperview()
+//            }
+//        }
+//    }
     
     private lazy var notificationButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -25,10 +38,29 @@ class HomePageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        Messaging.messaging().token { token, error in
+            Messaging.messaging().token { token, error in
+              if let error = error {
+                print("Error fetching FCM registration token: \(error)")
+              } else if let token = token {
+                print("FCM registration token: \(token)")
+                  FirebaseStorageManager.shared.addFMCFieldToAuthDocument(fmc: token)
+              }
+            }
+        }
+        
         NotificationCenter.default.addObserver(self,
            selector: #selector(observerTrigger),
            name: Notification.Name("NotificationUpdate"),
            object: nil)
+        self.tableView.configRefreshHeader(container: self) { [weak self] in
+            FirebaseStorageManager.shared.getFollowingArticles { articles in
+                self?.articles = articles
+                self?.tableView.reloadData()
+                self?.tableView.switchRefreshHeader(to: .normal(.success, 0.5))
+            }
+        }
+
     }
     
     deinit {

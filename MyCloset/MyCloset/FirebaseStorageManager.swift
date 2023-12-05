@@ -216,8 +216,7 @@ class FirebaseStorageManager {
 extension FirebaseStorageManager {
     func fetchData(completion: @escaping ([Article]) -> Void) {
         let articlesCollection = firebaseDb.collection("articles")
-        
-        articlesCollection.order(by: "createdTime", descending: true).getDocuments { (querySnapshot, error) in
+        articlesCollection.order(by: "like", descending: true).getDocuments { (querySnapshot, error) in
             guard error == nil else {
                 print("Error getting documents: \(error!)")
                 completion([])
@@ -522,7 +521,6 @@ extension FirebaseStorageManager {
             }
         }
     }
-    
     
     func acceptFriendRequest(authorID: String, completion: @escaping (Error?) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {

@@ -41,19 +41,109 @@ class DetailPageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        saveButton = UIBarButtonItem(image: UIImage(systemName: "bookmark.fill"), style: .plain, target: self, action: #selector(saveButtonTapped))
+        saveButton = UIBarButtonItem(
+            image: UIImage(systemName: "bookmark.fill"),
+            style: .plain, target: self, action: #selector(saveButtonTapped))
         view.backgroundColor = .white
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
-            navigationItem.leftBarButtonItem = leftButton
-            leftButton.tintColor = UIColor.brown
-        let rightButton = UIBarButtonItem(image: UIImage(systemName: "person.crop.circle.fill"), style: .plain, target: self, action: #selector(profileButtonTapped))
+        let leftButton = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.backward.circle"),
+            style: .plain, target: self, action: #selector(backButtonTapped))
+        navigationItem.leftBarButtonItem = leftButton
+        leftButton.tintColor = UIColor.brown
+        let rightButton = UIBarButtonItem(
+            image: UIImage(systemName: "person.crop.circle.fill"),
+            style: .plain, target: self, action: #selector(profileButtonTapped))
+        let reportButton = UIBarButtonItem(
+            image: UIImage(systemName: "exclamationmark.triangle"),
+            style: .plain, target: self, action: #selector(reportButtonTapped))
         rightButton.tintColor = UIColor.brown
-        
-            navigationItem.rightBarButtonItems = [rightButton, saveButton]
-            
+        reportButton.tintColor = UIColor.lightBrown()
+        navigationItem.rightBarButtonItems = [rightButton, saveButton, reportButton]
         navigationItem.title = article?.author.name
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.brown, NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.brown,
+            NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         setupTableView()
+    }
+    
+    @objc func reportButtonTapped() {
+        let alertController = UIAlertController(
+            title: "Report",
+            message: "Choose a reason for reporting",
+            preferredStyle: .actionSheet)
+        
+        let reasons = ["Inappropriate Content", "Harassment", "Spam"]
+        for reason in reasons {
+            let action = UIAlertAction(title: reason, style: .default) { _ in
+                FirebaseStorageManager.shared.reportOther(
+                    authorId: self.article?.author.id ?? "",
+                    postId: self.article?.id ?? "",
+                    reportReason: reason) { error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                    } else {
+                        self.showSuccessAlert()
+                    }
+                }
+            }
+            alertController.addAction(action)
+        }
+        
+        let customAction = UIAlertAction(title: "Other Reason", style: .default) { _ in
+            self.showCustomReportAlert()
+        }
+        alertController.addAction(customAction)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        if let popoverController = alertController.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(
+                x: self.view.bounds.midX,
+                y: self.view.bounds.midY,
+                width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func showSuccessAlert() {
+        let successAlert = UIAlertController(
+            title: "Report Submitted",
+            message: "Thank you for reporting. We will review your report.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        successAlert.addAction(okAction)
+        present(successAlert, animated: true, completion: nil)
+    }
+    
+    func showCustomReportAlert() {
+        let customReportAlert = UIAlertController(
+            title: "Custom Report",
+            message: "Please enter your report reason", preferredStyle: .alert)
+        customReportAlert.addTextField { textField in
+            textField.placeholder = "Enter your reason"
+        }
+        
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { _ in
+            if let reason = customReportAlert.textFields?.first?.text, !reason.isEmpty {
+                FirebaseStorageManager.shared.reportOther(
+                    authorId: self.article?.author.id ?? "",
+                    postId: self.article?.id ?? "", reportReason: reason) { error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                    } else {
+                        self.showSuccessAlert()
+                    }
+                }
+            }
+        }
+        customReportAlert.addAction(submitAction)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        customReportAlert.addAction(cancelAction)
+        
+        present(customReportAlert, animated: true, completion: nil)
     }
     
     @objc func backButtonTapped() {
@@ -63,7 +153,10 @@ class DetailPageViewController: UIViewController {
     @objc func saveButtonTapped() {
         print("save")
         self.saveOrNot = !(saveOrNot ?? false)
-        FirebaseStorageManager.shared.savePost(postId: article!.id, imageURL: article!.imageURL, time: article?.createdTime ?? 0) { error in
+        FirebaseStorageManager.shared.savePost(
+            postId: article!.id,
+            imageURL: article!.imageURL,
+            time: article?.createdTime ?? 0) { error in
             if let error = error {
                 print(error.localizedDescription)
             } else {
@@ -76,8 +169,9 @@ class DetailPageViewController: UIViewController {
         let secondViewController = ProfileViewController()
         FirebaseStorageManager.shared.getSpecificAuth(id: article?.author.id ?? "") { author in
             secondViewController.author = author
+            self.navigationController?.pushViewController(secondViewController, animated: true)
         }
-        self.navigationController?.pushViewController(secondViewController, animated: true)
+        
     }
 }
 
@@ -124,17 +218,24 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(
+_ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             switch indexPath.row {
             case 0:
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "imageCell", for: indexPath) as? DetailPageImageCell else {
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: "imageCell",
+                    for: indexPath) as? DetailPageImageCell else {
                     fatalError("Cant find cell")
                 }
                 var position: [CGPoint] = []
                 if article?.position.isEmpty == false {
                     for indexI in 0..<(article?.position.count ?? 0) {
-                        position.append(CGPointMake(article?.position[indexI].xPosition ?? 0 , article?.position[indexI].yPosition ?? 0))
+                        position.append(CGPointMake(
+                                article?.position[indexI].xPosition ?? 0,
+                                article?.position[indexI].yPosition ?? 0)
+                        )
                     }
                 }
                 cell.isUserInteractionEnabled = true
@@ -145,22 +246,32 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.authorId = article?.author.id
                 return cell
             case 1:
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "commentCell", for: indexPath) as? DetailPageCommentCell else {
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: "commentCell",
+                    for: indexPath) as? DetailPageCommentCell else {
                     fatalError("Cant find cell")
                 }
                 cell.configure(content: article?.content ?? "")
                 cell.selectionStyle = .none
                 return cell
             default:
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "productCell", for: indexPath) as? DetailPageProductCell else {
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: "productCell",
+                    for: indexPath) as? DetailPageProductCell else {
                     fatalError("Cant find cell")
                 }
-                cell.configure(product: article?.productList[indexPath.row-2] ?? Product(productName: "", productStore: "", productPrice: "", productComment: ""))
+                cell.configure(
+                    product: article?.productList[indexPath.row-2] ?? Product(productName: "",
+                                                                              productStore: "",
+                                                                              productPrice: "",
+                                                                              productComment: ""))
                 cell.selectionStyle = .none
                 return cell
             }
         } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "othersComment", for: indexPath) as? OthersCommentCell else {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "othersComment",
+                for: indexPath) as? OthersCommentCell else {
                 fatalError("Cant find cell")
             }
             cell.nameButton.setTitle(article?.comment[indexPath.row].authName, for: .normal)

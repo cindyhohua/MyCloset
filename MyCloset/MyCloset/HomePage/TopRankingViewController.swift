@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import PullToRefreshKit
 
 class TopRankingViewController: UIViewController {
     fileprivate let collectionView: UICollectionView = {
@@ -30,8 +31,15 @@ class TopRankingViewController: UIViewController {
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
             leftButton.tintColor = UIColor.lightBrown()
-        navigationItem.title = "Newest Post"
+        navigationItem.title = "Top Ranking"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        self.collectionView.configRefreshHeader(container: self) { [weak self] in
+            FirebaseStorageManager.shared.fetchData { articles in
+                self?.articles = articles
+                self?.collectionView.reloadData()
+                self?.collectionView.switchRefreshHeader(to: .normal(.success, 0.5))
+            }
+        }
     }
     
     @objc func backButtonTapped() {
@@ -81,13 +89,11 @@ extension TopRankingViewController: UICollectionViewDelegate, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let secondViewController = DetailPageViewController()
         FirebaseStorageManager.shared.fetchSpecificData(id: articles?[indexPath.row].id ?? "") { article in
-            let secondViewController = DetailPageViewController()
             secondViewController.article = article
             self.navigationController?.pushViewController(secondViewController, animated: true)
         }
         
     }
 }
-
-

@@ -53,6 +53,8 @@
 		CA795B082B19818800D5584E /* DetailPageInputCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B072B19818800D5584E /* DetailPageInputCommentView.swift */; };
 		CA795B0B2B19F3CB00D5584E /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B0A2B19F3CB00D5584E /* MyProfileViewController.swift */; };
 		CA795B0D2B1B263C00D5584E /* FirebaseStorageManager2.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B0C2B1B263C00D5584E /* FirebaseStorageManager2.swift */; };
+		CA795B0F2B1C716300D5584E /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = CA795B0E2B1C716300D5584E /* FirebaseMessaging */; };
+		CA795B122B1F0B5800D5584E /* FirebaseStorageManager3.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */; };
 		CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */; };
 		CABCC7CC2B0F3EB700FB38C5 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */; };
 		CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */; };
@@ -107,6 +109,8 @@
 		CA795B072B19818800D5584E /* DetailPageInputCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageInputCommentView.swift; sourceTree = "<group>"; };
 		CA795B0A2B19F3CB00D5584E /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		CA795B0C2B1B263C00D5584E /* FirebaseStorageManager2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager2.swift; sourceTree = "<group>"; };
+		CA795B102B1C816200D5584E /* push.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = push.apns; sourceTree = "<group>"; };
+		CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager3.swift; sourceTree = "<group>"; };
 		CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAuthCollectionViewCell.swift; sourceTree = "<group>"; };
 		CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -120,6 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA795B0F2B1C716300D5584E /* FirebaseMessaging in Frameworks */,
 				CA016D482B05FDD50066FBE7 /* FirebaseAnalytics in Frameworks */,
 				CA016D4A2B05FDD50066FBE7 /* FirebaseAuth in Frameworks */,
 				CA016D4C2B05FDD50066FBE7 /* FirebaseDatabase in Frameworks */,
@@ -175,6 +180,7 @@
 				CA016D302B04CB8C0066FBE7 /* Main.storyboard */,
 				CA016D312B04CB8D0066FBE7 /* LaunchScreen.storyboard */,
 				CA016D2C2B04CB880066FBE7 /* AppDelegate.swift */,
+				CA795B102B1C816200D5584E /* push.apns */,
 				CA016D2F2B04CB8B0066FBE7 /* SceneDelegate.swift */,
 				CA3B0FBE2B0DEA99001B708E /* LogInViewController.swift */,
 				CA795B032B1888D200D5584E /* AppleLoginSetProfileViewController.swift */,
@@ -182,6 +188,7 @@
 				CA016D272B04CB860066FBE7 /* Extensions.swift */,
 				CA016D442B05FC510066FBE7 /* FirebaseStorageManager.swift */,
 				CA795B0C2B1B263C00D5584E /* FirebaseStorageManager2.swift */,
+				CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */,
 				CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */,
 				CA016D572B074C180066FBE7 /* MyClosetPage */,
 				CA3B0FAF2B08DE70001B708E /* Doll page */,
@@ -280,6 +287,7 @@
 				CA016D4D2B05FDD50066FBE7 /* FirebaseFirestore */,
 				CA016D4F2B05FDD50066FBE7 /* FirebaseFirestoreSwift */,
 				CA016D512B05FDD50066FBE7 /* FirebaseStorage */,
+				CA795B0E2B1C716300D5584E /* FirebaseMessaging */,
 			);
 			productName = MyCloset;
 			productReference = CA016D0D2B04C93D0066FBE7 /* MyCloset.app */;
@@ -411,6 +419,7 @@
 				CA016D392B04CB8D0066FBE7 /* SceneDelegate.swift in Sources */,
 				CA795B0D2B1B263C00D5584E /* FirebaseStorageManager2.swift in Sources */,
 				CA61D5C52B15BC870028FB39 /* AccessoriesChosenViewController.swift in Sources */,
+				CA795B122B1F0B5800D5584E /* FirebaseStorageManager3.swift in Sources */,
 				CA016D352B04CB8D0066FBE7 /* HomePageViewController.swift in Sources */,
 				CA016D5B2B0758E40066FBE7 /* SegmentView.swift in Sources */,
 				CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */,
@@ -572,6 +581,7 @@
 				DEVELOPMENT_TEAM = N4C7YMWND2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyCloset/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "to let you export images to photo library";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -603,6 +613,7 @@
 				DEVELOPMENT_TEAM = N4C7YMWND2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyCloset/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "to let you export images to photo library";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -686,6 +697,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CA016D462B05FDD50066FBE7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		CA795B0E2B1C716300D5584E /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA016D462B05FDD50066FBE7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 

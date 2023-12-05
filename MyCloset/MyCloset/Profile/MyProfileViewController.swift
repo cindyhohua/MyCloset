@@ -61,6 +61,13 @@ class MyProfileViewController: UIViewController {
         }
         collectionView.delegate = self
         collectionView.dataSource = self
+        self.collectionView.configRefreshHeader(container: self) { [weak self] in
+            FirebaseStorageManager.shared.getAuth { author in
+                self?.author = author
+                self?.collectionView.reloadData()
+                self?.collectionView.switchRefreshHeader(to: .normal(.success, 0.5))
+            }
+        }
     }
 
     @objc func setButtonTapped() {

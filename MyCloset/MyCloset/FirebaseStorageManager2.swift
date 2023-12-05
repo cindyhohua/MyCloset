@@ -218,7 +218,6 @@ extension FirebaseStorageManager {
                 let updatedData: [String: Any] = [
                     "notification": FieldValue.arrayUnion([commentNotify])
                 ]
-                
                 self.firebaseDb.collection("auth").document(currentUserID).updateData(updatedData) { error in
                     completion(error)
                 }
@@ -310,17 +309,16 @@ extension FirebaseStorageManager {
                 
                 if newNotificationCount > oldNotificationCount {
                     print("Notification change:", notifications.last)
-                    self.handleNotificationsChange(notifications: notifications)
+//                    self.handleNotificationsChange(notifications: notifications)
                 } else if newPendingCount > oldPendingCount {
                     print("Pending requests change:", pendingRequests.last)
-                    self.handlePendingRequestsChange(pendingRequests: pendingRequests)
+//                    self.handlePendingRequestsChange(pendingRequests: pendingRequests)
                 }
                 
                 if newNotificationNotSeen != oldNotificationNotSeen {
                     print("NotificationNotSeen change:", newNotificationNotSeen)
                     NotificationCenter.default.post(name: Notification.Name("NotificationUpdate"), object: nil)
                 }
-                
                 self.currentNotificationCount = newNotificationCount
                 self.currentPendingCount = newPendingCount
                 self.currentNotificationNotSeen = newNotificationNotSeen
@@ -366,7 +364,6 @@ extension FirebaseStorageManager {
             completion(0)
             return
         }
-
         firebaseDb.collection("auth").document(currentUserID).getDocument { (document, error) in
             if let error = error {
                 print("Error fetching document: \(error)")
@@ -398,6 +395,103 @@ extension FirebaseStorageManager {
         
         firebaseDb.collection("auth").document(currentUserID).updateData(updatedData) { error in
             completion(error)
+        }
+    }
+    
+    func addFMCFieldToAuthDocument(fmc: String) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("User not authenticated")
+            return
+        }
+
+        let authCollection = firebaseDb.collection("auth")
+        let userDocument = authCollection.document(currentUserID)
+        
+        // 更新 "fmc" 欄位
+        userDocument.updateData(["fmc": fmc]) { error in
+            if let error = error {
+                print("Error updating fmc field: \(error.localizedDescription)")
+            } else {
+                print("fmc field updated successfully")
+            }
+        }
+    }
+}
+
+// delete account
+extension FirebaseStorageManager {
+    func deleteUser(completion: @escaping (Result<Void, Error>) -> Void) {
+        getAuth { author in
+            var postID: [String] = []
+            guard let posts = author.post else {
+                return
+            }
+            for authorPost in posts {
+                postID.append(authorPost.id)
+            }
+            self.deletePost(for: postID)
+            self.deleteFriend(usersWhoFollowHim: author.followers, usersWhoHasBeenFollowed: author.following)
+            self.deleteMyself()
+            completion(.success(()))
+        }
+    }
+    
+    func deletePost(for postIDs: [String]?) {
+        guard let postIDs = postIDs else {
+            return
+        }
+        
+        let postsCollection = firebaseDb.collection("articles")
+        
+        for postID in postIDs {
+            postsCollection.document(postID).delete { error in
+                if let error = error {
+                    print("Error deleting post \(postID): \(error)")
+                }
+            }
+        }
+    }
+    
+    func deleteFriend(usersWhoFollowHim: [String]?, usersWhoHasBeenFollowed: [String]?) {
+        guard let followers = usersWhoFollowHim, let following = usersWhoHasBeenFollowed else {
+            return
+        }
+        
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            return
+        }
+        let authCollection = firebaseDb.collection("auth")
+        
+        for user in followers {
+            authCollection.document(user).updateData([
+                "following": FieldValue.arrayRemove([currentUserID])
+            ]) { error in
+                if let error = error {
+                    print("Error updating following list for user \(currentUserID): \(error)")
+                }
+            }
+        }
+        
+        for user in followers {
+            authCollection.document(user).updateData([
+                "followers": FieldValue.arrayRemove([currentUserID])
+            ]) { error in
+                if let error = error {
+                    print("Error updating followers list for user \(user): \(error)")
+                }
+            }
+        }
+    }
+    
+    func deleteMyself() {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            return
+        }
+        
+        firebaseDb.collection("auth").document(currentUserID).delete { error in
+            if let error = error {
+                print("Error deleting user \(currentUserID): \(error)")
+            }
         }
     }
 }

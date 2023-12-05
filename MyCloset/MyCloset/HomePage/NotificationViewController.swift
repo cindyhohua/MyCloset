@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import PullToRefreshKit
 
 class FriendRequestCell: UITableViewCell {
     let profileImageView: UIImageView = {
@@ -100,6 +101,7 @@ class NotificationViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         FirebaseStorageManager.shared.fetchNotifications { notifies, error  in
             self.notifications = notifies
             print(self.notifications)
@@ -110,6 +112,13 @@ class NotificationViewController: UIViewController {
             leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "Notifications"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        self.tableView.configRefreshHeader(container: self) { [weak self] in
+            self?.fetchPendingAuthors()
+            FirebaseStorageManager.shared.fetchNotifications { notifies, error  in
+                self?.notifications = notifies
+                self?.tableView.switchRefreshHeader(to: .normal(.success, 0.5))
+            }
+        }
     }
     
     @objc func backButtonTapped() {
@@ -129,7 +138,7 @@ class NotificationViewController: UIViewController {
     func setupTableView() {
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
 
         tableView.dataSource = self
@@ -238,6 +247,7 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
         let author = pendingAuthors[sender.tag]
         FirebaseStorageManager.shared.acceptFriendRequest(authorID: author.id) {_ in
             FirebaseStorageManager.shared.fetchNotifications { notifies, error  in
+                self.fetchPendingAuthors()
                 self.notifications = notifies
                 self.tableView.reloadData()
             }
@@ -247,6 +257,7 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
     @objc func rejectButtonTapped(_ sender: UIButton) {
         let author = pendingAuthors[sender.tag]
         FirebaseStorageManager.shared.rejectFriendRequest(authorID: author.id) {_ in
+            self.fetchPendingAuthors()
             self.tableView.reloadData()
         }
     }

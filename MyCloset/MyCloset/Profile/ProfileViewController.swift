@@ -36,6 +36,7 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -65,6 +66,11 @@ class ProfileViewController: UIViewController {
             }
         }
         
+        let blockButton = UIBarButtonItem(
+            image: UIImage(systemName: "exclamationmark.triangle"),
+            style: .plain, target: self, action: #selector(blockButtonTapped))
+        blockButton.tintColor = .lightBrown()
+        
         followButton.tintColor = .lightBrown()
         self.navigationItem.rightBarButtonItem = followButton
         followButton.target = self
@@ -72,7 +78,7 @@ class ProfileViewController: UIViewController {
         
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain,
                                          target: self, action: #selector(backButtonTapped))
-        navigationItem.leftBarButtonItem = leftButton
+        navigationItem.leftBarButtonItems = [leftButton, blockButton]
         leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = author?.name
         navigationController?.navigationBar.titleTextAttributes =
@@ -81,6 +87,40 @@ class ProfileViewController: UIViewController {
         self.collectionView.reloadData()
     }
     
+    @objc func blockButtonTapped() {
+        let alertController = UIAlertController(
+            title: "Confirm Block",
+            message: "Are you sure you want to block this user?",
+            preferredStyle: .alert
+        )
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+
+        let blockAction = UIAlertAction(title: "Block", style: .destructive) { _ in
+            FirebaseStorageManager.shared.blockOther(authorId: self.author?.id ?? "") { result in
+                switch result {
+                case .success:
+                    print("User blocked successfully.")
+                    guard let viewControllers = self.navigationController?.viewControllers else { return }
+                    for controller in viewControllers {
+                        if controller is HomePageViewController {
+                        self.navigationController?.popToViewController(controller, animated: true)
+                        }
+                        if controller is MyProfileViewController {
+                        self.navigationController?.popToViewController(controller, animated: true)
+                        }
+                    }
+                case .failure(let error):
+                    print("Error blocking user: \(error.localizedDescription)")
+                }
+            }
+        }
+        alertController.addAction(blockAction)
+
+        present(alertController, animated: true, completion: nil)
+    }
+ 
     func setup() {
         view.backgroundColor = .white
         view.addSubview(collectionView)
