@@ -222,8 +222,9 @@ extension FirebaseStorageManager {
                     completion(error)
                 }
             } else {
-                let error = NSError(domain: "YourAppErrorDomain", code: -1,
-                                    userInfo: [NSLocalizedDescriptionKey: "Error retrieving author name"])
+                let error = NSError(
+                    domain: "YourAppErrorDomain", code: -1,
+                    userInfo: [NSLocalizedDescriptionKey: "Error retrieving author name"])
                 completion(error)
             }
         }

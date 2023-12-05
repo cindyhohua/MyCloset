@@ -30,12 +30,14 @@ class SignupViewController: UIViewController {
             } else {
                 print("nice")
                 print(authResult?.user.uid)
-                let author = Author(email: email, id: authResult?.user.uid ?? "",
-                                    name: nickName, image: "", height: "", weight: "",
-                                    privateOrNot: false,
-                                    littleWords: "", following: [],
-                                    followers: [], pending: [], post: [],
-                                    saved: [], notification: [], notificationNotSeen: 0)
+                let author = Author(
+                    email: email, id: authResult?.user.uid ?? "",
+                    name: nickName, image: "", height: "", weight: "",
+                    privateOrNot: false,
+                    littleWords: "", following: [],
+                    followers: [], pending: [], post: [],
+                    saved: [], notification: [], notificationNotSeen: 0,
+                    blockedUsers: [], blockedByUsers: [])
                 FirebaseStorageManager.shared.addAuth(uid: authResult?.user.uid ?? "", author: author) { result in
                     switch result {
                     case .success(_):

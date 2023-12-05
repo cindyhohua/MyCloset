@@ -44,12 +44,14 @@ class AppleLoginSetProfileViewController: UIViewController {
     @objc private func submitButtonTapped() {
         if let email = emailTextField.text, let fullName = fullNameTextField.text, let id = userId {
             print("Email: \(email), Full Name: \(fullName)")
-            FirebaseStorageManager.shared.addAuth(uid: id, author: Author(email: email, id: id,
-                 name: fullName, image: "", height: "", weight: "",
-                 privateOrNot: false, littleWords: "", following: [],
-                 followers: [], pending: [], post: [],
-                 saved: [], notification: [], notificationNotSeen: 0)) { result in
-                switch result {
+            FirebaseStorageManager.shared.addAuth(uid: id, author: Author(
+                email: email, id: id,
+                name: fullName, image: "", height: "", weight: "",
+                privateOrNot: false, littleWords: "", following: [],
+                followers: [], pending: [], post: [],
+                saved: [], notification: [], notificationNotSeen: 0,
+                blockedUsers:[], blockedByUsers: [])) { result in
+                    switch result {
                 case .success(_) :
                     print("success")
                     if let previousVC = self.presentingViewController?.presentingViewController {

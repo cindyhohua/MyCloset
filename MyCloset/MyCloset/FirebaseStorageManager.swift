@@ -46,6 +46,8 @@ struct Author: Codable {
     let saved: [Post]?
     let notification: [NotificationStruct]?
     let notificationNotSeen: Int?
+    let blockedUsers: [String]?
+    let blockedByUsers: [String]?
 }
 
 struct NotificationStruct: Codable {
@@ -215,6 +217,11 @@ class FirebaseStorageManager {
 // post
 extension FirebaseStorageManager {
     func fetchData(completion: @escaping ([Article]) -> Void) {
+        var blocked: [String] = []
+        getAuth { author in
+            blocked += author.blockedUsers ?? []
+            blocked += author.blockedByUsers ?? []
+        }
         let articlesCollection = firebaseDb.collection("articles")
         articlesCollection.order(by: "like", descending: true).getDocuments { (querySnapshot, error) in
             guard error == nil else {
@@ -231,7 +238,9 @@ extension FirebaseStorageManager {
                     let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
                     let decoder = JSONDecoder()
                     let article = try decoder.decode(Article.self, from: jsonData)
-                    articles.append(article)
+                    if !blocked.contains(article.author.id) {
+                        articles.append(article)
+                    }
                 }
                 completion(articles)
             } catch {
@@ -429,6 +438,11 @@ extension FirebaseStorageManager {
 // friend
 extension FirebaseStorageManager {
     func searchFriends(query: String, completion: @escaping ([Author]) -> Void) {
+        var blocked: [String] = []
+        getAuth { author in
+            blocked += author.blockedUsers ?? []
+            blocked += author.blockedByUsers ?? []
+        }
         firebaseDb.collection("auth")
             .whereField("name", isGreaterThanOrEqualTo: query)
             .whereField("name", isLessThan: query + "z")
@@ -450,7 +464,12 @@ extension FirebaseStorageManager {
                         let data = document.data()
                         let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
                         let decoder = JSONDecoder()
-                        return try decoder.decode(Author.self, from: jsonData)
+                        let user =  try decoder.decode(Author.self, from: jsonData)
+                        if !blocked.contains(user.id) {
+                            return user
+                        } else {
+                            return nil
+                        }
                     } catch {
                         print("Error decoding JSON: \(error)")
                         return nil

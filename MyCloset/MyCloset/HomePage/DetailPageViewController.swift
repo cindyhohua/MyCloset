@@ -218,8 +218,7 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(
-_ tableView: UITableView,
+    func tableView(_ tableView: UITableView,
         cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             switch indexPath.row {
@@ -261,10 +260,11 @@ _ tableView: UITableView,
                     fatalError("Cant find cell")
                 }
                 cell.configure(
-                    product: article?.productList[indexPath.row-2] ?? Product(productName: "",
-                                                                              productStore: "",
-                                                                              productPrice: "",
-                                                                              productComment: ""))
+                    product: article?.productList[indexPath.row-2] ?? Product(
+                        productName: "",
+                        productStore: "",
+                        productPrice: "",
+                        productComment: ""))
                 cell.selectionStyle = .none
                 return cell
             }
@@ -288,10 +288,18 @@ _ tableView: UITableView,
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
-            let secondVC = ProfileViewController()
-            FirebaseStorageManager.shared.getSpecificAuth(id: article?.comment[indexPath.row].authId ?? "") { author in
-                secondVC.author = author
-                self.navigationController?.pushViewController(secondVC, animated: true)
+            var blocked: [String] = []
+            FirebaseStorageManager.shared.getAuth { author in
+                blocked += author.blockedUsers ?? []
+                blocked += author.blockedByUsers ?? []
+                if let authId = self.article?.comment[indexPath.row].authId, !blocked.contains(authId) {
+                    print(authId)
+                    let secondVC = ProfileViewController()
+                    FirebaseStorageManager.shared.getSpecificAuth(id: authId) { author in
+                        secondVC.author = author
+                        self.navigationController?.pushViewController(secondVC, animated: true)
+                    }
+                }
             }
         }
     }
