@@ -11,23 +11,43 @@ class DetailPageViewController: UIViewController {
     private var saveButton: UIBarButtonItem!
     var article: Article? {
         didSet {
-            FirebaseStorageManager.shared.getAuth { author in
-                self.saveOrNot = author.saved?.contains {$0.id == self.article?.id}
+            FirebaseStorageManager.shared.getAuth { [weak self] author in
+                if let articleID = self?.article?.id,
+                   let savedArticles = author.saved,
+                   !savedArticles.isEmpty {
+                    self?.saveOrNot = savedArticles.contains { $0.id == articleID }
+                } else {
+                    self?.saveOrNot = false
+                }
             }
-            commentInput.postId = article?.id
-            commentInput.posterId = article?.author.id
+
+            if let articleID = article?.id,
+               let authorID = article?.author.id {
+                commentInput.postId = articleID
+                commentInput.posterId = authorID
+            } else {
+                commentInput.postId = nil
+                commentInput.posterId = nil
+            }
         }
     }
+
     var saveOrNot: Bool? {
         didSet {
-            if saveOrNot == true {
-                saveButton.tintColor = .brown
-            } else {
-                saveButton.tintColor = .lightLightBrown()
+            DispatchQueue.main.async {
+                if let save = self.saveOrNot {
+                    if let button = self.saveButton {
+                        if save {
+                            button.tintColor = .brown
+                        } else {
+                            button.tintColor = .lightLightBrown()
+                        }
+                    }
+                }
             }
-            
         }
     }
+
     var tableView = UITableView()
     var commentInput = DetailPageInputCommentView()
     lazy var imageView: UIImageView = {
@@ -48,18 +68,19 @@ class DetailPageViewController: UIViewController {
         let leftButton = UIBarButtonItem(
             image: UIImage(systemName: "chevron.backward.circle"),
             style: .plain, target: self, action: #selector(backButtonTapped))
-        navigationItem.leftBarButtonItem = leftButton
         leftButton.tintColor = UIColor.brown
         let rightButton = UIBarButtonItem(
-            image: UIImage(systemName: "person.crop.circle.fill"),
+            title: article?.author.name,
             style: .plain, target: self, action: #selector(profileButtonTapped))
         let reportButton = UIBarButtonItem(
             image: UIImage(systemName: "exclamationmark.triangle"),
             style: .plain, target: self, action: #selector(reportButtonTapped))
         rightButton.tintColor = UIColor.brown
         reportButton.tintColor = UIColor.lightBrown()
-        navigationItem.rightBarButtonItems = [rightButton, saveButton, reportButton]
-        navigationItem.title = article?.author.name
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        flexibleSpace.width = 20
+        navigationItem.leftBarButtonItems = [leftButton, flexibleSpace, rightButton]
+        navigationItem.rightBarButtonItems = [reportButton, saveButton]
         navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedString.Key.foregroundColor: UIColor.brown,
             NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]

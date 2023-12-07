@@ -7,7 +7,7 @@
 import UIKit
 import SnapKit
 
-class PaperDollAccessoriesViewController: UIViewController{
+class PaperDollAccessoriesViewController: UIViewController {
     var cloth: ClothesStruct?
 
     var dollParts: [String: UIImageView] = [:]
@@ -34,7 +34,9 @@ class PaperDollAccessoriesViewController: UIViewController{
     
     var segmentIndex = 0
     
-    let codeSegmented = SegmentView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44), buttonTitle: ["飾品","顏色"])
+    let codeSegmented = SegmentView(
+        frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44),
+        buttonTitle: ["飾品","顏色"])
 
     var neckline: [DollCloth] = [
         DollCloth(outer: "飾品1", bottom: "B飾品1", name: "neckline"),
@@ -68,11 +70,15 @@ class PaperDollAccessoriesViewController: UIViewController{
         let addButton = UIBarButtonItem(title: "save", style: .plain, target: self, action: #selector(addButtonTapped))
         addButton.tintColor = UIColor.lightBrown()
         navigationItem.rightBarButtonItem = addButton
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
+        let leftButton = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.backward.circle"),
+            style: .plain, target: self, action: #selector(backButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
             leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "My Closet"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        navigationController?.navigationBar.titleTextAttributes =
+        [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(),
+         NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         
         view.addSubview(imageViewDoll)
         imageViewDoll.image = UIImage(named: "doll")
@@ -136,7 +142,9 @@ class PaperDollAccessoriesViewController: UIViewController{
         imageView = UIImageView()
         imageView?.isUserInteractionEnabled = true
         imageView?.contentMode = .scaleAspectFit
-        imageView?.image = (tintColor == nil) ? UIImage(named: imageName) : UIImage(named: imageName)?.withTintColor(tintColor ?? .white)
+        imageView?.image =
+        (tintColor == nil) ?
+        UIImage(named: imageName) : UIImage(named: imageName)?.withTintColor(tintColor ?? .white)
         imageViewDoll.addSubview(imageView!)
         setupConstraints(for: imageView!)
     }
@@ -180,7 +188,6 @@ class PaperDollAccessoriesViewController: UIViewController{
         }
     }
 }
-
 
 extension PaperDollAccessoriesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SegmentControlDelegate, ColorPickerViewDelegate {
     func didSelectColor(_ color: UIColor) {
@@ -237,33 +244,39 @@ extension PaperDollAccessoriesViewController: UICollectionViewDataSource, UIColl
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .white
-        collectionView.register(OutfitCollectionViewCell.self, forCellWithReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier)
+        collectionView.register(
+            OutfitCollectionViewCell.self,
+            forCellWithReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier)
 
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
 
-        let cellWidth = (UIScreen.main.bounds.width - layout.minimumInteritemSpacing * 2 - layout.sectionInset.left - layout.sectionInset.right) / 3
+        let cellWidth = (
+            UIScreen.main.bounds.width - layout.minimumInteritemSpacing * 2 - layout.sectionInset.left - layout.sectionInset.right
+        ) / 3
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
 
-        layout.sectionInset = UIEdgeInsets(top: 10,
-                                           left: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2,
-                                           bottom: 10, right: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2)
-
+        layout.sectionInset = UIEdgeInsets(
+            top: 10,
+            left: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2,
+            bottom: 10, right: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2)
+        
         collectionView.collectionViewLayout = layout
     }
-
-    
-    
-    
+ 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return outfits?.count ?? 0
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier, for: indexPath) as? OutfitCollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier,
+            for: indexPath) as? OutfitCollectionViewCell {
             if let outfit = outfits?[indexPath.item] {
-                cell.configure(with: outfit)
+                cell.configureAcc(with: outfit)
             }
             return cell
         } else {
@@ -272,7 +285,10 @@ extension PaperDollAccessoriesViewController: UICollectionViewDataSource, UIColl
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = (collectionView.frame.width - 30) / 3
         return CGSize(width: cellWidth, height: cellWidth)
     }
@@ -281,7 +297,6 @@ extension PaperDollAccessoriesViewController: UICollectionViewDataSource, UIColl
         if let selectedOutfit = outfits?[indexPath.item] {
             updateDollImage(with: selectedOutfit)
             selected?[segmentIndex] = (outfitss?[segmentIndex][indexPath.item])!
-            print(selected)
         }
     }
     

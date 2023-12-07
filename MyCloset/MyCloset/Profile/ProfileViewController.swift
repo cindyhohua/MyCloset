@@ -12,6 +12,9 @@ import FirebaseAuth
 
 class ProfileViewController: UIViewController {
     private var followButton = UIBarButtonItem()
+    let blockButton = UIBarButtonItem(
+        image: UIImage(systemName: "exclamationmark.triangle"),
+        style: .plain, target: self, action: #selector(blockButtonTapped))
     fileprivate let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cview = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -28,6 +31,7 @@ class ProfileViewController: UIViewController {
             othersSetup()
             if author?.id == Auth.auth().currentUser?.uid {
                 followButton.isHidden = true
+                blockButton.isHidden = true
             }
             navigationItem.title = author?.name
             self.collectionView.reloadData()
@@ -65,10 +69,10 @@ class ProfileViewController: UIViewController {
                 followButton.action = #selector(followButtonTapped)
             }
         }
-        
-        let blockButton = UIBarButtonItem(
-            image: UIImage(systemName: "exclamationmark.triangle"),
-            style: .plain, target: self, action: #selector(blockButtonTapped))
+//
+//        let blockButton = UIBarButtonItem(
+//            image: UIImage(systemName: "exclamationmark.triangle"),
+//            style: .plain, target: self, action: #selector(blockButtonTapped))
         blockButton.tintColor = .lightBrown()
         
         followButton.tintColor = .lightBrown()
@@ -157,18 +161,37 @@ class ProfileViewController: UIViewController {
         }
     }
     @objc func unfollowButtonTapped() {
+        // 創建一個確認視窗
+        let alertController = UIAlertController(title: "Unfollow", message: "Are you sure you want to unfollow?", preferredStyle: .alert)
+
+        // 增加確認按鈕
+        let confirmAction = UIAlertAction(title: "Confirm", style: .destructive) { _ in
+            self.performUnfollow()
+        }
+        alertController.addAction(confirmAction)
+
+        // 增加取消按鈕
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+
+        // 顯示確認視窗
+        present(alertController, animated: true, completion: nil)
+    }
+
+    func performUnfollow() {
         FirebaseStorageManager.shared.removeFriend(friendID: author?.id ?? "") { error in
             if let error = error {
-                print("Error sending friend request: \(error)")
+                print("Error removing friend: \(error)")
             } else {
                 self.followButton = UIBarButtonItem(title: "Follow", style: .plain,
                                                     target: self, action: #selector(self.followButtonTapped))
                 self.followButton.tintColor = UIColor.lightBrown()
                 self.navigationItem.rightBarButtonItem = self.followButton
-                print("unfollow")
+                print("Unfollow successful")
             }
         }
     }
+
     @objc func unrequestButtonTapped() {
         FirebaseStorageManager.shared.cancelFriendRequest(toUserID: author?.id ?? "") { error in
             if let error = error {

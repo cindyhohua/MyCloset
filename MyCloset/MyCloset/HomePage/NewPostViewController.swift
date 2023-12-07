@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import TOCropViewController
 
 class NewPostViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var position: [CGPoint] = []
@@ -30,23 +31,53 @@ class NewPostViewController: UIViewController, UIImagePickerControllerDelegate, 
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
-    
+
     @objc func pickPhoto() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
-        present(imagePicker, animated: true, completion: nil)
-    }
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            imageView.image = pickedImage
-            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
-            imageView.addGestureRecognizer(tapGestureRecognizer)
-            imageView.isUserInteractionEnabled = true
-            navigationItem.rightBarButtonItem?.isEnabled = true
+
+        let alertController = UIAlertController(title: "選擇照片來源", message: nil, preferredStyle: .actionSheet)
+
+        let cameraAction = UIAlertAction(title: "相機", style: .default) { _ in
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                imagePicker.sourceType = .camera
+                self.present(imagePicker, animated: true, completion: nil)
+            } else {
+                print("相機不可用")
+            }
         }
-        
-        dismiss(animated: true, completion: nil)
+
+        let libraryAction = UIAlertAction(title: "相簿", style: .default) { _ in
+            imagePicker.sourceType = .photoLibrary
+            self.present(imagePicker, animated: true, completion: nil)
+        }
+
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+
+        alertController.addAction(cameraAction)
+        alertController.addAction(libraryAction)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true, completion: nil)
+    }
+
+    
+    func showAlert(message: String) {
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "確定", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let pickedImage = info[.originalImage] as? UIImage {
+            self.dismiss(animated: true)
+            let cropViewController = TOCropViewController(image: pickedImage)
+            cropViewController.delegate = self
+            let customAspectRatio = CGSize(width: 1, height: 1.4)
+            cropViewController.customAspectRatio = customAspectRatio
+            present(cropViewController, animated: true, completion: nil)
+        }
     }
     
     func convertToRelativePosition(_ point: CGPoint) -> CGPoint {
@@ -125,3 +156,16 @@ class NewPostViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
 }
+
+extension NewPostViewController: TOCropViewControllerDelegate {
+    func cropViewController(_ cropViewController: TOCropViewController, didCropTo image: UIImage, with cropRect: CGRect, angle: Int) {
+        // 在這裡處理裁切後的照片，例如顯示在 UIImageView 中
+        imageView.image = image
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
+        imageView.addGestureRecognizer(tapGestureRecognizer)
+        imageView.isUserInteractionEnabled = true
+        navigationItem.rightBarButtonItem?.isEnabled = true
+        dismiss(animated: true, completion: nil)
+    }
+}
+

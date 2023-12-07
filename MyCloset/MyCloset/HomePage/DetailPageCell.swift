@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import QuartzCore
+
 class DetailPageImageCell: UITableViewCell {
     var labelTexts: [Product]?
     var likeCount: Int?
@@ -75,8 +77,16 @@ class DetailPageImageCell: UITableViewCell {
         likeButton.backgroundColor = .white
         likeButton.layer.cornerRadius = 25
         likeButton.addTarget(self, action: #selector(likeTapped), for: .touchUpInside)
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(likeButtonLongPressed(_:)))
+        likeButton.addGestureRecognizer(longPressGesture)
     }
     
+    @objc func likeButtonLongPressed(_ gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .began {
+            print("Like button long pressed!")
+        }
+    }
+  
     @objc func likeTapped() {
         FirebaseStorageManager.shared.toggleLike(postId: postId ?? "", authorId: authorId ?? "") { error in
                 if let error = error {

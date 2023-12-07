@@ -16,9 +16,9 @@ class ChangeClothesViewController: UIViewController {
     var currentIndex = 0
     var timer: Timer?
     
-    let buttonTitle = ["Tops","Bottoms","Accessories"]
+    let buttonTitle = ["Tops", "Bottoms", "Accessories"]
     var clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
-    var sectionAll : [[Section]] = []
+    var sectionAll: [[Section]] = []
     var sections: [Section] = []
     var dollParts: [String: UIImageView] = [:]
     var segmentesIndex: Int = 0
@@ -32,7 +32,9 @@ class ChangeClothesViewController: UIViewController {
         let image1 = UIImage(named: "changing1") ?? UIImage()
         let image2 = UIImage(named: "changing2") ?? UIImage()
         imageArray = [image1, image2]
-        timer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(switchImage), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(
+            timeInterval: 0.3, target: self, selector: #selector(switchImage),
+            userInfo: nil, repeats: true)
     }
     
     @objc func switchImage() {
@@ -84,7 +86,9 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
         tabBarController?.tabBar.backgroundColor = .white
         view.backgroundColor = .white
         navigationItem.title = "Change clothes"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        navigationController?.navigationBar.titleTextAttributes =
+        [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(),
+         NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         // Set up doll parts
         view.addSubview(imageViewDoll)
         view.addSubview(imageViewChanging)
@@ -188,11 +192,15 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ClosetPageCell", for: indexPath) as? ClosetPageCell else {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "ClosetPageCell",
+            for: indexPath) as? ClosetPageCell else {
             fatalError("Cant find cell")
         }
         if let imageData = sections[indexPath.section].items[indexPath.row].image {
-            cell.configure(with: imageData , name: sections[indexPath.section].items[indexPath.row].item ?? "")
+            cell.configure(
+                with: imageData ,
+                name: sections[indexPath.section].items[indexPath.row].item ?? "")
             cell.index = segmentesIndex
         } else {
             cell.configureWithoutImage(name: sections[indexPath.section].items[indexPath.row].item ?? "")

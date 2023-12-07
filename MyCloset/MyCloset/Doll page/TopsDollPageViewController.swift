@@ -289,7 +289,9 @@ extension PaperDollTopsViewController: UICollectionViewDataSource, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier, for: indexPath) as? OutfitCollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier,
+            for: indexPath) as? OutfitCollectionViewCell {
             if let outfit = outfits?[indexPath.item] {
                 cell.configure(with: outfit)
             }

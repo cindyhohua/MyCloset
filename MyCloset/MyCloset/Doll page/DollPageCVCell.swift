@@ -38,8 +38,30 @@ class OutfitCollectionViewCell: UICollectionViewCell {
     func configure(with outfit: DollCloth) {
         let outerImage = UIImage(named: "\(outfit.outer)")
         let bottomImage = UIImage(named: "\(outfit.bottom)")
-        outfitImageView.image = UIImage(named: "download20231105155350")
-//        outfitImageView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+        outfitImageView.image = createCenterCroppedImage(named: "\(outfit.outer)")
+    }
+    
+    func configureAcc(with outfit: DollCloth) {
+        let outerImage = UIImage(named: "\(outfit.outer)")
+        let bottomImage = UIImage(named: "\(outfit.bottom)")
+        outfitImageView.image = UIImage(named: "\(outfit.outer)")
+    }
+    
+    func createCenterCroppedImage(named imageName: String) -> UIImage? {
+        guard let originalImage = UIImage(named: imageName) else {
+            return nil
+        }
+
+        let width = originalImage.size.width / 2
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: width))
+        let xPosition = -(originalImage.size.width - width) / 2
+        let yPosition = -(originalImage.size.height - width) / 2
+
+        let image = renderer.image { context in
+            originalImage.draw(at: CGPoint(x: xPosition, y: yPosition))
+        }
+
+        return image
     }
 }
 

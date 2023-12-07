@@ -6,7 +6,7 @@
 //
 import UIKit
 import SnapKit
-
+import TOCropViewController
 
 class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var clothes: ClothesStruct?
@@ -154,8 +154,37 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
     @objc func uploadImageButtonTapped() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
-        present(imagePicker, animated: true, completion: nil)
+
+        let alertController = UIAlertController(title: "選擇照片來源", message: nil, preferredStyle: .actionSheet)
+
+        let photoLibraryAction = UIAlertAction(title: "從相簿選擇", style: .default) { _ in
+            imagePicker.sourceType = .photoLibrary
+            self.present(imagePicker, animated: true, completion: nil)
+        }
+
+        let cameraAction = UIAlertAction(title: "拍攝照片", style: .default) { _ in
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                imagePicker.sourceType = .camera
+                self.present(imagePicker, animated: true, completion: nil)
+            } else {
+                self.showAlert(message: "你的設備沒有相機功能。")
+            }
+        }
+
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+
+        alertController.addAction(photoLibraryAction)
+        alertController.addAction(cameraAction)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true, completion: nil)
+    }
+
+    func showAlert(message: String) {
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "確定", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
     }
     
     // MARK: - UIPickerViewDataSource and UIPickerViewDelegate
@@ -192,11 +221,13 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
     // MARK: - UIImagePickerControllerDelegate
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[.originalImage] as? UIImage {
-            imageView.image = image
-            uploadImageButton.setTitle("重新選擇照片", for: .normal)
+        if let pickedImage = info[.originalImage] as? UIImage {
+            picker.dismiss(animated: true)
+            let cropViewController = TOCropViewController(image: pickedImage)
+            cropViewController.delegate = self
+            cropViewController.aspectRatioPreset = .presetSquare
+            present(cropViewController, animated: true, completion: nil)
         }
-        picker.dismiss(animated: true, completion: nil)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -212,7 +243,10 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
         let content = contentTextField.text ?? ""
         let image = imageView.image?.jpegData(compressionQuality: 0.3)
         
-        CoreDataManager.shared.addClothes(category: categoryName, subcategory: subcategoryName, item: itemName, price: price, store: storeName, content: content, image: image)
+        CoreDataManager.shared.addClothes(
+            category: categoryName, subcategory: subcategoryName,
+            item: itemName, price: price, store: storeName,
+            content: content, image: image)
         guard let viewControllers = self.navigationController?.viewControllers else { return }
         for controller in viewControllers {
             if controller is MyClosetPageViewController {
@@ -244,5 +278,13 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
                 make.height.equalTo(40)
             }
         }
+    }
+}
+
+extension AddMyClosetViewController: TOCropViewControllerDelegate {
+    func cropViewController(_ cropViewController: TOCropViewController, didCropTo image: UIImage, with cropRect: CGRect, angle: Int) {
+        imageView.image = image
+        uploadImageButton.setTitle("重新選擇照片", for: .normal)
+        dismiss(animated: true, completion: nil)
     }
 }

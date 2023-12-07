@@ -35,7 +35,7 @@
 		CA016D5D2B07691A0066FBE7 /* AddMyClothesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */; };
 		CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */; };
 		CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */; };
-		CA3B0FB12B08DE8B001B708E /* DollPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */; };
+		CA3B0FB12B08DE8B001B708E /* TopsDollPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB02B08DE8B001B708E /* TopsDollPageViewController.swift */; };
 		CA3B0FB32B09CF76001B708E /* DollPageCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */; };
 		CA3B0FB52B0B1CD2001B708E /* DollModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB42B0B1CD2001B708E /* DollModel.swift */; };
 		CA3B0FB72B0B2053001B708E /* TopsChosenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */; };
@@ -55,6 +55,8 @@
 		CA795B0D2B1B263C00D5584E /* FirebaseStorageManager2.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B0C2B1B263C00D5584E /* FirebaseStorageManager2.swift */; };
 		CA795B0F2B1C716300D5584E /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = CA795B0E2B1C716300D5584E /* FirebaseMessaging */; };
 		CA795B122B1F0B5800D5584E /* FirebaseStorageManager3.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */; };
+		CA795B142B205D6800D5584E /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = CA795B132B205D6800D5584E /* FirebaseCrashlytics */; };
+		CA795B162B205D8B00D5584E /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CA795B152B205D8B00D5584E /* FirebaseAnalyticsSwift */; };
 		CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */; };
 		CABCC7CC2B0F3EB700FB38C5 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */; };
 		CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */; };
@@ -90,7 +92,7 @@
 		CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMyClothesViewController.swift; sourceTree = "<group>"; };
 		CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManeger.swift; sourceTree = "<group>"; };
 		CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetDetailPageViewController.swift; sourceTree = "<group>"; };
-		CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageViewController.swift; sourceTree = "<group>"; };
+		CA3B0FB02B08DE8B001B708E /* TopsDollPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopsDollPageViewController.swift; sourceTree = "<group>"; };
 		CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageCVCell.swift; sourceTree = "<group>"; };
 		CA3B0FB42B0B1CD2001B708E /* DollModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollModel.swift; sourceTree = "<group>"; };
 		CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopsChosenViewController.swift; sourceTree = "<group>"; };
@@ -128,8 +130,10 @@
 				CA016D482B05FDD50066FBE7 /* FirebaseAnalytics in Frameworks */,
 				CA016D4A2B05FDD50066FBE7 /* FirebaseAuth in Frameworks */,
 				CA016D4C2B05FDD50066FBE7 /* FirebaseDatabase in Frameworks */,
+				CA795B162B205D8B00D5584E /* FirebaseAnalyticsSwift in Frameworks */,
 				CA016D4E2B05FDD50066FBE7 /* FirebaseFirestore in Frameworks */,
 				CA016D522B05FDD50066FBE7 /* FirebaseStorage in Frameworks */,
+				CA795B142B205D6800D5584E /* FirebaseCrashlytics in Frameworks */,
 				82073DDD4A75F060A18ED851 /* Pods_MyCloset.framework in Frameworks */,
 				CA016D502B05FDD50066FBE7 /* FirebaseFirestoreSwift in Frameworks */,
 			);
@@ -236,11 +240,11 @@
 			isa = PBXGroup;
 			children = (
 				CA3B0FB42B0B1CD2001B708E /* DollModel.swift */,
-				CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */,
 				CA3B0FBC2B0C6C35001B708E /* ChangeClothesViewController.swift */,
-				CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */,
+				CA3B0FB02B08DE8B001B708E /* TopsDollPageViewController.swift */,
 				CA3B0FB82B0B4BC4001B708E /* BottomChosenViewController.swift */,
 				CA61D5C42B15BC870028FB39 /* AccessoriesChosenViewController.swift */,
+				CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */,
 				CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */,
 				CA61D5C02B14873A0028FB39 /* MineDollViewController.swift */,
 				CA61D5C22B148B000028FB39 /* MineDollDetailViewController.swift */,
@@ -288,6 +292,8 @@
 				CA016D4F2B05FDD50066FBE7 /* FirebaseFirestoreSwift */,
 				CA016D512B05FDD50066FBE7 /* FirebaseStorage */,
 				CA795B0E2B1C716300D5584E /* FirebaseMessaging */,
+				CA795B132B205D6800D5584E /* FirebaseCrashlytics */,
+				CA795B152B205D8B00D5584E /* FirebaseAnalyticsSwift */,
 			);
 			productName = MyCloset;
 			productReference = CA016D0D2B04C93D0066FBE7 /* MyCloset.app */;
@@ -352,6 +358,11 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
 			);
 			outputFileListPaths = (
 			);
@@ -359,7 +370,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/SwiftLint/swiftlint\"\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
 		};
 		E3A782220BE03FC6CBA2C67A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -424,7 +435,7 @@
 				CA016D5B2B0758E40066FBE7 /* SegmentView.swift in Sources */,
 				CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */,
 				CA3B0FB92B0B4BC4001B708E /* BottomChosenViewController.swift in Sources */,
-				CA3B0FB12B08DE8B001B708E /* DollPageViewController.swift in Sources */,
+				CA3B0FB12B08DE8B001B708E /* TopsDollPageViewController.swift in Sources */,
 				CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */,
 				CA3B0FB32B09CF76001B708E /* DollPageCVCell.swift in Sources */,
 				CAF701142B1222440053B12B /* NotificationViewController.swift in Sources */,
@@ -578,6 +589,7 @@
 				CODE_SIGN_ENTITLEMENTS = MyCloset/MyCloset.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = N4C7YMWND2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyCloset/Info.plist;
@@ -610,6 +622,7 @@
 				CODE_SIGN_ENTITLEMENTS = MyCloset/MyCloset.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = N4C7YMWND2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyCloset/Info.plist;
@@ -702,6 +715,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CA016D462B05FDD50066FBE7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
+		};
+		CA795B132B205D6800D5584E /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA016D462B05FDD50066FBE7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		CA795B152B205D8B00D5584E /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA016D462B05FDD50066FBE7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 

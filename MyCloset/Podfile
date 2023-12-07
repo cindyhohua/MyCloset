@@ -12,6 +12,8 @@ pod 'SnapKit', '~> 5.6.0'
 pod 'Alamofire'
 pod 'Kingfisher'
 pod 'IQKeyboardManager'
-pod "PullToRefreshKit"
+pod 'PullToRefreshKit'
+pod 'TOCropViewController'
+
 
 end
