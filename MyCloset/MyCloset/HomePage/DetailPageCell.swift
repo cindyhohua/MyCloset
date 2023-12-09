@@ -9,10 +9,16 @@ import UIKit
 import SnapKit
 import QuartzCore
 
+protocol LongPressDelegate {
+    func longPress()
+}
+
 class DetailPageImageCell: UITableViewCell {
     var labelTexts: [Product]?
     var likeCount: Int?
     var authorId: String?
+    var friendList: [String] = []
+    var delegate: LongPressDelegate?
     var isLiked: Bool? {
         didSet {
             if isLiked == true {
@@ -83,7 +89,7 @@ class DetailPageImageCell: UITableViewCell {
     
     @objc func likeButtonLongPressed(_ gesture: UILongPressGestureRecognizer) {
         if gesture.state == .began {
-            print("Like button long pressed!")
+            delegate?.longPress()
         }
     }
   

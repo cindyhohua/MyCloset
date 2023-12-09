@@ -275,7 +275,7 @@ extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollecti
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier, for: indexPath) as? OutfitCollectionViewCell {
             if let outfit = outfits?[indexPath.item] {
-                cell.configure(with: outfit)
+                cell.configure(with: outfit, yPos: 2)
             }
             return cell
         } else {

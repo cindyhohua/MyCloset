@@ -35,10 +35,10 @@ class OutfitCollectionViewCell: UICollectionViewCell {
         }
     }
 
-    func configure(with outfit: DollCloth) {
+    func configure(with outfit: DollCloth, yPos: CGFloat) {
         let outerImage = UIImage(named: "\(outfit.outer)")
         let bottomImage = UIImage(named: "\(outfit.bottom)")
-        outfitImageView.image = createCenterCroppedImage(named: "\(outfit.outer)")
+        outfitImageView.image = createCenterCroppedImage(named: "\(outfit.outer)", yPos: yPos)
     }
     
     func configureAcc(with outfit: DollCloth) {
@@ -47,7 +47,7 @@ class OutfitCollectionViewCell: UICollectionViewCell {
         outfitImageView.image = UIImage(named: "\(outfit.outer)")
     }
     
-    func createCenterCroppedImage(named imageName: String) -> UIImage? {
+    func createCenterCroppedImage(named imageName: String, yPos: CGFloat) -> UIImage? {
         guard let originalImage = UIImage(named: imageName) else {
             return nil
         }
@@ -55,7 +55,7 @@ class OutfitCollectionViewCell: UICollectionViewCell {
         let width = originalImage.size.width / 2
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: width))
         let xPosition = -(originalImage.size.width - width) / 2
-        let yPosition = -(originalImage.size.height - width) / 2
+        let yPosition = -(originalImage.size.height - width) / yPos
 
         let image = renderer.image { context in
             originalImage.draw(at: CGPoint(x: xPosition, y: yPosition))

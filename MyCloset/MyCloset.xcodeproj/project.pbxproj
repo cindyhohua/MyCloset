@@ -57,6 +57,8 @@
 		CA795B122B1F0B5800D5584E /* FirebaseStorageManager3.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */; };
 		CA795B142B205D6800D5584E /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = CA795B132B205D6800D5584E /* FirebaseCrashlytics */; };
 		CA795B162B205D8B00D5584E /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CA795B152B205D8B00D5584E /* FirebaseAnalyticsSwift */; };
+		CA795B192B21CACB00D5584E /* FriendList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B182B21CACB00D5584E /* FriendList.swift */; };
+		CA795B1B2B244A7900D5584E /* HairDollPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B1A2B244A7800D5584E /* HairDollPageViewController.swift */; };
 		CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */; };
 		CABCC7CC2B0F3EB700FB38C5 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */; };
 		CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */; };
@@ -113,6 +115,8 @@
 		CA795B0C2B1B263C00D5584E /* FirebaseStorageManager2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager2.swift; sourceTree = "<group>"; };
 		CA795B102B1C816200D5584E /* push.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = push.apns; sourceTree = "<group>"; };
 		CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager3.swift; sourceTree = "<group>"; };
+		CA795B182B21CACB00D5584E /* FriendList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendList.swift; sourceTree = "<group>"; };
+		CA795B1A2B244A7800D5584E /* HairDollPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HairDollPageViewController.swift; sourceTree = "<group>"; };
 		CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAuthCollectionViewCell.swift; sourceTree = "<group>"; };
 		CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -212,6 +216,7 @@
 				CA016D2B2B04CB880066FBE7 /* HomePageViewController.swift */,
 				CA016D2A2B04CB880066FBE7 /* HomePageTableCell.swift */,
 				CA016D3C2B04F36B0066FBE7 /* DetailPageViewController.swift */,
+				CA795B182B21CACB00D5584E /* FriendList.swift */,
 				CA795B052B1980F200D5584E /* DetailPageCommentCell.swift */,
 				CA795B072B19818800D5584E /* DetailPageInputCommentView.swift */,
 				CA016D552B0729C00066FBE7 /* DetailPageCell.swift */,
@@ -241,6 +246,7 @@
 			children = (
 				CA3B0FB42B0B1CD2001B708E /* DollModel.swift */,
 				CA3B0FBC2B0C6C35001B708E /* ChangeClothesViewController.swift */,
+				CA795B1A2B244A7800D5584E /* HairDollPageViewController.swift */,
 				CA3B0FB02B08DE8B001B708E /* TopsDollPageViewController.swift */,
 				CA3B0FB82B0B4BC4001B708E /* BottomChosenViewController.swift */,
 				CA61D5C42B15BC870028FB39 /* AccessoriesChosenViewController.swift */,
@@ -426,9 +432,11 @@
 				CA3B0FB72B0B2053001B708E /* TopsChosenViewController.swift in Sources */,
 				CA3B0FC12B0DF221001B708E /* SignUpViewController.swift in Sources */,
 				CA519DFA2B0EEF5E00892AC4 /* ProfileViewController.swift in Sources */,
+				CA795B192B21CACB00D5584E /* FriendList.swift in Sources */,
 				CA016D342B04CB8D0066FBE7 /* HomePageTableCell.swift in Sources */,
 				CA016D392B04CB8D0066FBE7 /* SceneDelegate.swift in Sources */,
 				CA795B0D2B1B263C00D5584E /* FirebaseStorageManager2.swift in Sources */,
+				CA795B1B2B244A7900D5584E /* HairDollPageViewController.swift in Sources */,
 				CA61D5C52B15BC870028FB39 /* AccessoriesChosenViewController.swift in Sources */,
 				CA795B122B1F0B5800D5584E /* FirebaseStorageManager3.swift in Sources */,
 				CA016D352B04CB8D0066FBE7 /* HomePageViewController.swift in Sources */,

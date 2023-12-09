@@ -220,17 +220,27 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             let secondViewController = ProfileViewController()
-            FirebaseStorageManager.shared.getSpecificAuth(id: pendingAuthors[indexPath.row].id) { author in
-                secondViewController.author = author
-                self.navigationController?.pushViewController(secondViewController, animated: true)
+            FirebaseStorageManager.shared.getSpecificAuth(id: pendingAuthors[indexPath.row].id) { result in
+                switch result {
+                case .success(let author):
+                    secondViewController.author = author
+                    self.navigationController?.pushViewController(secondViewController, animated: true)
+                case .failure(let failure):
+                    print(failure)
+                }
             }
         } else {
             if self.notifications?[indexPath.row].postId == "" {
                 let secondViewController = ProfileViewController()
                 FirebaseStorageManager.shared.getSpecificAuth(id: self.notifications?[indexPath.row].authId ?? "")
-                { author in
-                    secondViewController.author = author
-                    self.navigationController?.pushViewController(secondViewController, animated: true)
+                { result in
+                    switch result {
+                    case .success(let author):
+                        secondViewController.author = author
+                        self.navigationController?.pushViewController(secondViewController, animated: true)
+                    case .failure(let failure):
+                        print(failure)
+                    }
                 }
             } else {
                 let secondViewController = DetailPageViewController()

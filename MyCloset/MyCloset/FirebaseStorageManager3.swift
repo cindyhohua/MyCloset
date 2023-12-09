@@ -75,6 +75,59 @@ extension FirebaseStorageManager {
             }
         }
     }
+    
+    func deletePost(postId: String, completion: @escaping (Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(
+                NSError(
+                    domain: "YourAppErrorDomain",
+                    code: -1,
+                    userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+        
+        getCreatedTime(postId: postId) { createdTime, imageURL in
+            let authPost = [
+                "createdTime": createdTime,
+                "id": postId,
+                "image": imageURL
+            ]
+            print(authPost)
+            
+            let batch = self.firebaseDb.batch()
+            
+            let userRef = self.firebaseDb.collection("auth").document(currentUserID)
+            batch.updateData(["post": FieldValue.arrayRemove([authPost])], forDocument: userRef)
+            
+            let articleRef = self.firebaseDb.collection("articles").document(postId)
+            batch.deleteDocument(articleRef)
+            
+            batch.commit { error in
+                if let error = error {
+                    completion(error)
+                    print("Error deleting post: \(error.localizedDescription)")
+                } else {
+                    completion(nil)
+                    print("Post deleted successfully")
+                }
+            }
+        }
+    }
+    
+    func getCreatedTime(postId: String, completion: @escaping (Double?, String?) -> Void) {
+        getAuth { author in
+            let posts = author.post
+            if let post = posts?.first(where: { $0.id == postId }) {
+                let createdTime = post.createdTime
+                let urlString = post.image
+                completion(createdTime, urlString)
+                print("Found createdTime for post \(postId): \(createdTime)")
+            } else {
+                completion(nil, nil)
+                print("Post with ID \(postId) not found in the array")
+            }
+        }
+    }
 }
 
 

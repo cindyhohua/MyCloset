@@ -29,11 +29,11 @@ class ChangeClothesViewController: UIViewController {
         setup()
         makeSectionArray()
         tableView.reloadData()
-        let image1 = UIImage(named: "changing1") ?? UIImage()
-        let image2 = UIImage(named: "changing2") ?? UIImage()
+        let image1 = UIImage(named: "changing01") ?? UIImage()
+        let image2 = UIImage(named: "changing02") ?? UIImage()
         imageArray = [image1, image2]
         timer = Timer.scheduledTimer(
-            timeInterval: 0.3, target: self, selector: #selector(switchImage),
+            timeInterval: 0.5, target: self, selector: #selector(switchImage),
             userInfo: nil, repeats: true)
     }
     
@@ -57,6 +57,31 @@ class ChangeClothesViewController: UIViewController {
         tableView.reloadData()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        DispatchQueue.main.async {
+            self.imageViewChanging.isHidden = false
+        }
+        let hair = CoreDataManager.shared.fetchHair()
+        if hair == nil {
+            imageViewDoll.image = UIImage(named: "doll")
+            DispatchQueue.main.async {
+                self.imageViewChanging.isHidden = true
+            }
+        } else {
+            let colorui = UIColor(
+                red: hair?.color[0] ?? 0, green: hair?.color[1] ?? 0,
+                blue: hair?.color[2] ?? 0, alpha: 1)
+            let dollImage = mergeImagesDoll(
+                imageSB: hair?.hairB ?? [],
+                imageS: hair?.hair ?? [], color: colorui)
+            imageViewDoll.image = dollImage
+            DispatchQueue.main.async {
+                self.imageViewChanging.isHidden = true
+            }
+        }
+    }
+    
     func makeSectionArray() {
         for title in buttonTitle {
             if let subcategories = clothes[title] {
@@ -77,7 +102,6 @@ class ChangeClothesViewController: UIViewController {
         self.tableView.reloadData()
     }
     
-    
 }
 
 extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSource {
@@ -92,9 +116,8 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
         // Set up doll parts
         view.addSubview(imageViewDoll)
         view.addSubview(imageViewChanging)
-        imageViewChanging.image = UIImage(named: "changing1")
-        imageViewChanging.isHidden = true
-        imageViewDoll.image = UIImage(named: "doll")
+        imageViewChanging.image = UIImage(named: "changing01")
+//        imageViewChanging.isHidden = true
         setupConstraints(for: imageViewDoll)
         setupConstraints(for: imageViewChanging)
         addGestures(imageView: imageViewDoll)
@@ -121,12 +144,25 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
-        let mineButton = UIBarButtonItem(title: "Mine", style: .plain, target: self, action: #selector(mineButtonTapped))
+        let mineButton = UIBarButtonItem(
+            title: "Mine", style: .plain, target: self,
+            action: #selector(mineButtonTapped))
+        let hairButton = UIBarButtonItem(
+            title: "   Hair", style: .plain, target: self,
+            action: #selector(hairButtonTapped))
         mineButton.tintColor = UIColor.lightBrown()
-        navigationItem.leftBarButtonItem = mineButton
-        let saveButton = UIBarButtonItem(title: "save", style: .plain, target: self, action: #selector(saveButtonTapped))
+        hairButton.tintColor = UIColor.lightBrown()
+        navigationItem.leftBarButtonItems = [mineButton, hairButton]
+        let saveButton = UIBarButtonItem(
+            title: "save", style: .plain, target: self,
+            action: #selector(saveButtonTapped))
         navigationItem.rightBarButtonItem = saveButton
         saveButton.tintColor = UIColor.lightBrown()
+    }
+    
+    @objc func hairButtonTapped() {
+        let secondViewController = PaperDollHairViewController()
+        self.navigationController?.pushViewController(secondViewController, animated: true)
     }
     
     @objc func mineButtonTapped() {
@@ -342,7 +378,26 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
         let mergedImage = UIGraphicsGetImageFromCurrentImageContext()
         return mergedImage
     }
-    
+        
+    func mergeImagesDoll(imageSB: [String], imageS: [String], color: UIColor) -> UIImage? {
+        print("qqqqq",imageSB, imageS, color)
+        var totalSize = CGSize.zero
+        let image = UIImage(named: "無")?.withTintColor(color)
+        totalSize.width = max(totalSize.width, image?.size.width ?? 0)
+        totalSize.height = image?.size.height ?? 0
+        
+        UIGraphicsBeginImageContextWithOptions(totalSize, false, 0.0)
+        defer { UIGraphicsEndImageContext() }
+        UIImage(named: imageSB[1])?.withTintColor(color).draw(at: CGPoint(x: 0, y: 0))
+        UIImage(named: imageS[1])?.draw(at: CGPoint(x: 0, y: 0))
+        UIImage(named: "娃娃2B")?.draw(at: CGPoint(x: 0, y: 0))
+        UIImage(named: "娃娃2")?.draw(at: CGPoint(x: 0, y: 0))
+        UIImage(named: imageSB[0])?.withTintColor(color).draw(at: CGPoint(x: 0, y: 0))
+        UIImage(named: imageS[0])?.draw(at: CGPoint(x: 0, y: 0))
+        let mergedImage = UIGraphicsGetImageFromCurrentImageContext()
+        return mergedImage
+    }
+        
     func setupDollPart(imageView: inout UIImageView?, imageName: UIImage) {
         imageView = UIImageView()
         imageView?.isUserInteractionEnabled = true

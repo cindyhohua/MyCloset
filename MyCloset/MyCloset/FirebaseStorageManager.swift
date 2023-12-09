@@ -121,27 +121,32 @@ class FirebaseStorageManager {
         }
     }
     
-    func getSpecificAuth(id: String, completion: @escaping (Author) -> Void) {
+    func getSpecificAuth(id: String, completion: @escaping (Result<Author, Error>) -> Void) {
         let auth = firebaseDb.collection("auth").document(id)
         auth.getDocument { (document, error) in
             if let error = error {
                 print("Error getting document: \(error)")
+                completion(.failure(error))
             } else {
                 do {
                     if let document = document, document.exists, let data = document.data() {
                         let jsonData = try JSONSerialization.data(withJSONObject: data)
                         let decoder = JSONDecoder()
                         let author = try decoder.decode(Author.self, from: jsonData)
-                        completion(author)
+                        completion(.success(author))
                     } else {
                         print("Document does not exist")
+                        let notExistError = NSError(domain: "YourDomain", code: 404, userInfo: [NSLocalizedDescriptionKey: "Document does not exist"])
+                        completion(.failure(notExistError))
                     }
                 } catch {
                     print("Error decoding author data: \(error)")
+                    completion(.failure(error))
                 }
             }
         }
     }
+
     
     func addAuth(uid: String, author: Author, completion: @escaping (Result<Void, Error>) -> Void) {
         let auth = firebaseDb.collection("auth")
@@ -443,7 +448,9 @@ extension FirebaseStorageManager {
             blocked += author.blockedUsers ?? []
             blocked += author.blockedByUsers ?? []
         }
+        let lowercaseQuery = query.lowercased()
         firebaseDb.collection("auth")
+            .whereField("name", isGreaterThanOrEqualTo: lowercaseQuery)
             .whereField("name", isGreaterThanOrEqualTo: query)
             .whereField("name", isLessThan: query + "z")
             .getDocuments { (querySnapshot, error) in
@@ -529,15 +536,48 @@ extension FirebaseStorageManager {
             for pendingID in pendingRequests {
                 dispatchGroup.enter()
                 
-                self.getSpecificAuth(id: pendingID) { author in
-                    pendingAuthors.append(author)
-                    dispatchGroup.leave()
+                self.getSpecificAuth(id: pendingID) { result in
+                    switch result {
+                    case .success(let author):
+                        pendingAuthors.append(author)
+                        dispatchGroup.leave()
+                    case .failure(let error):
+                        print(error)
+                        dispatchGroup.leave()
+                    }
                 }
             }
             
             dispatchGroup.notify(queue: .main) {
                 completion(pendingAuthors)
             }
+        }
+    }
+    
+    func fetchName(ids: [String], completion: @escaping ([Author]) -> Void) {
+        var pendingAuthorsNames: [Author] = []
+        
+        let dispatchGroup = DispatchGroup()
+        
+        for pendingID in ids {
+            dispatchGroup.enter()
+            print(pendingID)
+            
+            getSpecificAuth(id: pendingID) { result in
+                switch result {
+                case .success(let author):
+                    pendingAuthorsNames.append(author)
+                    print(author.name)
+                case .failure(let error):
+                    print("Error fetching author: \(error)")
+                }
+                dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            completion(pendingAuthorsNames)
+            print(pendingAuthorsNames)
         }
     }
     

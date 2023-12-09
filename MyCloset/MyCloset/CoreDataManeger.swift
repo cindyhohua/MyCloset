@@ -21,6 +21,12 @@ struct ClothesStruct {
     var color: [CGFloat]?
 }
 
+struct HairStruct {
+    var hair: [String]
+    var hairB: [String]
+    var color: [CGFloat]
+}
+
 class CoreDataManager {
 
     static let shared = CoreDataManager()
@@ -316,23 +322,61 @@ class CoreDataManager {
             return []
         }
     }
-
     
-//    func fetchMineData(forName name: String) -> Mine? {
-//        let fetchRequest: NSFetchRequest<Mine> = Mine.fetchRequest()
-//        fetchRequest.predicate = NSPredicate(format: "name == %@", name)
-//
-//        do {
-//            let result = try managedObjectContext.fetch(fetchRequest)
-//            return result.first
-//        } catch {
-//            print("Error fetching mine data: \(error.localizedDescription)")
-//            return nil
-//        }
-//    }
-
-
+    func fetchHair() -> HairStruct? {
+        let fetchRequest: NSFetchRequest<DollHair> = DollHair.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "name == %@", "doll")
+        
+        do {
+            let result = try CoreDataManager.shared.managedObjectContext.fetch(fetchRequest)
+            
+            if let dollHair = result.first {
+                // 轉換 NSArray 為 Swift 陣列
+                let hairArray = dollHair.hair as? [String] ?? []
+                let hairBArray = dollHair.hairB as? [String] ?? []
+                
+                // 轉換 NSArray 為 Swift 陣列
+                var colorArray: [CGFloat] = []
+                if let colorNSArray = dollHair.color as? [NSNumber] {
+                    colorArray = colorNSArray.map { CGFloat($0.floatValue) }
+                }
+                
+                return HairStruct(hair: hairArray, hairB: hairBArray, color: colorArray)
+            } else {
+                print("Doll hair not found")
+                return nil
+            }
+        } catch {
+            print("Error fetching data: \(error.localizedDescription)")
+            return nil
+        }
+    }
     
-
+    
+    func addHair(hair: [String], hairB: [String],color: [CGFloat]) {
+        let fetchRequest: NSFetchRequest<DollHair> = DollHair.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "name == %@", "doll")
+        
+        do {
+            let result = try CoreDataManager.shared.managedObjectContext.fetch(fetchRequest)
+            
+            if let existingHair = result.first {
+                existingHair.hair = hair as NSArray
+                existingHair.hairB = hairB as NSArray
+                let colorNSArray = color.map { NSNumber(value: Float($0)) }
+                existingHair.color = colorNSArray as NSArray
+            } else {
+                let newClothes = DollHair(context: managedObjectContext)
+                newClothes.name = "doll"
+                newClothes.hair = hair as NSArray
+                newClothes.hairB = hairB as NSArray
+                let colorNSArray = color.map { NSNumber(value: Float($0)) }
+                newClothes.color = colorNSArray as NSArray
+            }
+            saveContext()
+        } catch {
+            print("Error fetching data: \(error.localizedDescription)")
+        }
+    }
 }
 

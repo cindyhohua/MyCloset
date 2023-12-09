@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21279" systemVersion="21G920" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="21G920" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Clothes" representedClassName=".Clothes" syncable="YES" codeGenerationType="class">
         <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="cloth" optional="YES" attributeType="Transformable" customClassName="NSArray"/>
@@ -11,6 +11,12 @@
         <attribute name="price" optional="YES" attributeType="String"/>
         <attribute name="store" optional="YES" attributeType="String"/>
         <attribute name="subcategory" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="DollHair" representedClassName="DollHair" syncable="YES" codeGenerationType="class">
+        <attribute name="color" optional="YES" attributeType="Transformable" customClassName="NSArray"/>
+        <attribute name="hair" optional="YES" attributeType="Transformable" customClassName="NSArray"/>
+        <attribute name="hairB" optional="YES" attributeType="Transformable" customClassName="NSArray"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Mine" representedClassName="Mine" syncable="YES" codeGenerationType="class">
         <attribute name="myWearing" optional="YES" attributeType="Binary"/>

@@ -2,7 +2,7 @@
 //  Clothes+CoreDataProperties.swift
 //  
 //
-//  Created by 賀華 on 2023/11/27.
+//  Created by 賀華 on 2023/12/9.
 //
 //
 

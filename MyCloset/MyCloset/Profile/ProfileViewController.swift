@@ -162,7 +162,9 @@ class ProfileViewController: UIViewController {
     }
     @objc func unfollowButtonTapped() {
         // 創建一個確認視窗
-        let alertController = UIAlertController(title: "Unfollow", message: "Are you sure you want to unfollow?", preferredStyle: .alert)
+        let alertController = UIAlertController(
+            title: "Unfollow", message: "Are you sure you want to unfollow?",
+            preferredStyle: .alert)
 
         // 增加確認按鈕
         let confirmAction = UIAlertAction(title: "Confirm", style: .destructive) { _ in
@@ -272,6 +274,5 @@ extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataS
             secondViewController.article = article
             self.navigationController?.pushViewController(secondViewController, animated: true)
         }
-        
     }
 }

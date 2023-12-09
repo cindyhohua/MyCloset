@@ -60,11 +60,22 @@ class DetailPageViewController: UIViewController {
     }()
     
     override func viewDidLoad() {
-        super.viewDidLoad()
+        super.viewDidLoad()        
         saveButton = UIBarButtonItem(
             image: UIImage(systemName: "bookmark.fill"),
             style: .plain, target: self, action: #selector(saveButtonTapped))
+        if let save = self.saveOrNot, let button = self.saveButton {
+            if save {
+                button.tintColor = .brown
+            } else {
+                button.tintColor = .lightLightBrown()
+            }
+        }
         view.backgroundColor = .white
+        let deleteButton = UIBarButtonItem(
+            image: UIImage(systemName: "trash.fill"),
+            style: .plain, target: self, action: #selector(deleteButtonTapped))
+        deleteButton.tintColor = UIColor.lightBrown()
         let leftButton = UIBarButtonItem(
             image: UIImage(systemName: "chevron.backward.circle"),
             style: .plain, target: self, action: #selector(backButtonTapped))
@@ -80,11 +91,43 @@ class DetailPageViewController: UIViewController {
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         flexibleSpace.width = 20
         navigationItem.leftBarButtonItems = [leftButton, flexibleSpace, rightButton]
-        navigationItem.rightBarButtonItems = [reportButton, saveButton]
+        if article?.author.id == Auth.auth().currentUser?.uid {
+            navigationItem.rightBarButtonItems = [deleteButton, reportButton, saveButton]
+        } else {
+            navigationItem.rightBarButtonItems = [reportButton, saveButton]
+        }
         navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedString.Key.foregroundColor: UIColor.brown,
             NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         setupTableView()
+    }
+    
+    @objc func deleteButtonTapped() {
+        let alertController = UIAlertController(
+            title: "Confirm Deletion",
+            message: "Are you sure you want to delete this post?",
+            preferredStyle: .alert
+        )
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
+            self.performDelete()
+        }
+        alertController.addAction(deleteAction)
+
+        present(alertController, animated: true, completion: nil)
+    }
+
+    func performDelete() {
+        FirebaseStorageManager.shared.deletePost(postId: self.article?.id ?? "") { error in
+            if let error = error {
+                print(error)
+            } else {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
     }
     
     @objc func reportButtonTapped() {
@@ -188,9 +231,15 @@ class DetailPageViewController: UIViewController {
     
     @objc func profileButtonTapped() {
         let secondViewController = ProfileViewController()
-        FirebaseStorageManager.shared.getSpecificAuth(id: article?.author.id ?? "") { author in
-            secondViewController.author = author
-            self.navigationController?.pushViewController(secondViewController, animated: true)
+        FirebaseStorageManager.shared.getSpecificAuth(id: article?.author.id ?? "") { result in
+            switch result {
+            case .success(let author):
+                secondViewController.author = author
+                self.navigationController?.pushViewController(secondViewController, animated: true)
+            case .failure(let failure):
+                print(failure)
+            }
+            
         }
         
     }
@@ -264,6 +313,7 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.postId = article?.id
                 cell.selectionStyle = .none
                 cell.authorId = article?.author.id
+                cell.delegate = self
                 return cell
             case 1:
                 guard let cell = tableView.dequeueReusableCell(
@@ -316,9 +366,15 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
                 if let authId = self.article?.comment[indexPath.row].authId, !blocked.contains(authId) {
                     print(authId)
                     let secondVC = ProfileViewController()
-                    FirebaseStorageManager.shared.getSpecificAuth(id: authId) { author in
-                        secondVC.author = author
-                        self.navigationController?.pushViewController(secondVC, animated: true)
+                    FirebaseStorageManager.shared.getSpecificAuth(id: authId) { result in
+                        switch result {
+                        case .success(let author):
+                            secondVC.author = author
+                            self.navigationController?.pushViewController(secondVC, animated: true)
+                        case .failure(let failure):
+                            print(failure)
+                        }
+                        
                     }
                 }
             }
@@ -334,4 +390,13 @@ extension DetailPageViewController: DetailPageInputCommentDelegate {
         }
     }
 
+}
+
+extension DetailPageViewController: LongPressDelegate {
+    func longPress() {
+        let secondVC = FriendListViewController()
+        secondVC.likeAmount = self.article?.like ?? 0
+        secondVC.fetchData(friendList: self.article?.whoLiked ?? [])
+        self.navigationController?.pushViewController(secondVC, animated: true)
+    }
 }
