@@ -82,25 +82,25 @@ class EditProfileViewController: UIViewController {
             make.height.equalTo(40)
         }
         
-        view.addSubview(heightTextField)
-        heightTextField.borderStyle = .roundedRect
-        heightTextField.placeholder = "height"
-        heightTextField.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(littleWordsTextField.snp.bottom).offset(20)
-            make.width.equalTo(200)
-            make.height.equalTo(40)
-        }
+//        view.addSubview(heightTextField)
+//        heightTextField.borderStyle = .roundedRect
+//        heightTextField.placeholder = "height"
+//        heightTextField.snp.makeConstraints { make in
+//            make.centerX.equalToSuperview()
+//            make.top.equalTo(littleWordsTextField.snp.bottom).offset(20)
+//            make.width.equalTo(200)
+//            make.height.equalTo(40)
+//        }
         
-        view.addSubview(weightTextField)
-        weightTextField.borderStyle = .roundedRect
-        weightTextField.placeholder = "weight"
-        weightTextField.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(heightTextField.snp.bottom).offset(20)
-            make.width.equalTo(200)
-            make.height.equalTo(40)
-        }
+//        view.addSubview(weightTextField)
+//        weightTextField.borderStyle = .roundedRect
+//        weightTextField.placeholder = "weight"
+//        weightTextField.snp.makeConstraints { make in
+//            make.centerX.equalToSuperview()
+//            make.top.equalTo(heightTextField.snp.bottom).offset(20)
+//            make.width.equalTo(200)
+//            make.height.equalTo(40)
+//        }
         
         view.addSubview(deleteAccountButton)
         deleteAccountButton.setTitle("刪除帳號", for: .normal)

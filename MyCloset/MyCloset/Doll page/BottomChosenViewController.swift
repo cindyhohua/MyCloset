@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import PencilKit
 
 class PaperDollBottomsViewController: UIViewController{
     var cloth: ClothesStruct?
@@ -26,6 +27,15 @@ class PaperDollBottomsViewController: UIViewController{
     }()
     
     var colorPickerView = ColorPickerView()
+    var pencilPickerView = PencilPickerView()
+    
+    var pencilSelectedColor: UIColor = .white
+    var pencilWidth: CGFloat = 5
+    let canvasView: PKCanvasView = {
+        let canvasView = PKCanvasView()
+        canvasView.backgroundColor = .clear
+        return canvasView
+    }()
     
     var outfitss: [[DollCloth]]?
     var outfits: [DollCloth]?
@@ -35,7 +45,7 @@ class PaperDollBottomsViewController: UIViewController{
     
     var segmentIndex = 0
     
-    let codeSegmented = SegmentView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44), buttonTitle: ["褲頭","褲子","顏色"])
+    let codeSegmented = SegmentView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44), buttonTitle: ["褲頭","褲子","手繪","顏色"])
 
     var neckline: [DollCloth] = [
         DollCloth(outer: "褲頭1", bottom: "B褲頭1", name: "neckline"),
@@ -97,6 +107,7 @@ class PaperDollBottomsViewController: UIViewController{
         setupDollPart(imageView: &dollParts["sleeve"], imageName: sleeve[0].outer, tintColor: nil)
         setupDollPart(imageView: &dollParts["neckline"], imageName: neckline[0].outer, tintColor: nil)
         
+        
         view.addSubview(imageViewReal)
         if let clothImage = cloth?.image {
             imageViewReal.image = UIImage(data: clothImage)
@@ -109,6 +120,15 @@ class PaperDollBottomsViewController: UIViewController{
         }
         imageViewReal.clipsToBounds = true
         imageViewReal.layer.cornerRadius = 60
+        
+        imageViewDoll.addSubview(canvasView)
+        canvasView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            canvasView.topAnchor.constraint(equalTo: imageViewDoll.topAnchor),
+            canvasView.leadingAnchor.constraint(equalTo: imageViewDoll.leadingAnchor),
+            canvasView.trailingAnchor.constraint(equalTo: imageViewDoll.trailingAnchor),
+            canvasView.bottomAnchor.constraint(equalTo: imageViewDoll.bottomAnchor)
+        ])
     }
     
     @objc func addButtonTapped() {
@@ -128,14 +148,19 @@ class PaperDollBottomsViewController: UIViewController{
 
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         print(red, green, blue)
-        CoreDataManager.shared.addClothAndColor(category: (self.cloth?.category)!,
-                                                subcategory: (self.cloth?.subcategory)!,
-                                                item: (self.cloth?.item)!, clothArray: cloth,
-                                                clothBArray: clothB, color: [red, green, blue])
+        guard let imageData = canvasView.asImage()?.pngData() else {
+            return
+        }
+        CoreDataManager.shared.addClothAndColor(
+            category: (self.cloth?.category)!,
+            subcategory: (self.cloth?.subcategory)!,
+            item: (self.cloth?.item)!, clothArray: cloth,
+            clothBArray: clothB, color: [red, green, blue],
+            draw: imageData)
         guard let viewControllers = self.navigationController?.viewControllers else { return }
         for controller in viewControllers {
             if controller is MyClosetDetailPageViewController {
-            self.navigationController?.popToViewController(controller, animated: true)
+                self.navigationController?.popToViewController(controller, animated: true)
             }
         }
     }
@@ -166,7 +191,7 @@ class PaperDollBottomsViewController: UIViewController{
     func addGestures(imageView: UIImageView) {
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
-        
+        panGesture.minimumNumberOfTouches = 2
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(pinchGesture)
         imageView.addGestureRecognizer(panGesture)
@@ -193,8 +218,31 @@ class PaperDollBottomsViewController: UIViewController{
     }
 }
 
-
-extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SegmentControlDelegate, ColorPickerViewDelegate {
+extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SegmentControlDelegate, ColorPickerViewDelegate, PencilPickerViewDelegate {
+    func pencilSelectColor(_ color: UIColor) {
+        pencilSelectedColor = color
+        let newTool = PKInkingTool(.pen, color: color, width: pencilWidth)
+        canvasView.drawingPolicy = .anyInput
+        canvasView.tool = newTool
+    }
+    
+    func undoAction() {
+        print("undo")
+        canvasView.undoManager?.undo()
+    }
+    
+    func redoAction() {
+        print("redo")
+        canvasView.undoManager?.redo()
+    }
+    
+    func thicknessChanged(thickness: CGFloat) {
+        pencilWidth = thickness
+        print(thickness)
+        let newTool = PKInkingTool(.pen, color: pencilSelectedColor, width: thickness)
+        canvasView.tool = newTool
+    }
+    
     func didSelectColor(_ color: UIColor) {
         selectedColor = color
         guard let selected = selected else { return }
@@ -211,7 +259,7 @@ extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollecti
             outfits = outfitss?[index]
             collectionView.reloadData()
             colorPickerView.removeFromSuperview()
-        } else if index == 2 {
+        } else if index == 3 {
             view.addSubview(colorPickerView)
             colorPickerView.backgroundColor = .blue
             colorPickerView.translatesAutoresizingMaskIntoConstraints = false
@@ -220,6 +268,19 @@ extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollecti
                 colorPickerView.leadingAnchor.constraint(equalTo: collectionView.leadingAnchor),
                 colorPickerView.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
                 colorPickerView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor)
+            ])
+        } else if index == 2 {
+            view.addSubview(pencilPickerView)
+            pencilPickerView.backgroundColor = .white
+            pencilPickerView.delegate = self
+            canvasView.tool = PKInkingTool(.pen, color: pencilSelectedColor, width: pencilWidth)
+            canvasView.drawingPolicy = .anyInput
+            pencilPickerView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                pencilPickerView.topAnchor.constraint(equalTo: collectionView.topAnchor),
+                pencilPickerView.leadingAnchor.constraint(equalTo: collectionView.leadingAnchor),
+                pencilPickerView.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
+                pencilPickerView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor)
             ])
         }
     }

@@ -127,7 +127,7 @@ class PaperDollHairViewController: UIViewController{
 
         guard let viewControllers = self.navigationController?.viewControllers else { return }
         for controller in viewControllers {
-            if controller is MyClosetDetailPageViewController {
+            if controller is ChangeClothesViewController {
             self.navigationController?.popToViewController(controller, animated: true)
             }
         }

@@ -72,7 +72,7 @@ class MyClosetPageViewController: UIViewController, UITabBarControllerDelegate {
                 var sectionsForCategory: [Section] = []
                 for (_, subcategory) in subcategories.enumerated() {
                     let items = CoreDataManager.shared.fetchClothesFor(category: title, subcategory: subcategory)
-                    let section = Section(title: "\(subcategory)", isExpanded: false, items: items)
+                    let section = Section(title: "\(subcategory)", isExpanded: true, items: items)
                     sectionsForCategory.append(section)
                 }
                 sectionAll.append(sectionsForCategory)

@@ -6,6 +6,7 @@
         <attribute name="clothB" optional="YES" attributeType="Transformable" customClassName="NSArray"/>
         <attribute name="color" optional="YES" attributeType="Transformable" customClassName="NSArray"/>
         <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="draw" optional="YES" attributeType="Binary"/>
         <attribute name="image" optional="YES" attributeType="Binary"/>
         <attribute name="item" optional="YES" attributeType="String"/>
         <attribute name="price" optional="YES" attributeType="String"/>

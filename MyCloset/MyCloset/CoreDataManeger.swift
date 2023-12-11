@@ -19,6 +19,7 @@ struct ClothesStruct {
     var cloth: [String]?
     var clothB: [String]?
     var color: [CGFloat]?
+    var draw: Data?
 }
 
 struct HairStruct {
@@ -79,7 +80,8 @@ class CoreDataManager {
                     image: clothesEntity.image,
                     cloth: clothesEntity.cloth as? [String],
                     clothB: clothesEntity.clothB as? [String],
-                    color: clothesEntity.color as? [CGFloat]
+                    color: clothesEntity.color as? [CGFloat],
+                    draw: clothesEntity.draw
                 )
             }
             return clothesStructArray
@@ -107,7 +109,8 @@ class CoreDataManager {
                     image: specificClothes.image,
                     cloth: specificClothes.cloth as? [String],
                     clothB: specificClothes.clothB as? [String],
-                    color: specificClothes.color as? [CGFloat]
+                    color: specificClothes.color as? [CGFloat],
+                    draw: specificClothes.draw
                 )
             } else {
                 print("Clothes with item name \(name) not found.")
@@ -146,7 +149,7 @@ class CoreDataManager {
         }
     }
     
-    func addClothAndColor(category: String, subcategory: String, item: String, clothArray: [String], clothBArray: [String], color: [CGFloat]) {
+    func addClothAndColor(category: String, subcategory: String, item: String, clothArray: [String], clothBArray: [String], color: [CGFloat], draw: Data) {
         let fetchRequest: NSFetchRequest<Clothes> = Clothes.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "category == %@ AND subcategory == %@ AND item == %@", category, subcategory, item)
         
@@ -157,20 +160,19 @@ class CoreDataManager {
                 existingClothes.cloth = clothArray as NSArray
                 existingClothes.clothB = clothBArray as NSArray
                 
-                // Convert CGFloat array to NSArray
                 let colorNSArray = color.map { NSNumber(value: Float($0)) }
                 existingClothes.color = colorNSArray as NSArray
+                existingClothes.draw = draw
             } else {
-                // Create a new Clothes object
                 let newClothes = Clothes(context: managedObjectContext)
                 newClothes.category = category
                 newClothes.subcategory = subcategory
                 newClothes.cloth = clothArray as NSArray
                 newClothes.clothB = clothBArray as NSArray
                 
-                // Convert CGFloat array to NSArray
                 let colorNSArray = color.map { NSNumber(value: Float($0)) }
                 newClothes.color = colorNSArray as NSArray
+                newClothes.draw = draw
             }
             
             saveContext()
@@ -196,7 +198,8 @@ class CoreDataManager {
                     image: clothesEntity.image,
                     cloth: clothesEntity.cloth as? [String],
                     clothB: clothesEntity.clothB as? [String],
-                    color: clothesEntity.color as? [CGFloat]
+                    color: clothesEntity.color as? [CGFloat],
+                    draw: clothesEntity.draw
                 )
             }
             return clothesStructArray
@@ -205,7 +208,6 @@ class CoreDataManager {
             return []
         }
     }
-
     
     // MARK: - Add Data
 
