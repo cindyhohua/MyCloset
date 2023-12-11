@@ -71,6 +71,10 @@ class DetailPageImageCell: UITableViewCell {
             make.height.equalTo(imageViewCell.snp.width).multipliedBy(1.4)
             make.bottom.equalTo(contentView).offset(-16)
         }
+        imageViewCell.layer.shadowColor = UIColor.black.cgColor
+        imageViewCell.layer.shadowOpacity = 0.5
+        imageViewCell.layer.shadowOffset = CGSize(width: 0, height: 3)
+        imageViewCell.layer.shadowRadius = 5
         contentView.addSubview(likeButton)
         likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         likeButton.imageView?.contentMode = .scaleAspectFit
@@ -85,6 +89,12 @@ class DetailPageImageCell: UITableViewCell {
         likeButton.addTarget(self, action: #selector(likeTapped), for: .touchUpInside)
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(likeButtonLongPressed(_:)))
         likeButton.addGestureRecognizer(longPressGesture)
+        
+        imageViewCell.layer.masksToBounds = true
+        contentView.layer.shadowColor = UIColor.black.cgColor
+        contentView.layer.shadowOpacity = 0.5
+        contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        contentView.layer.shadowRadius = 4
     }
     
     @objc func likeButtonLongPressed(_ gesture: UILongPressGestureRecognizer) {

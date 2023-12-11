@@ -87,6 +87,7 @@ class NewPostCommentCell: UITableViewCell {
 
 class NewPostProductCell: UITableViewCell {
     var numberLabel = UILabel()
+    var fromClosetButton = UIButton()
     
     lazy var nameLabel: UITextField = {
         return createTextField(placeholder: "輸入品項")
@@ -122,6 +123,9 @@ class NewPostProductCell: UITableViewCell {
         contentView.addSubview(storeLabel)
         contentView.addSubview(priceLabel)
         contentView.addSubview(commentsLabel)
+        contentView.addSubview(fromClosetButton)
+        fromClosetButton.setTitle("從衣櫃輸入", for: .normal)
+        fromClosetButton.setTitleColor(UIColor.brown, for: .normal)
         setupConstraints()
     }
     
@@ -129,6 +133,10 @@ class NewPostProductCell: UITableViewCell {
         numberLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView).offset(8)
             make.leading.equalTo(contentView).offset(16)
+        }
+        fromClosetButton.snp.makeConstraints { make in
+            make.centerY.equalTo(numberLabel)
+            make.trailing.equalTo(contentView).offset(-16)
         }
         nameLabel.snp.makeConstraints { make in
             make.top.equalTo(numberLabel.snp.bottom).offset(8)

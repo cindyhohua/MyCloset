@@ -24,12 +24,18 @@ class NewPostSecondStepViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
+        let leftButton = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.backward.circle"),
+            style: .plain, target: self, action: #selector(backButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
             leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "Add Item"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
-        let nextButton = UIBarButtonItem(title: "Post", style: .plain, target: self, action: #selector(postButtonTapped))
+        navigationController?.navigationBar.titleTextAttributes =
+        [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(),
+         NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        let nextButton = UIBarButtonItem(
+            title: "Post", style: .plain,
+            target: self, action: #selector(postButtonTapped))
         nextButton.tintColor = UIColor.lightBrown()
         navigationItem.rightBarButtonItem = nextButton
         navigationItem.rightBarButtonItem?.isEnabled = true
@@ -50,7 +56,9 @@ class NewPostSecondStepViewController: UIViewController {
             let store = cell.storeLabel.text ?? ""
             let price = cell.priceLabel.text ?? ""
             let comments = cell.commentsLabel.text ?? ""
-            productList.append(Product(productName: name, productStore: store, productPrice: price, productComment: comments))
+            productList.append(
+                Product(
+                    productName: name, productStore: store, productPrice: price, productComment: comments))
         }
         var content = ""
         guard let cellContent = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? NewPostCommentCell else {
@@ -61,7 +69,8 @@ class NewPostSecondStepViewController: UIViewController {
             switch result {
             case .success(let downloadURL):
                 guard let auth = self?.author else {return}
-                FirebaseStorageManager.shared.addArticle(auth: auth, imageURL: downloadURL.absoluteString, content: content,
+                FirebaseStorageManager.shared.addArticle(
+                    auth: auth, imageURL: downloadURL.absoluteString, content: content,
                     positions: self?.position ?? [CGPoint(x: -10,y: -10)],
                     productList: productList) { _ in
                     guard let viewControllers = self?.navigationController?.viewControllers else { return }
@@ -119,10 +128,35 @@ extension NewPostSecondStepViewController: UITableViewDelegate, UITableViewDataS
             return cell
         default:
             let cell = NewPostProductCell()
+            print(cell.tag,indexPath.row)
             cell.numberLabel.text = "品項\(indexPath.row-1) :"
+            cell.fromClosetButton.tag = indexPath.row
+            cell.fromClosetButton.addTarget(self, action: #selector(fromClosetButtonTapped(_:)), for: .touchUpInside)
             cell.isUserInteractionEnabled = true
             cell.selectionStyle = .none
             return cell
         }
     }
+    @objc func fromClosetButtonTapped(_ sender: UIButton) {
+        print("aaa",sender.tag)
+        let secondVC = ImportFromClosetViewController()
+        secondVC.delegate = self
+        secondVC.indexPathRow = sender.tag
+        self.present(secondVC, animated: true)
+    }
+}
+
+extension NewPostSecondStepViewController: ClosetToPost {
+    func closetToPost(cloth: ClothesStruct, index: Int) {
+        guard let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? NewPostProductCell else {
+            return
+        }
+        print("qqq",cloth)
+        cell.nameLabel.text = cloth.item
+        cell.storeLabel.text = cloth.store
+        cell.priceLabel.text = cloth.price
+        cell.commentsLabel.text = cloth.content
+    }
+    
+    
 }

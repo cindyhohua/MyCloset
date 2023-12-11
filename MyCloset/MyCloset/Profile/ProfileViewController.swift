@@ -12,7 +12,7 @@ import FirebaseAuth
 
 class ProfileViewController: UIViewController {
     private var followButton = UIBarButtonItem()
-    let blockButton = UIBarButtonItem(
+    var blockButton = UIBarButtonItem(
         image: UIImage(systemName: "exclamationmark.triangle"),
         style: .plain, target: self, action: #selector(blockButtonTapped))
     fileprivate let collectionView: UICollectionView = {
@@ -69,10 +69,10 @@ class ProfileViewController: UIViewController {
                 followButton.action = #selector(followButtonTapped)
             }
         }
-//
-//        let blockButton = UIBarButtonItem(
-//            image: UIImage(systemName: "exclamationmark.triangle"),
-//            style: .plain, target: self, action: #selector(blockButtonTapped))
+
+        blockButton = UIBarButtonItem(
+            image: UIImage(systemName: "exclamationmark.triangle"),
+            style: .plain, target: self, action: #selector(blockButtonTapped))
         blockButton.tintColor = .lightBrown()
         
         followButton.tintColor = .lightBrown()
@@ -92,37 +92,73 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func blockButtonTapped() {
-        let alertController = UIAlertController(
-            title: "Confirm Block",
-            message: "Are you sure you want to block this user?",
-            preferredStyle: .alert
-        )
+        FirebaseStorageManager.shared.getAuth { myProfile in
+            if (myProfile.blockedUsers?.contains(self.author?.id ?? "")) != nil {
+                let alertController = UIAlertController(
+                    title: "Confirm unblock",
+                    message: "Are you sure you want to unblock this user?",
+                    preferredStyle: .alert
+                )
 
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                alertController.addAction(cancelAction)
 
-        let blockAction = UIAlertAction(title: "Block", style: .destructive) { _ in
-            FirebaseStorageManager.shared.blockOther(authorId: self.author?.id ?? "") { result in
-                switch result {
-                case .success:
-                    print("User blocked successfully.")
-                    guard let viewControllers = self.navigationController?.viewControllers else { return }
-                    for controller in viewControllers {
-                        if controller is HomePageViewController {
-                        self.navigationController?.popToViewController(controller, animated: true)
-                        }
-                        if controller is MyProfileViewController {
-                        self.navigationController?.popToViewController(controller, animated: true)
+                let unblockAction = UIAlertAction(title: "unlock", style: .destructive) { _ in
+                    FirebaseStorageManager.shared.unblockOther(authorId: self.author?.id ?? "") { result in
+                        switch result {
+                        case .success:
+                            print("User unblocked successfully.")
+                            guard let viewControllers = self.navigationController?.viewControllers else { return }
+                            for controller in viewControllers {
+                                if controller is HomePageViewController {
+                                self.navigationController?.popToViewController(controller, animated: true)
+                                }
+                                if controller is MyProfileViewController {
+                                self.navigationController?.popToViewController(controller, animated: true)
+                                }
+                            }
+                        case .failure(let error):
+                            print("Error unblocking user: \(error.localizedDescription)")
                         }
                     }
-                case .failure(let error):
-                    print("Error blocking user: \(error.localizedDescription)")
                 }
+                alertController.addAction(unblockAction)
+
+                self.present(alertController, animated: true, completion: nil)
+            } else {
+                let alertController = UIAlertController(
+                    title: "Confirm Block",
+                    message: "Are you sure you want to block this user?",
+                    preferredStyle: .alert
+                )
+
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                alertController.addAction(cancelAction)
+
+                let blockAction = UIAlertAction(title: "Block", style: .destructive) { _ in
+                    FirebaseStorageManager.shared.blockOther(authorId: self.author?.id ?? "") { result in
+                        switch result {
+                        case .success:
+                            print("User blocked successfully.")
+                            guard let viewControllers = self.navigationController?.viewControllers else { return }
+                            for controller in viewControllers {
+                                if controller is HomePageViewController {
+                                self.navigationController?.popToViewController(controller, animated: true)
+                                }
+                                if controller is MyProfileViewController {
+                                self.navigationController?.popToViewController(controller, animated: true)
+                                }
+                            }
+                        case .failure(let error):
+                            print("Error blocking user: \(error.localizedDescription)")
+                        }
+                    }
+                }
+                alertController.addAction(blockAction)
+
+                self.present(alertController, animated: true, completion: nil)
             }
         }
-        alertController.addAction(blockAction)
-
-        present(alertController, animated: true, completion: nil)
     }
  
     func setup() {

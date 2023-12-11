@@ -59,6 +59,8 @@
 		CA795B162B205D8B00D5584E /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CA795B152B205D8B00D5584E /* FirebaseAnalyticsSwift */; };
 		CA795B192B21CACB00D5584E /* FriendList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B182B21CACB00D5584E /* FriendList.swift */; };
 		CA795B1B2B244A7900D5584E /* HairDollPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B1A2B244A7800D5584E /* HairDollPageViewController.swift */; };
+		CA795B1D2B26B3A200D5584E /* RelationshipListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B1C2B26B3A200D5584E /* RelationshipListViewController.swift */; };
+		CA795B1F2B26EE7C00D5584E /* ImportFromClosetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B1E2B26EE7C00D5584E /* ImportFromClosetViewController.swift */; };
 		CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */; };
 		CABCC7CC2B0F3EB700FB38C5 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */; };
 		CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */; };
@@ -117,6 +119,8 @@
 		CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager3.swift; sourceTree = "<group>"; };
 		CA795B182B21CACB00D5584E /* FriendList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendList.swift; sourceTree = "<group>"; };
 		CA795B1A2B244A7800D5584E /* HairDollPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HairDollPageViewController.swift; sourceTree = "<group>"; };
+		CA795B1C2B26B3A200D5584E /* RelationshipListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipListViewController.swift; sourceTree = "<group>"; };
+		CA795B1E2B26EE7C00D5584E /* ImportFromClosetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFromClosetViewController.swift; sourceTree = "<group>"; };
 		CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAuthCollectionViewCell.swift; sourceTree = "<group>"; };
 		CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -222,6 +226,7 @@
 				CA016D552B0729C00066FBE7 /* DetailPageCell.swift */,
 				CA016D3E2B05AF030066FBE7 /* NewPostViewController.swift */,
 				CA016D422B05BF120066FBE7 /* NewPostSecondStepViewController.swift */,
+				CA795B1E2B26EE7C00D5584E /* ImportFromClosetViewController.swift */,
 				CA016D402B05B76C0066FBE7 /* NewPostCell.swift */,
 				CAF701112B11E7A00053B12B /* SearchViewController.swift */,
 				CAF701132B1222440053B12B /* NotificationViewController.swift */,
@@ -267,6 +272,7 @@
 				CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */,
 				CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */,
 				CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */,
+				CA795B1C2B26B3A200D5584E /* RelationshipListViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -427,6 +433,7 @@
 				CAF701122B11E7A00053B12B /* SearchViewController.swift in Sources */,
 				CA795B042B1888D200D5584E /* AppleLoginSetProfileViewController.swift in Sources */,
 				CA016D362B04CB8D0066FBE7 /* AppDelegate.swift in Sources */,
+				CA795B1F2B26EE7C00D5584E /* ImportFromClosetViewController.swift in Sources */,
 				CA016D5D2B07691A0066FBE7 /* AddMyClothesViewController.swift in Sources */,
 				CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */,
 				CA3B0FB72B0B2053001B708E /* TopsChosenViewController.swift in Sources */,
@@ -467,6 +474,7 @@
 				CA3B0FB52B0B1CD2001B708E /* DollModel.swift in Sources */,
 				CA795B062B1980F200D5584E /* DetailPageCommentCell.swift in Sources */,
 				CA016D562B0729C00066FBE7 /* DetailPageCell.swift in Sources */,
+				CA795B1D2B26B3A200D5584E /* RelationshipListViewController.swift in Sources */,
 				CA61D5C12B14873A0028FB39 /* MineDollViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

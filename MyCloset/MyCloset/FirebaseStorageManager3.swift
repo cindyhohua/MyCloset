@@ -76,6 +76,40 @@ extension FirebaseStorageManager {
         }
     }
     
+    func unblockOther(authorId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            completion(
+                .failure(
+                    NSError(
+                        domain: "YourAppErrorDomain",
+                        code: -1,
+                        userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            )
+            return
+        }
+        
+        let usersCollection = firebaseDb.collection("auth")
+        
+        usersCollection.document(currentUserID).updateData([
+            "blockedUsers": FieldValue.arrayRemove([authorId])
+        ]) { error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+        }
+        
+        usersCollection.document(authorId).updateData([
+            "blockedByUsers": FieldValue.arrayRemove([currentUserID])
+        ]) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+    
     func deletePost(postId: String, completion: @escaping (Error?) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             completion(

@@ -25,6 +25,7 @@ class EditProfileViewController: UIViewController {
     var weightTextField = UITextField()
     
     var privateOrNotButton = UIButton()
+    var relationshipButton = UIButton()
     var logoutButton = UIButton()
     var deleteAccountButton = UIButton()
     
@@ -125,6 +126,26 @@ class EditProfileViewController: UIViewController {
             make.height.equalTo(40)
         }
         logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        
+        view.addSubview(relationshipButton)
+        relationshipButton.setTitle("關係列表", for: .normal)
+        relationshipButton.backgroundColor = .brown
+        relationshipButton.layer.cornerRadius = 5
+        relationshipButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(logoutButton.snp.top).offset(-20)
+            make.width.equalTo(150)
+            make.height.equalTo(40)
+        }
+        relationshipButton.addTarget(self, action: #selector(relationshipButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func relationshipButtonTapped() {
+        let secondVC = RelationshipListViewController()
+        FirebaseStorageManager.shared.getAuth { author in
+            secondVC.fetchData(friendList: author.following ?? [])
+            self.navigationController?.pushViewController(secondVC, animated: true)
+        }
     }
     
     @objc func deleteAccount() {
