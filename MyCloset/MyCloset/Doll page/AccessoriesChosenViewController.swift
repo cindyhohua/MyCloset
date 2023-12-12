@@ -253,6 +253,7 @@ extension PaperDollAccessoriesViewController: UICollectionViewDataSource, UIColl
             outfits = outfitss?[index]
             collectionView.reloadData()
             colorPickerView.removeFromSuperview()
+            pencilPickerView.removeFromSuperview()
         } else if index == 2 {
             view.addSubview(colorPickerView)
             colorPickerView.backgroundColor = .blue

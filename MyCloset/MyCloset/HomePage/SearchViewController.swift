@@ -66,9 +66,12 @@ class SearchViewController: UIViewController {
     }
 
     func searchFriends(query: String) {
-        firebaseManager.searchFriends(query: query) { [weak self] (searchResults) in
-            self?.searchResults = searchResults
-            self?.tableView.reloadData()
+//        firebaseManager.searchFriends(query: query) { [weak self] (searchResults) in
+//            self?.searchResults = searchResults
+//            self?.tableView.reloadData()
+//        }
+        FirebaseStorageManager.shared.searchStoreName(store: query) { articles in
+            print(articles.count)
         }
     }
 }

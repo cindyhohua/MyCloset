@@ -259,6 +259,7 @@ extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollecti
             outfits = outfitss?[index]
             collectionView.reloadData()
             colorPickerView.removeFromSuperview()
+            pencilPickerView.removeFromSuperview()
         } else if index == 3 {
             view.addSubview(colorPickerView)
             colorPickerView.backgroundColor = .blue

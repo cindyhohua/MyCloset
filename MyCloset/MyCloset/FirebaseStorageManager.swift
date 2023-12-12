@@ -222,6 +222,20 @@ class FirebaseStorageManager {
 
 // post
 extension FirebaseStorageManager {
+    func searchStoreName(store: String, completion: @escaping ([Article]) -> Void) {
+        fetchData { articles in
+            var articleStore: [Article] = []
+            for article in articles {
+                for list in article.productList {
+                    if list.productStore.lowercased() == store.lowercased() {
+                        articleStore.append(article)
+                        break
+                    }
+                }
+            }
+            completion(articleStore)
+        }
+    }
     func fetchData(completion: @escaping ([Article]) -> Void) {
         var blocked: [String] = []
         getAuth { author in
@@ -450,9 +464,7 @@ extension FirebaseStorageManager {
             blocked += author.blockedUsers ?? []
             blocked += author.blockedByUsers ?? []
         }
-        let lowercaseQuery = query.lowercased()
         firebaseDb.collection("auth")
-            .whereField("name", isGreaterThanOrEqualTo: lowercaseQuery)
             .whereField("name", isGreaterThanOrEqualTo: query)
             .whereField("name", isLessThan: query + "z")
             .getDocuments { (querySnapshot, error) in
@@ -484,7 +496,6 @@ extension FirebaseStorageManager {
                         return nil
                     }
                 }
-                
                 completion(searchResults)
             }
     }

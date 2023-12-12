@@ -222,7 +222,7 @@ class EditProfileViewController: UIViewController {
         if let image = author?.image {
             imageView.kf.setImage(with: URL(string: image))
         } else {
-            imageView.image = UIImage(named: "Image")
+            imageView.image = UIImage(named: "AppIcon")
         }
         nameTextField.text = author?.name
         littleWordsTextField.text = author?.littleWords

@@ -91,7 +91,7 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         if clothes == nil {
-            imageView.image = UIImage(named: "Image")
+            imageView.image = UIImage(named: "AppIcon")
         }
         
         // Name Text Field Constraints
@@ -142,11 +142,11 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
         // Upload image button
         uploadImageButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.centerY.equalTo(imageView)
+            make.centerY.equalTo(imageView).offset(15)
         }
         
         uploadImageButton.setTitle("新增服飾照", for: .normal)
-        uploadImageButton.setTitleColor(.white, for: .normal)
+        uploadImageButton.setTitleColor(.brown, for: .normal)
         uploadImageButton.addTarget(self, action: #selector(uploadImageButtonTapped), for: .touchUpInside)
         
     }
