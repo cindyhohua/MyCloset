@@ -10,7 +10,7 @@ import SnapKit
 import PullToRefreshKit
 
 class TopRankingViewController: UIViewController {
-    fileprivate let collectionView: UICollectionView = {
+    let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false

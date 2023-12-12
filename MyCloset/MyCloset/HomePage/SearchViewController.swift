@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import FirebaseAuth
 
-class SearchViewController: UIViewController {
+class SearchViewController: TopRankingViewController {
 
     var searchBar = UISearchBar()
     var tableView = UITableView()
@@ -17,12 +17,13 @@ class SearchViewController: UIViewController {
     var searchResults: [Author] = []
 
     let firebaseManager = FirebaseStorageManager.shared
+    var switchOrNot = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-
         setupSearchBar()
+        setup()
         setupTableView()
 
         tableView.delegate = self
@@ -31,16 +32,45 @@ class SearchViewController: UIViewController {
         let leftButton = UIBarButtonItem(
             image: UIImage(systemName: "chevron.backward.circle"),
             style: .plain, target: self, action: #selector(backButtonTapped))
-            navigationItem.leftBarButtonItem = leftButton
-            leftButton.tintColor = UIColor.lightBrown()
+        navigationItem.leftBarButtonItem = leftButton
+        leftButton.tintColor = UIColor.lightBrown()
+        let switchButton = UIBarButtonItem(
+            image: UIImage(systemName: "arrow.left.arrow.right"),
+            style: .plain, target: self, action: #selector(switchButtonTapped))
+        navigationItem.rightBarButtonItem = switchButton
+        switchButton.tintColor = UIColor.lightBrown()
+        
         navigationItem.title = "Search Friend"
         navigationController?.navigationBar.titleTextAttributes =
         [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(),
          NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        switchButtonTapped()
     }
     
-    @objc func backButtonTapped() {
-        navigationController?.popViewController(animated: true)
+    @objc func switchButtonTapped() {
+        if switchOrNot {
+            self.tableView.isHidden = true
+            self.collectionView.isHidden = false
+            self.navigationItem.title = "Search item store"
+        } else {
+            self.tableView.isHidden = false
+            self.collectionView.isHidden = true
+            self.navigationItem.title = "Search Friend"
+        }
+        searchBar.text = ""
+        switchOrNot = !switchOrNot
+    }
+    
+    override func setup() {
+        view.backgroundColor = .white
+        view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
+            make.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(50)
+        }
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.isHidden = true
     }
 
     func setupSearchBar() {
@@ -66,12 +96,16 @@ class SearchViewController: UIViewController {
     }
 
     func searchFriends(query: String) {
-//        firebaseManager.searchFriends(query: query) { [weak self] (searchResults) in
-//            self?.searchResults = searchResults
-//            self?.tableView.reloadData()
-//        }
-        FirebaseStorageManager.shared.searchStoreName(store: query) { articles in
-            print(articles.count)
+        if switchOrNot {
+            firebaseManager.searchFriends(query: query) { [weak self] (searchResults) in
+                self?.searchResults = searchResults
+                self?.tableView.reloadData()
+            }
+        } else {
+            FirebaseStorageManager.shared.searchStoreName(store: query) { articles in
+                self.articles = articles
+                self.collectionView.reloadData()
+            }
         }
     }
 }
