@@ -21,6 +21,7 @@ struct Article: Codable {
     let like: Int
     let whoLiked: [String]
     let comment: [Comment]
+    let dollImageURL: String?
 }
 
 struct Comment: Codable {
@@ -371,7 +372,7 @@ extension FirebaseStorageManager {
         return products
     }
     
-    func addArticle(auth: Author,imageURL: String, content: String, positions: [CGPoint] , productList: [Product], completion: @escaping (Error?) -> Void) {
+    func addArticle(auth: Author, imageURL: String, content: String, positions: [CGPoint] , productList: [Product], dollImageURL: String, completion: @escaping (Error?) -> Void) {
         let convertedPositions: [[String: CGFloat]] = positions.map { point in
             return ["x": point.x, "y": point.y]
         }
@@ -398,7 +399,8 @@ extension FirebaseStorageManager {
             "id": document.documentID,
             "like": 0,
             "whoLiked": [],
-            "comment": []
+            "comment": [],
+            "dollImageURL": dollImageURL
         ]
         document.setData(data) { error in
             completion(error)

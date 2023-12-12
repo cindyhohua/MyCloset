@@ -14,6 +14,7 @@ class NewPostSecondStepViewController: UIViewController {
     var tableView = UITableView()
     var actualPositions: [CGPoint] = []
     var author: Author?
+    var dollImageData: Data?
     
     func convertToActualPosition(_ relativePosition: CGPoint) -> CGPoint {
         let actualX = relativePosition.x * (view.bounds.width-32)
@@ -36,14 +37,23 @@ class NewPostSecondStepViewController: UIViewController {
         let nextButton = UIBarButtonItem(
             title: "Post", style: .plain,
             target: self, action: #selector(postButtonTapped))
+        let addButton = UIBarButtonItem(
+            title: "AddDoll", style: .plain,
+            target: self, action: #selector(addButtonTapped))
         nextButton.tintColor = UIColor.lightBrown()
-        navigationItem.rightBarButtonItem = nextButton
-        navigationItem.rightBarButtonItem?.isEnabled = true
+        addButton.tintColor = UIColor.lightBrown()
+        navigationItem.rightBarButtonItems = [nextButton, addButton]
         actualPositions = position.map { convertToActualPosition($0) }
         setupTableView()
         FirebaseStorageManager.shared.getAuth { author in
             self.author = author
         }
+    }
+    
+    @objc func addButtonTapped() {
+        let secondVC = MineDollChooseViewController()
+        secondVC.delegate = self
+        self.present(secondVC, animated: true)
     }
     
     @objc func postButtonTapped() {
@@ -68,17 +78,40 @@ class NewPostSecondStepViewController: UIViewController {
         FirebaseStorageManager.shared.uploadImageAndGetURL(selectedImage!) { [weak self] result in
             switch result {
             case .success(let downloadURL):
-                guard let auth = self?.author else {return}
-                FirebaseStorageManager.shared.addArticle(
-                    auth: auth, imageURL: downloadURL.absoluteString, content: content,
-                    positions: self?.position ?? [CGPoint(x: -10,y: -10)],
-                    productList: productList) { _ in
-                    guard let viewControllers = self?.navigationController?.viewControllers else { return }
-                    for controller in viewControllers {
-                        if controller is HomePageViewController {
-                            self?.navigationController?.popToViewController(controller, animated: true)
+                if let dollImageData = self?.dollImageData {
+                    FirebaseStorageManager.shared.uploadImageAndGetURL(UIImage(data: dollImageData)!) { [weak self] result in
+                        switch result {
+                        case .success(let downloadDollURL):
+                            guard let auth = self?.author else {return}
+                            FirebaseStorageManager.shared.addArticle(
+                                auth: auth, imageURL: downloadURL.absoluteString, content: content,
+                                positions: self?.position ?? [CGPoint(x: -10, y: -10)],
+                                productList: productList, dollImageURL: downloadDollURL.absoluteString) { _ in
+                                    guard let viewControllers = self?.navigationController?.viewControllers else { return }
+                                    for controller in viewControllers {
+                                        if controller is HomePageViewController {
+                                            self?.navigationController?.popToViewController(controller, animated: true)
+                                            
+                                        }
+                                    }
+                                }
+                        case .failure(let error):
+                            print("Error uploading post data to Firebase: \(error.localizedDescription)")
                         }
                     }
+                } else {
+                    guard let auth = self?.author else {return}
+                    FirebaseStorageManager.shared.addArticle(
+                        auth: auth, imageURL: downloadURL.absoluteString, content: content,
+                        positions: self?.position ?? [CGPoint(x: -10, y: -10)],
+                        productList: productList, dollImageURL: "") { _ in
+                            guard let viewControllers = self?.navigationController?.viewControllers else { return }
+                            for controller in viewControllers {
+                                if controller is HomePageViewController {
+                                    self?.navigationController?.popToViewController(controller, animated: true)
+                                }
+                            }
+                        }
                 }
             case .failure(let error):
                 print("Error uploading post data to Firebase: \(error.localizedDescription)")
@@ -113,14 +146,16 @@ extension NewPostSecondStepViewController: UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.row {
         case 0:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "image", for: indexPath) as? NewPostImageCell else {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "image", for: indexPath) as? NewPostImageCell else {
                 fatalError("Cant find cell")
             }
             cell.configure(with: selectedImage!, buttonPosition: actualPositions)
             cell.isUserInteractionEnabled = false
             return cell
         case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "comment", for: indexPath) as? NewPostCommentCell else {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "comment", for: indexPath) as? NewPostCommentCell else {
                 fatalError("Cant find cell")
             }
             cell.isUserInteractionEnabled = true
@@ -128,7 +163,6 @@ extension NewPostSecondStepViewController: UITableViewDelegate, UITableViewDataS
             return cell
         default:
             let cell = NewPostProductCell()
-            print(cell.tag,indexPath.row)
             cell.numberLabel.text = "品項\(indexPath.row-1) :"
             cell.fromClosetButton.tag = indexPath.row
             cell.fromClosetButton.addTarget(self, action: #selector(fromClosetButtonTapped(_:)), for: .touchUpInside)
@@ -138,7 +172,6 @@ extension NewPostSecondStepViewController: UITableViewDelegate, UITableViewDataS
         }
     }
     @objc func fromClosetButtonTapped(_ sender: UIButton) {
-        print("aaa",sender.tag)
         let secondVC = ImportFromClosetViewController()
         secondVC.delegate = self
         secondVC.indexPathRow = sender.tag
@@ -151,12 +184,20 @@ extension NewPostSecondStepViewController: ClosetToPost {
         guard let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? NewPostProductCell else {
             return
         }
-        print("qqq",cloth)
         cell.nameLabel.text = cloth.item
         cell.storeLabel.text = cloth.store
         cell.priceLabel.text = cloth.price
         cell.commentsLabel.text = cloth.content
     }
-    
+}
+
+extension NewPostSecondStepViewController: MineDollToPost {
+    func mineDollToPost(dollImageData: Data) {
+        self.dollImageData = dollImageData
+        guard let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? NewPostImageCell else {
+            return
+        }
+        cell.dollImageView.image = UIImage(data: dollImageData)
+    }
     
 }

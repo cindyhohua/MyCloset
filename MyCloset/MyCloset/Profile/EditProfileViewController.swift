@@ -21,8 +21,8 @@ class EditProfileViewController: UIViewController {
     var nameTextField = UITextField()
     var littleWordsTextField = UITextField()
 
-    var heightTextField = UITextField()
-    var weightTextField = UITextField()
+//    var heightTextField = UITextField()
+//    var weightTextField = UITextField()
     
     var privateOrNotButton = UIButton()
     var relationshipButton = UIButton()
@@ -207,8 +207,8 @@ class EditProfileViewController: UIViewController {
                     FirebaseStorageManager.shared.updateAuth(image: downloadURL.absoluteString,
                        name: self?.nameTextField.text ?? "",
                        littleWords: self?.littleWordsTextField.text ?? "",
-                       weight: self?.weightTextField.text ?? "",
-                       height: self?.heightTextField.text ?? "") { _ in
+                       weight: "",
+                       height: "") { _ in
                         self?.navigationController?.popViewController(animated: true)
                     }
                 case .failure(let error):
@@ -226,8 +226,8 @@ class EditProfileViewController: UIViewController {
         }
         nameTextField.text = author?.name
         littleWordsTextField.text = author?.littleWords
-        heightTextField.text = author?.height
-        weightTextField.text = author?.weight
+//        heightTextField.text = author?.height
+//        weightTextField.text = author?.weight
     }
 }
 

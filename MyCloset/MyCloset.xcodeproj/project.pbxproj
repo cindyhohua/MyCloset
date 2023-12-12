@@ -61,6 +61,7 @@
 		CA795B1B2B244A7900D5584E /* HairDollPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B1A2B244A7800D5584E /* HairDollPageViewController.swift */; };
 		CA795B1D2B26B3A200D5584E /* RelationshipListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B1C2B26B3A200D5584E /* RelationshipListViewController.swift */; };
 		CA795B1F2B26EE7C00D5584E /* ImportFromClosetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B1E2B26EE7C00D5584E /* ImportFromClosetViewController.swift */; };
+		CA795B212B273E7A00D5584E /* MineDollChooseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B202B273E7A00D5584E /* MineDollChooseViewController.swift */; };
 		CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */; };
 		CABCC7CC2B0F3EB700FB38C5 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */; };
 		CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */; };
@@ -121,6 +122,7 @@
 		CA795B1A2B244A7800D5584E /* HairDollPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HairDollPageViewController.swift; sourceTree = "<group>"; };
 		CA795B1C2B26B3A200D5584E /* RelationshipListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipListViewController.swift; sourceTree = "<group>"; };
 		CA795B1E2B26EE7C00D5584E /* ImportFromClosetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFromClosetViewController.swift; sourceTree = "<group>"; };
+		CA795B202B273E7A00D5584E /* MineDollChooseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineDollChooseViewController.swift; sourceTree = "<group>"; };
 		CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAuthCollectionViewCell.swift; sourceTree = "<group>"; };
 		CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 				CA016D552B0729C00066FBE7 /* DetailPageCell.swift */,
 				CA016D3E2B05AF030066FBE7 /* NewPostViewController.swift */,
 				CA016D422B05BF120066FBE7 /* NewPostSecondStepViewController.swift */,
+				CA795B202B273E7A00D5584E /* MineDollChooseViewController.swift */,
 				CA795B1E2B26EE7C00D5584E /* ImportFromClosetViewController.swift */,
 				CA016D402B05B76C0066FBE7 /* NewPostCell.swift */,
 				CAF701112B11E7A00053B12B /* SearchViewController.swift */,
@@ -458,6 +461,7 @@
 				CA016D3F2B05AF030066FBE7 /* NewPostViewController.swift in Sources */,
 				CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */,
 				CA016D592B074C4B0066FBE7 /* MyClosetPageViewController.swift in Sources */,
+				CA795B212B273E7A00D5584E /* MineDollChooseViewController.swift in Sources */,
 				CAF701162B1346E90053B12B /* TopRankingViewController.swift in Sources */,
 				CA3B0FBD2B0C6C35001B708E /* ChangeClothesViewController.swift in Sources */,
 				CABCC7CC2B0F3EB700FB38C5 /* EditProfileViewController.swift in Sources */,
@@ -609,12 +613,14 @@
 				DEVELOPMENT_TEAM = N4C7YMWND2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyCloset/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = E.Mode;
+				INFOPLIST_KEY_NSCameraUsageDescription = "允許使用相機來記錄衣服及穿搭";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "to let you export images to photo library";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -623,9 +629,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cindyhohua.MyCloset;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -642,12 +651,14 @@
 				DEVELOPMENT_TEAM = N4C7YMWND2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyCloset/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = E.Mode;
+				INFOPLIST_KEY_NSCameraUsageDescription = "允許使用相機來記錄衣服及穿搭";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "to let you export images to photo library";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -656,9 +667,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cindyhohua.MyCloset;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

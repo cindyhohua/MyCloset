@@ -16,6 +16,14 @@ class NewPostImageCell: UITableViewCell {
         imageView.clipsToBounds = true
         return imageView
     }()
+    
+    lazy var dollImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.cornerRadius = 40
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -35,6 +43,14 @@ class NewPostImageCell: UITableViewCell {
             make.height.equalTo(imageViewCell.snp.width).multipliedBy(1.4)
             make.bottom.equalTo(contentView).offset(-16)
         }
+        contentView.addSubview(dollImageView)
+        dollImageView.snp.makeConstraints { make in
+            make.leading.equalTo(imageViewCell.snp.leading).offset(16)
+            make.bottom.equalTo(imageViewCell.snp.bottom).offset(-16)
+            make.height.width.equalTo(80)
+        }
+        dollImageView.image = UIImage(named: "AppIcon")
+        
     }
 
     func configure(with image: UIImage, buttonPosition: [CGPoint]) {

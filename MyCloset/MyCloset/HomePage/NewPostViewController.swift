@@ -168,4 +168,3 @@ extension NewPostViewController: TOCropViewControllerDelegate {
         dismiss(animated: true, completion: nil)
     }
 }
-
