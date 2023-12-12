@@ -14,6 +14,8 @@ protocol LongPressDelegate {
 }
 
 class DetailPageImageCell: UITableViewCell {
+    var dollImageURL: String?
+    var imageURL: String?
     var labelTexts: [Product]?
     var likeCount: Int?
     var authorId: String?
@@ -52,6 +54,15 @@ class DetailPageImageCell: UITableViewCell {
         imageView.isUserInteractionEnabled = true
         return imageView
     }()
+    
+    lazy var dollImageViewCell: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.cornerRadius = 5
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.isUserInteractionEnabled = true
+        return imageView
+    }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -75,6 +86,22 @@ class DetailPageImageCell: UITableViewCell {
         imageViewCell.layer.shadowOpacity = 0.5
         imageViewCell.layer.shadowOffset = CGSize(width: 0, height: 3)
         imageViewCell.layer.shadowRadius = 5
+        
+        contentView.addSubview(dollImageViewCell)
+        dollImageViewCell.snp.makeConstraints { make in
+            make.top.equalTo(contentView).offset(16)
+            make.leading.equalTo(contentView).offset(16)
+            make.trailing.equalTo(contentView).offset(-16)
+            make.height.equalTo(imageViewCell.snp.width).multipliedBy(1.4)
+            make.bottom.equalTo(contentView).offset(-16)
+        }
+        dollImageViewCell.layer.shadowColor = UIColor.black.cgColor
+        dollImageViewCell.layer.shadowOpacity = 0.5
+        dollImageViewCell.layer.shadowOffset = CGSize(width: 0, height: 3)
+        dollImageViewCell.layer.shadowRadius = 5
+        dollImageViewCell.isHidden = true
+//        dollImageViewCell.addGestureRecognizer(rightSwipeGesture)
+        
         contentView.addSubview(likeButton)
         likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         likeButton.imageView?.contentMode = .scaleAspectFit
@@ -95,6 +122,41 @@ class DetailPageImageCell: UITableViewCell {
         contentView.layer.shadowOpacity = 0.5
         contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
         contentView.layer.shadowRadius = 4
+    }
+    
+    @objc func handleRightSwipe() {
+       performFlipAnimationR()
+    }
+    @objc func handleLeftSwipe() {
+        performFlipAnimationL()
+    }
+    
+    var isFlipped = false
+    
+    func performFlipAnimationR() {
+        UIView.transition(with: contentView, duration: 0.5, options: .transitionFlipFromLeft, animations: {
+            if self.isFlipped {
+                self.imageViewCell.isHidden = false
+                self.dollImageViewCell.isHidden = true
+            } else {
+                self.imageViewCell.isHidden = true
+                self.dollImageViewCell.isHidden = false
+            }
+        }, completion: nil)
+        isFlipped.toggle()
+    }
+    
+    func performFlipAnimationL() {
+        UIView.transition(with: contentView, duration: 0.5, options: .transitionFlipFromRight, animations: {
+            if self.isFlipped {
+                self.imageViewCell.isHidden = false
+                self.dollImageViewCell.isHidden = true
+            } else {
+                self.imageViewCell.isHidden = true
+                self.dollImageViewCell.isHidden = false
+            }
+        }, completion: nil)
+        isFlipped.toggle()
     }
     
     @objc func likeButtonLongPressed(_ gesture: UILongPressGestureRecognizer) {
@@ -129,7 +191,7 @@ class DetailPageImageCell: UITableViewCell {
         heartImageView.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
         heartImageView.center = likeButton.center
         
-        imageViewCell.addSubview(heartImageView)
+        contentView.addSubview(heartImageView)
         heartImageView.addSubview(heartAmountLabel)
         heartImageView.snp.makeConstraints { make in
             make.center.equalTo(imageViewCell)
@@ -148,7 +210,19 @@ class DetailPageImageCell: UITableViewCell {
         }
     }
     
-    func configure(with image: String, buttonPosition: [CGPoint]) {
+    func configure(with image: String, dollImage: String, buttonPosition: [CGPoint]) {
+        self.imageURL = image
+        self.dollImageURL = dollImage
+        if dollImage != "" {
+            dollImageViewCell.kf.setImage(with: URL(string: dollImage))
+            let rightSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleRightSwipe))
+            rightSwipeGesture.direction = .right
+            let leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleLeftSwipe))
+            rightSwipeGesture.direction = .right
+            leftSwipeGesture.direction = .left
+            contentView.addGestureRecognizer(rightSwipeGesture)
+            contentView.addGestureRecognizer(leftSwipeGesture)
+        }
         imageViewCell.kf.setImage(with: URL(string: image))
         var actualPositions: [CGPoint] = []
         actualPositions = buttonPosition.map { convertToActualPosition($0) }

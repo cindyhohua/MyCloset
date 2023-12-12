@@ -309,7 +309,7 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
                 }
                 cell.isUserInteractionEnabled = true
                 cell.labelTexts = article?.productList
-                cell.configure(with: article?.imageURL ?? "", buttonPosition: position)
+                cell.configure(with: article?.imageURL ?? "", dollImage: article?.dollImageURL ?? "", buttonPosition: position)
                 cell.postId = article?.id
                 cell.selectionStyle = .none
                 cell.authorId = article?.author.id
