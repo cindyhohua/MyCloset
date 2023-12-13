@@ -25,7 +25,7 @@ class ProfileCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(image)
-        image.image = UIImage(named: "AppIcon")
+        image.image = UIImage(named: "placeHolder")
         image.snp.makeConstraints { make in
             make.top.leading.bottom.trailing.equalTo(contentView)
         }

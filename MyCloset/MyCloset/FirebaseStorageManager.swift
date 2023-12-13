@@ -229,7 +229,7 @@ extension FirebaseStorageManager {
                 for list in article.productList {
                     if list.productStore.lowercased() == store.lowercased() {
                         articleStore.append(article)
-                        break
+                        b040reak
                     }
                 }
             }

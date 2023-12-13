@@ -84,7 +84,7 @@ extension MineDollViewController: UICollectionViewDelegate, UICollectionViewData
             fatalError("Unable to dequeue ProfileCell")
         }
         if let imageData = mineDoll?[indexPath.row].myWearing {
-            cell.image.image = UIImage(data: imageData) ?? UIImage(named: "AppIcon")
+            cell.image.image = UIImage(data: imageData) ?? UIImage(named: "placeHolder")
         }
         return cell
     }

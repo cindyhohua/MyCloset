@@ -91,7 +91,7 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         if clothes == nil {
-            imageView.image = UIImage(named: "AppIcon")
+            imageView.image = UIImage(named: "placeHolder")
         }
         
         // Name Text Field Constraints

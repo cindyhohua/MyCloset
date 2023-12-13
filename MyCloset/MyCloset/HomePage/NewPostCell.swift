@@ -49,7 +49,7 @@ class NewPostImageCell: UITableViewCell {
             make.bottom.equalTo(imageViewCell.snp.bottom).offset(-16)
             make.height.width.equalTo(80)
         }
-        dollImageView.image = UIImage(named: "AppIcon")
+        dollImageView.image = UIImage(named: "placeHolder")
         
     }
 
