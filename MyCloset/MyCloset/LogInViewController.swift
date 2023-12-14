@@ -114,13 +114,12 @@ extension LoginViewController: ASAuthorizationControllerDelegate, ASAuthorizatio
                     self.dismiss(animated: true)
                     authorExist = true
                 }
+                if authorExist == false {
+                    let secondVC = AppleLoginSetProfileViewController()
+                    secondVC.userId = authResult?.user.uid
+                    self.present(secondVC, animated: true)
+                }
             }
-            if authorExist == false {
-                let secondVC = AppleLoginSetProfileViewController()
-                secondVC.userId = authResult?.user.uid
-                self.present(secondVC, animated: true)
-            }
-
         }
     }
     

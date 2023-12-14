@@ -15,7 +15,7 @@ struct DollCloth {
     let name: String
 }
 
-class PaperDollTopsViewController: UIViewController{
+class PaperDollTopsViewController: UIViewController {
     var cloth: ClothesStruct?
 
     var dollParts: [String: UIImageView] = [:]
@@ -197,6 +197,7 @@ class PaperDollTopsViewController: UIViewController{
 
     func setupConstraints(for imageView: UIImageView) {
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),

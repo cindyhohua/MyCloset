@@ -104,7 +104,6 @@ class NewPostCommentCell: UITableViewCell {
 class NewPostProductCell: UITableViewCell {
     var numberLabel = UILabel()
     var fromClosetButton = UIButton()
-    
     lazy var nameLabel: UITextField = {
         return createTextField(placeholder: "輸入品項")
     }()
@@ -169,6 +168,7 @@ class NewPostProductCell: UITableViewCell {
             make.leading.equalTo(contentView).offset(16)
             make.trailing.equalTo(contentView).offset(-16)
         }
+        priceLabel.keyboardType = .numberPad
         commentsLabel.snp.makeConstraints { make in
             make.top.equalTo(priceLabel.snp.bottom).offset(8)
             make.leading.equalTo(contentView).offset(16)

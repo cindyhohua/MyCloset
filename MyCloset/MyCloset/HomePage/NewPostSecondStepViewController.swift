@@ -79,7 +79,8 @@ class NewPostSecondStepViewController: UIViewController {
             switch result {
             case .success(let downloadURL):
                 if let dollImageData = self?.dollImageData {
-                    FirebaseStorageManager.shared.uploadImageAndGetURL(UIImage(data: dollImageData)!) { [weak self] result in
+                    FirebaseStorageManager.shared.uploadImageAndGetURL(
+                        UIImage(data: dollImageData)!) { [weak self] result in
                         switch result {
                         case .success(let downloadDollURL):
                             guard let auth = self?.author else {return}
@@ -87,7 +88,8 @@ class NewPostSecondStepViewController: UIViewController {
                                 auth: auth, imageURL: downloadURL.absoluteString, content: content,
                                 positions: self?.position ?? [CGPoint(x: -10, y: -10)],
                                 productList: productList, dollImageURL: downloadDollURL.absoluteString) { _ in
-                                    guard let viewControllers = self?.navigationController?.viewControllers else { return }
+                                    guard let viewControllers = self?.navigationController?.viewControllers
+                                    else { return }
                                     for controller in viewControllers {
                                         if controller is HomePageViewController {
                                             self?.navigationController?.popToViewController(controller, animated: true)

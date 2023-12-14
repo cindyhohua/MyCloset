@@ -174,6 +174,7 @@ class PaperDollAccessoriesViewController: UIViewController {
 
     func setupConstraints(for imageView: UIImageView) {
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -268,7 +269,7 @@ extension PaperDollAccessoriesViewController: UICollectionViewDataSource, UIColl
             view.addSubview(pencilPickerView)
             pencilPickerView.backgroundColor = .white
             pencilPickerView.delegate = self
-            canvasView.tool = PKInkingTool(.pen, color: pencilSelectedColor , width: pencilWidth)
+            canvasView.tool = PKInkingTool(.pen, color: pencilSelectedColor, width: pencilWidth)
             canvasView.drawingPolicy = .anyInput
             pencilPickerView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([

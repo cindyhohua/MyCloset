@@ -18,6 +18,8 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
     var priceTextField = UITextField()
     var contentTextField = UITextField()
     var uploadImageButton = UIButton()
+    var chooseCategoryLabel = UILabel()
+    var chooseSubcategoryLabel = UILabel()
 
     var categories = ["Tops", "Bottoms", "Accessories"]
     var subcategories = [
@@ -32,14 +34,21 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
+//        self.navigationController?.navigationBar.backgroundColor = .white
+        let leftButton = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.backward.circle"),
+            style: .plain, target: self, action: #selector(backButtonTapped))
         navigationItem.leftBarButtonItem = leftButton
         leftButton.tintColor = UIColor.brown
-        let rightButton = UIBarButtonItem(image: UIImage(systemName: "checkmark.circle"), style: .plain, target: self, action: #selector(addButtonTapped(_:)))
+        let rightButton = UIBarButtonItem(
+            image: UIImage(systemName: "checkmark.circle"), style: .plain,
+            target: self, action: #selector(addButtonTapped(_:)))
         navigationItem.rightBarButtonItem = rightButton
         rightButton.tintColor = UIColor.brown
         navigationItem.title = "Add new item"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.brown, NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.brown,
+            NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         categoryPicker.dataSource = self
         categoryPicker.delegate = self
         subcategoryPicker.dataSource = self
@@ -66,19 +75,36 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
         view.addSubview(priceTextField)
         view.addSubview(contentTextField)
         view.addSubview(uploadImageButton)
+        view.addSubview(chooseCategoryLabel)
+        view.addSubview(chooseSubcategoryLabel)
         
         // Category Picker Constraints
         categoryPicker.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.trailing.equalToSuperview().inset(20)
+            make.leading.equalToSuperview().inset(100)
             make.height.equalTo(100)
+        }
+        
+        chooseCategoryLabel.text = "Category"
+        chooseCategoryLabel.textColor = .brown
+        chooseCategoryLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(20)
+            make.centerY.equalTo(categoryPicker)
         }
         
         // Subcategory Picker Constraints
         subcategoryPicker.snp.makeConstraints { make in
             make.top.equalTo(categoryPicker.snp.bottom)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.trailing.equalToSuperview().inset(20)
+            make.leading.equalToSuperview().inset(100)
             make.height.equalTo(100)
+        }
+        chooseSubcategoryLabel.text = "Subategory"
+        chooseSubcategoryLabel.textColor = .brown
+        chooseSubcategoryLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(16)
+            make.centerY.equalTo(subcategoryPicker)
         }
         
         // Image View Constraints
@@ -100,10 +126,11 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(40)
         }
-        nameTextField.placeholder = "    輸入品名（必填）"
+        nameTextField.placeholder = "輸入品名（必填）"
         nameTextField.layer.borderWidth = 1
         nameTextField.layer.borderColor = UIColor.lightLightBrown().cgColor
         nameTextField.layer.cornerRadius = 10
+        nameTextField.layer.sublayerTransform = CATransform3DMakeTranslation(20, 0, 0)
         
         // Store Text Field Constraints
         storeTextField.snp.makeConstraints { make in
@@ -111,11 +138,11 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(40)
         }
-        storeTextField.placeholder = "     輸入店家"
+        storeTextField.placeholder = "輸入店家"
         storeTextField.layer.borderWidth = 1
         storeTextField.layer.borderColor = UIColor.lightLightBrown().cgColor
         storeTextField.layer.cornerRadius = 10
-        
+        storeTextField.layer.sublayerTransform = CATransform3DMakeTranslation(20, 0, 0)
         
         // Price Text Field Constraints
         priceTextField.snp.makeConstraints { make in
@@ -123,10 +150,12 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(40)
         }
-        priceTextField.placeholder = "    輸入價錢"
+        priceTextField.placeholder = "輸入價錢"
         priceTextField.layer.borderWidth = 1
         priceTextField.layer.borderColor = UIColor.lightLightBrown().cgColor
         priceTextField.layer.cornerRadius = 10
+        priceTextField.layer.sublayerTransform = CATransform3DMakeTranslation(20, 0, 0)
+        priceTextField.keyboardType = .numberPad
         
         // Content Text Field Constraints
         contentTextField.snp.makeConstraints { make in
@@ -134,10 +163,11 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(40)
         }
-        contentTextField.placeholder = "    輸入其他註解"
+        contentTextField.placeholder = "輸入其他註解"
         contentTextField.layer.borderWidth = 1
         contentTextField.layer.borderColor = UIColor.lightLightBrown().cgColor
         contentTextField.layer.cornerRadius = 10
+        contentTextField.layer.sublayerTransform = CATransform3DMakeTranslation(20, 0, 0)
         
         // Upload image button
         uploadImageButton.snp.makeConstraints { make in
@@ -145,7 +175,9 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
             make.centerY.equalTo(imageView).offset(15)
         }
         
-        uploadImageButton.setTitle("新增服飾照", for: .normal)
+        uploadImageButton.setTitle("  新增服飾照  ", for: .normal)
+        uploadImageButton.layer.cornerRadius = 10
+        uploadImageButton.backgroundColor = .white.withAlphaComponent(0.5)
         uploadImageButton.setTitleColor(.brown, for: .normal)
         uploadImageButton.addTarget(self, action: #selector(uploadImageButtonTapped), for: .touchUpInside)
         
@@ -243,15 +275,19 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
         let content = contentTextField.text ?? ""
         let image = imageView.image?.jpegData(compressionQuality: 0.3)
         
-        CoreDataManager.shared.addClothes(
-            category: categoryName, subcategory: subcategoryName,
-            item: itemName, price: price, store: storeName,
-            content: content, image: image)
-        guard let viewControllers = self.navigationController?.viewControllers else { return }
-        for controller in viewControllers {
-            if controller is MyClosetPageViewController {
-            self.navigationController?.popToViewController(controller, animated: true)
+        if itemName != "" {
+            CoreDataManager.shared.addClothes(
+                category: categoryName, subcategory: subcategoryName,
+                item: itemName, price: price, store: storeName,
+                content: content, image: image)
+            guard let viewControllers = self.navigationController?.viewControllers else { return }
+            for controller in viewControllers {
+                if controller is MyClosetPageViewController {
+                    self.navigationController?.popToViewController(controller, animated: true)
+                }
             }
+        } else {
+            showAlert(message: "Item name is required")
         }
     }
     
@@ -284,7 +320,9 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
 extension AddMyClosetViewController: TOCropViewControllerDelegate {
     func cropViewController(_ cropViewController: TOCropViewController, didCropTo image: UIImage, with cropRect: CGRect, angle: Int) {
         imageView.image = image
-        uploadImageButton.setTitle("重新選擇照片", for: .normal)
+        uploadImageButton.setTitle("  重新選擇照片  ", for: .normal)
+        uploadImageButton.backgroundColor = .white.withAlphaComponent(0.5)
+        uploadImageButton.layer.cornerRadius = 10
         dismiss(animated: true, completion: nil)
     }
 }

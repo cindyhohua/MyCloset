@@ -132,7 +132,17 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
             fatalError("Cant find cell")
         }
         if let imageData = sections[indexPath.section].items[indexPath.row].image {
-            cell.configure(with: imageData , name: sections[indexPath.section].items[indexPath.row].item ?? "")
+            if sections[indexPath.section].items[indexPath.row].cloth != nil {
+                cell.configure(
+                    with: imageData ,
+                    name: sections[indexPath.section].items[indexPath.row].item ?? "",
+                    clothOrNot: true)
+            } else {
+                cell.configure(
+                    with: imageData ,
+                    name: sections[indexPath.section].items[indexPath.row].item ?? "",
+                    clothOrNot: false)
+            }
         } else {
             cell.configureWithoutImage(name: sections[indexPath.section].items[indexPath.row].item ?? "")
         }
@@ -188,6 +198,7 @@ class ClosetPageCell: UITableViewCell {
     var selectMine = false
     var index = 0
     let checkButton = UIButton()
+    let clothButton = UIButton()
     let circularImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 25
@@ -215,6 +226,7 @@ class ClosetPageCell: UITableViewCell {
         contentView.addSubview(circularImageView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(checkButton)
+        contentView.addSubview(clothButton)
         circularImageView.snp.makeConstraints { make in
             make.top.equalTo(contentView).offset(3)
             make.leading.equalTo(contentView).offset(16)
@@ -235,11 +247,29 @@ class ClosetPageCell: UITableViewCell {
             make.width.height.equalTo(50)
         }
         checkButton.isHidden = true
+        
+        clothButton.setImage(UIImage(systemName: "sparkle"), for: .normal)
+        clothButton.tintColor = .lightBrown()
+        clothButton.snp.makeConstraints { make in
+            make.trailing.equalTo(contentView).offset(-16)
+            make.width.height.equalTo(70)
+            make.centerY.equalTo(contentView)
+        }
+        clothButton.addTarget(self, action: #selector(clothButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func clothButtonTapped() {
+        print("tapped")
     }
 
-    func configure(with imageData: Data, name: String) {
+    func configure(with imageData: Data, name: String, clothOrNot: Bool) {
         circularImageView.image = UIImage(data: imageData)
         nameLabel.text = name
+        if clothOrNot == true {
+            clothButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+        } else {
+            clothButton.setImage(UIImage(systemName: "pencil"), for: .normal)
+        }
     }
     
     func configureWithoutImage(name: String) {

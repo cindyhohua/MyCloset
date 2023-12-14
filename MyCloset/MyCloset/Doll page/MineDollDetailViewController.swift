@@ -47,14 +47,22 @@ class MineDollDetailViewController: UIViewController, UITableViewDelegate, UITab
         tableView.register(MineDollClothesViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.tableHeaderView = createTableHeaderView()
         
-        let deleteButton = UIBarButtonItem(image: UIImage(systemName: "trash"), style: .plain, target: self, action: #selector(deleteButtonTapped))
+        let deleteButton = UIBarButtonItem(
+            image: UIImage(systemName: "trash"), style: .plain,
+            target: self, action: #selector(deleteButtonTapped))
         deleteButton.tintColor = UIColor.lightBrown()
-        let saveButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up.fill"), style: .plain, target: self, action: #selector(saveButtonTapped))
+        let saveButton = UIBarButtonItem(
+            image: UIImage(systemName: "square.and.arrow.up.fill"),
+            style: .plain, target: self, action: #selector(saveButtonTapped))
         saveButton.tintColor = UIColor.lightBrown()
-        let saveToAlbum = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveToAlbumTapped))
+        let saveToAlbum = UIBarButtonItem(
+            title: "Save", style: .plain, target: self,
+            action: #selector(saveToAlbumTapped))
         saveToAlbum.tintColor = UIColor.lightBrown()
         navigationItem.rightBarButtonItems = [saveToAlbum, saveButton, deleteButton]
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
+        let leftButton = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.backward.circle"),
+            style: .plain, target: self, action: #selector(backButtonTapped))
         navigationItem.leftBarButtonItem = leftButton
         leftButton.tintColor = UIColor.lightBrown()
     }
@@ -68,7 +76,14 @@ class MineDollDetailViewController: UIViewController, UITableViewDelegate, UITab
             print("No image to save.")
             return
         }
-        UIImageWriteToSavedPhotosAlbum(imageToSave, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+        UIImageWriteToSavedPhotosAlbum(
+            imageToSave, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+        let alertController = UIAlertController(
+            title: "Success", message: "Save to your album successfully",
+            preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(okAction)
+            present(alertController, animated: true, completion: nil)
     }
     
     @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {

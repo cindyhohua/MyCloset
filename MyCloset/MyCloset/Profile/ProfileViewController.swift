@@ -29,9 +29,12 @@ class ProfileViewController: UIViewController {
     var author: Author? {
         didSet {
             othersSetup()
+            blockButton.isHidden = true
             if author?.id == Auth.auth().currentUser?.uid {
                 followButton.isHidden = true
                 blockButton.isHidden = true
+            } else {
+                blockButton.isHidden = false
             }
             navigationItem.title = author?.name
             self.collectionView.reloadData()
@@ -82,7 +85,12 @@ class ProfileViewController: UIViewController {
         
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain,
                                          target: self, action: #selector(backButtonTapped))
-        navigationItem.leftBarButtonItems = [leftButton, blockButton]
+        if author?.id == Auth.auth().currentUser?.uid {
+            followButton.isHidden = true
+            navigationItem.leftBarButtonItem = leftButton
+        } else {
+            navigationItem.leftBarButtonItems = [leftButton, blockButton]
+        }
         leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = author?.name
         navigationController?.navigationBar.titleTextAttributes =
@@ -197,22 +205,17 @@ class ProfileViewController: UIViewController {
         }
     }
     @objc func unfollowButtonTapped() {
-        // 創建一個確認視窗
         let alertController = UIAlertController(
             title: "Unfollow", message: "Are you sure you want to unfollow?",
             preferredStyle: .alert)
 
-        // 增加確認按鈕
         let confirmAction = UIAlertAction(title: "Confirm", style: .destructive) { _ in
             self.performUnfollow()
         }
         alertController.addAction(confirmAction)
-
-        // 增加取消按鈕
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
 
-        // 顯示確認視窗
         present(alertController, animated: true, completion: nil)
     }
 

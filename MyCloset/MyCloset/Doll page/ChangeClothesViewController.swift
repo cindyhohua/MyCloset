@@ -108,7 +108,7 @@ class ChangeClothesViewController: UIViewController {
     
 }
 
-extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSource {
+extension ChangeClothesViewController: UITableViewDelegate, UITableViewDataSource {
     
     func setup() {
         tabBarController?.tabBar.backgroundColor = .white
@@ -126,7 +126,8 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
         setupConstraints(for: imageViewChanging)
         addGestures(imageView: imageViewDoll)
 
-        let codeSegmented = SegmentView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 44), buttonTitle: buttonTitle)
+        let codeSegmented = SegmentView(
+            frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 44), buttonTitle: buttonTitle)
         view.addSubview(codeSegmented)
         codeSegmented.backgroundColor = UIColor.lightLightBrown()
         codeSegmented.delegate = self
@@ -181,11 +182,14 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
             }
             let name = UUID().uuidString
             CoreDataManager.shared.saveMineData(image: imageData, selectedItem: self.selectedItems, uuid: name)
+            let secondVC = MineDollViewController()
+            self.navigationController?.pushViewController(secondVC, animated: true)
         }
     }
     
     func setupConstraints(for imageView: UIImageView) {
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -238,9 +242,17 @@ extension ChangeClothesViewController : UITableViewDelegate, UITableViewDataSour
             fatalError("Cant find cell")
         }
         if let imageData = sections[indexPath.section].items[indexPath.row].image {
-            cell.configure(
-                with: imageData ,
-                name: sections[indexPath.section].items[indexPath.row].item ?? "")
+            if sections[indexPath.section].items[indexPath.row].cloth != nil {
+                cell.configure(
+                    with: imageData ,
+                    name: sections[indexPath.section].items[indexPath.row].item ?? "",
+                    clothOrNot: true)
+            } else {
+                cell.configure(
+                    with: imageData ,
+                    name: sections[indexPath.section].items[indexPath.row].item ?? "",
+                    clothOrNot: false)
+            }
             cell.index = segmentesIndex
         } else {
             cell.configureWithoutImage(name: sections[indexPath.section].items[indexPath.row].item ?? "")
