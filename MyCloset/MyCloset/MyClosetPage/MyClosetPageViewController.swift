@@ -99,14 +99,19 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
         addButton.tintColor = UIColor.lightBrown()
         navigationItem.rightBarButtonItem = addButton
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "heart"), style: .plain, target: self, action: #selector(heartButtonTapped))
-        navigationItem.leftBarButtonItem = leftButton
+//        navigationItem.leftBarButtonItem = leftButton
         leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "My Closet"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
-        let codeSegmented = SegmentView(frame: CGRect(x: 0, y: 100, width: self.view.frame.width, height: 44), buttonTitle: buttonTitle)
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.lightBrown(),
+            NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        let codeSegmented = SegmentView(
+            frame: CGRect(x: 0, y: 100, width: self.view.frame.width, height: 44),
+            buttonTitle: buttonTitle)
+        view.addSubview(codeSegmented)
         codeSegmented.backgroundColor = UIColor.white
         codeSegmented.delegate = self
-        view.addSubview(codeSegmented)
+        
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
@@ -128,7 +133,9 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ClosetPageCell", for: indexPath) as? ClosetPageCell else {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "ClosetPageCell",
+            for: indexPath) as? ClosetPageCell else {
             fatalError("Cant find cell")
         }
         if let imageData = sections[indexPath.section].items[indexPath.row].image {
@@ -248,7 +255,7 @@ class ClosetPageCell: UITableViewCell {
         }
         checkButton.isHidden = true
         
-        clothButton.setImage(UIImage(systemName: "sparkle"), for: .normal)
+        clothButton.setImage(UIImage(systemName: "tshirt.fill"), for: .normal)
         clothButton.tintColor = .lightBrown()
         clothButton.snp.makeConstraints { make in
             make.trailing.equalTo(contentView).offset(-16)
@@ -266,9 +273,9 @@ class ClosetPageCell: UITableViewCell {
         circularImageView.image = UIImage(data: imageData)
         nameLabel.text = name
         if clothOrNot == true {
-            clothButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+            clothButton.setImage(UIImage(named: "還未")?.withTintColor(.lightLightBrown()), for: .normal)
         } else {
-            clothButton.setImage(UIImage(systemName: "pencil"), for: .normal)
+            clothButton.setImage(UIImage(named: "已建")?.withTintColor(.lightBrown()), for: .normal)
         }
     }
     

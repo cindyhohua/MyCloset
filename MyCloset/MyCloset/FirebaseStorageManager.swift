@@ -236,6 +236,76 @@ extension FirebaseStorageManager {
             completion(articleStore)
         }
     }
+    
+    func fetchDollData(completion: @escaping ([Article]) -> Void) {
+        var blocked: [String] = []
+        getAuth { author in
+            blocked += author.blockedUsers ?? []
+            blocked += author.blockedByUsers ?? []
+        }
+        let articlesCollection = firebaseDb.collection("articles")
+        articlesCollection.order(by: "createdTime", descending: true).getDocuments { (querySnapshot, error) in
+            guard error == nil else {
+                print("Error getting documents: \(error!)")
+                completion([])
+                return
+            }
+            
+            var articles: [Article] = []
+            
+            do {
+                for document in querySnapshot!.documents {
+                    let data = document.data()
+                    let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
+                    let decoder = JSONDecoder()
+                    let article = try decoder.decode(Article.self, from: jsonData)
+                    if !blocked.contains(article.author.id), let urlString = article.dollImageURL {
+                        if urlString != "" {
+                            articles.append(article)
+                        }
+                    }
+                }
+                completion(articles)
+            } catch {
+                print("Error decoding JSON: \(error)")
+                completion([])
+            }
+        }
+    }
+    
+    func fetchLatestData(completion: @escaping ([Article]) -> Void) {
+        var blocked: [String] = []
+        getAuth { author in
+            blocked += author.blockedUsers ?? []
+            blocked += author.blockedByUsers ?? []
+        }
+        let articlesCollection = firebaseDb.collection("articles")
+        articlesCollection.order(by: "createdTime", descending: true).getDocuments { (querySnapshot, error) in
+            guard error == nil else {
+                print("Error getting documents: \(error!)")
+                completion([])
+                return
+            }
+            
+            var articles: [Article] = []
+            
+            do {
+                for document in querySnapshot!.documents {
+                    let data = document.data()
+                    let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
+                    let decoder = JSONDecoder()
+                    let article = try decoder.decode(Article.self, from: jsonData)
+                    if !blocked.contains(article.author.id) {
+                        articles.append(article)
+                    }
+                }
+                completion(articles)
+            } catch {
+                print("Error decoding JSON: \(error)")
+                completion([])
+            }
+        }
+    }
     func fetchData(completion: @escaping ([Article]) -> Void) {
         var blocked: [String] = []
         getAuth { author in

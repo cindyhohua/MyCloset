@@ -302,6 +302,8 @@ class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPic
             storeTextField.text = clothe.store
             priceTextField.text = clothe.price
             contentTextField.text = clothe.content
+            chooseCategoryLabel.isHidden = true
+            chooseSubcategoryLabel.isHidden = true
             imageView.snp.makeConstraints { make in
                 make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(100)
                 make.bottom.equalTo(nameTextField.snp.top).offset(-10)

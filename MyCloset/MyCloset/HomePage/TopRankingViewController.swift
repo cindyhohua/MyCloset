@@ -33,13 +33,6 @@ class TopRankingViewController: UIViewController {
             leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "Top Ranking"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
-        self.collectionView.configRefreshHeader(container: self) { [weak self] in
-            FirebaseStorageManager.shared.fetchData { articles in
-                self?.articles = articles
-                self?.collectionView.reloadData()
-                self?.collectionView.switchRefreshHeader(to: .normal(.success, 0.5))
-            }
-        }
     }
     
     @objc func backButtonTapped() {
@@ -47,10 +40,18 @@ class TopRankingViewController: UIViewController {
     }
     
     func setup() {
+        let codeSegmented = SegmentView(
+            frame: CGRect(x: 0, y: 100, width: self.view.frame.width, height: 44),
+            buttonTitle: ["熱門", "最新", "含紙娃娃"])
+        view.addSubview(codeSegmented)
+        codeSegmented.backgroundColor = UIColor.lightLightBrown()
+        codeSegmented.delegate = self
+        
         view.backgroundColor = .white
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.top.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(44)
+            make.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
         }
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -96,4 +97,35 @@ extension TopRankingViewController: UICollectionViewDelegate, UICollectionViewDa
         }
         
     }
+}
+
+extension TopRankingViewController: SegmentControlDelegate {
+    func changeToIndex(_ manager: SegmentView, index: Int) {
+        switch index {
+        case 0: navigationItem.title = "Top Ranking"
+            self.articles = []
+            self.collectionView.reloadData()
+            FirebaseStorageManager.shared.fetchData { articles in
+                self.articles = articles
+                self.collectionView.reloadData()
+            }
+        case 1: navigationItem.title = "Latest Post"
+            self.articles = []
+            self.collectionView.reloadData()
+            FirebaseStorageManager.shared.fetchLatestData { articles in
+                self.articles = articles
+                self.collectionView.reloadData()
+            }
+        case 2: navigationItem.title = "Include Paper Doll"
+            self.articles = []
+            self.collectionView.reloadData()
+            FirebaseStorageManager.shared.fetchDollData { articles in
+                self.articles = articles
+                self.collectionView.reloadData()
+            }
+        default: navigationItem.title = "Top Ranking"
+        }
+    }
+    
+    
 }

@@ -118,10 +118,7 @@ class DetailPageImageCell: UITableViewCell {
         likeButton.addGestureRecognizer(longPressGesture)
         
         imageViewCell.layer.masksToBounds = true
-        contentView.layer.shadowColor = UIColor.black.cgColor
-        contentView.layer.shadowOpacity = 0.5
-        contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        contentView.layer.shadowRadius = 4
+
     }
     
     @objc func handleRightSwipe() {
@@ -222,6 +219,10 @@ class DetailPageImageCell: UITableViewCell {
             leftSwipeGesture.direction = .left
             contentView.addGestureRecognizer(rightSwipeGesture)
             contentView.addGestureRecognizer(leftSwipeGesture)
+            contentView.layer.shadowColor = UIColor.black.cgColor
+            contentView.layer.shadowOpacity = 0.5
+            contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
+            contentView.layer.shadowRadius = 4
         }
         imageViewCell.kf.setImage(with: URL(string: image))
         var actualPositions: [CGPoint] = []
