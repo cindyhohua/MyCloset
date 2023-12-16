@@ -18,10 +18,11 @@ struct Section {
 
 class MyClosetPageViewController: UIViewController, UITabBarControllerDelegate {
     var tableView = UITableView()
-    let buttonTitle = ["Tops","Bottoms","Accessories"]
+    let buttonTitle = ["Tops", "Bottoms", "Accessories"]
     var clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
-    var sectionAll : [[Section]] = []
+    var sectionAll: [[Section]] = []
     var sections: [Section] = []
+    var segmentIndex = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         let tabBarController = self.tabBarController
@@ -36,10 +37,11 @@ class MyClosetPageViewController: UIViewController, UITabBarControllerDelegate {
         super.viewWillAppear(animated)
         sections = []
         sectionAll = []
-        setup()
         clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
         makeSectionArray()
         tableView.reloadData()
+        self.sections = self.sectionAll[segmentIndex]
+        self.tableView.reloadData()
     }
     
     func tabBarController( _ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
@@ -141,14 +143,33 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
         if let imageData = sections[indexPath.section].items[indexPath.row].image {
             if sections[indexPath.section].items[indexPath.row].cloth != nil {
                 cell.configure(
-                    with: imageData ,
+                    with: imageData,
                     name: sections[indexPath.section].items[indexPath.row].item ?? "",
                     clothOrNot: true)
             } else {
                 cell.configure(
-                    with: imageData ,
+                    with: imageData,
                     name: sections[indexPath.section].items[indexPath.row].item ?? "",
                     clothOrNot: false)
+            }
+            cell.buttonTapped = { [weak self] in
+                let item = self?.sections[indexPath.section].items[indexPath.row]
+                print("Button tapped in cell with item: \(item?.item ?? "")")
+                switch (item?.category)! {
+                case "Tops":
+                    let secondViewController = TopsChosenViewController()
+                    secondViewController.cloth = item
+                    self?.navigationController?.pushViewController(secondViewController, animated: true)
+                case "Bottoms":
+                    let secondViewController = PaperDollBottomsViewController()
+                    secondViewController.cloth = item
+                    self?.navigationController?.pushViewController(secondViewController, animated: true)
+                case "Accessories":
+                    let secondViewController = PaperDollAccessoriesViewController()
+                    secondViewController.cloth = item
+                    self?.navigationController?.pushViewController(secondViewController, animated: true)
+                default: print("default")
+                }
             }
         } else {
             cell.configureWithoutImage(name: sections[indexPath.section].items[indexPath.row].item ?? "")
@@ -196,6 +217,7 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
 
 extension MyClosetPageViewController: SegmentControlDelegate {
     func changeToIndex(_ manager: SegmentView, index: Int) {
+        segmentIndex = index
         self.sections = self.sectionAll[index]
         self.tableView.reloadData()
     }
@@ -206,6 +228,7 @@ class ClosetPageCell: UITableViewCell {
     var index = 0
     let checkButton = UIButton()
     let clothButton = UIButton()
+    var buttonTapped: (() -> Void)?
     let circularImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 25
@@ -266,14 +289,14 @@ class ClosetPageCell: UITableViewCell {
     }
     
     @objc func clothButtonTapped() {
-        print("tapped")
+        buttonTapped?()
     }
-
+    
     func configure(with imageData: Data, name: String, clothOrNot: Bool) {
         circularImageView.image = UIImage(data: imageData)
         nameLabel.text = name
         if clothOrNot == true {
-            clothButton.setImage(UIImage(named: "還未")?.withTintColor(.lightLightBrown()), for: .normal)
+            clothButton.setImage(UIImage(named: "編輯")?.withTintColor(.lightLightBrown()), for: .normal)
         } else {
             clothButton.setImage(UIImage(named: "已建")?.withTintColor(.lightBrown()), for: .normal)
         }

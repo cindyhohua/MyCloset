@@ -8,9 +8,15 @@
 import UIKit
 import SnapKit
 
+protocol HairToChangeCloth: AnyObject {
+    func hairToChangCloth()
+}
+
 class PaperDollHairViewController: UIViewController{
 
     var dollParts: [String: UIImageView] = [:]
+    
+    var delegate: HairToChangeCloth?
     
     var imageViewDoll = UIImageView()
 
@@ -124,7 +130,7 @@ class PaperDollHairViewController: UIViewController{
         print(cloth)
         print(clothB)
         CoreDataManager.shared.addHair(hair: cloth, hairB: clothB, color: [red, green, blue])
-
+        delegate?.hairToChangCloth()
         guard let viewControllers = self.navigationController?.viewControllers else { return }
         for controller in viewControllers {
             if controller is ChangeClothesViewController {

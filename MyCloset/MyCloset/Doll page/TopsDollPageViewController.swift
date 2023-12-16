@@ -15,7 +15,13 @@ struct DollCloth {
     let name: String
 }
 
+protocol EditToChangeCloth: AnyObject {
+    func editToChangCloth(cloth: ClothesStruct)
+}
+
 class PaperDollTopsViewController: UIViewController {
+    
+    var delegate: EditToChangeCloth?
     var cloth: ClothesStruct?
 
     var dollParts: [String: UIImageView] = [:]
@@ -176,7 +182,17 @@ class PaperDollTopsViewController: UIViewController {
             clothBArray: clothB, color: [red, green, blue], draw: imageData)
         guard let viewControllers = self.navigationController?.viewControllers else { return }
         for controller in viewControllers {
-            if controller is MyClosetDetailPageViewController {
+            if controller is MyClosetPageViewController {
+                self.navigationController?.popToViewController(controller, animated: true)
+            }
+            if controller is ChangeClothesViewController {
+                if var clothPass = self.cloth {
+                    clothPass.cloth = cloth
+                    clothPass.clothB = clothB
+                    clothPass.color = [red, green, blue]
+                    clothPass.draw = imageData
+                    delegate?.editToChangCloth(cloth: clothPass)
+                }
                 self.navigationController?.popToViewController(controller, animated: true)
             }
         }

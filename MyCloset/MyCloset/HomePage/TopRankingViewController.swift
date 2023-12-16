@@ -12,11 +12,11 @@ import PullToRefreshKit
 class TopRankingViewController: UIViewController {
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.register(ProfileCollectionViewCell.self, forCellWithReuseIdentifier: "ProfileCell")
-        cv.backgroundColor = UIColor.white
-        return cv
+        let cview = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cview.translatesAutoresizingMaskIntoConstraints = false
+        cview.register(ProfileCollectionViewCell.self, forCellWithReuseIdentifier: "ProfileCell")
+        cview.backgroundColor = UIColor.white
+        return cview
     }()
     
     var articles: [Article]?
@@ -28,11 +28,15 @@ class TopRankingViewController: UIViewController {
             self.articles = articles
             self.collectionView.reloadData()
         }
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
+        let leftButton = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.backward.circle"), style: .plain,
+            target: self, action: #selector(backButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
             leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "Top Ranking"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.lightBrown(),
+            NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
     }
     
     @objc func backButtonTapped() {
@@ -59,7 +63,10 @@ class TopRankingViewController: UIViewController {
 }
 
 extension TopRankingViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath) -> CGSize {
         let itemsPerRow = CGFloat(2)
         let sectionInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
         let paddingSpace =  sectionInsets.left * (itemsPerRow + 1)
@@ -68,7 +75,10 @@ extension TopRankingViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: widthPerItem, height: widthPerItem*1.4)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int) -> UIEdgeInsets {
         let sectionInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
         return sectionInsets
     }
@@ -79,8 +89,12 @@ extension TopRankingViewController: UICollectionViewDelegate, UICollectionViewDa
         return articles?.count ?? 0
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProfileCell", for: indexPath) as? ProfileCollectionViewCell else {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "ProfileCell",
+            for: indexPath) as? ProfileCollectionViewCell else {
             fatalError("Unable to dequeue ProfileCell")
         }
         if let imageURL = articles?[indexPath.row].imageURL {
@@ -126,6 +140,4 @@ extension TopRankingViewController: SegmentControlDelegate {
         default: navigationItem.title = "Top Ranking"
         }
     }
-    
-    
 }

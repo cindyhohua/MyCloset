@@ -9,7 +9,8 @@ import UIKit
 import SnapKit
 import PencilKit
 
-class PaperDollBottomsViewController: UIViewController{
+class PaperDollBottomsViewController: UIViewController {
+    var delegate: EditToChangeCloth?
     var cloth: ClothesStruct?
 
     var dollParts: [String: UIImageView] = [:]
@@ -45,7 +46,9 @@ class PaperDollBottomsViewController: UIViewController{
     
     var segmentIndex = 0
     
-    let codeSegmented = SegmentView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44), buttonTitle: ["褲頭","褲子","手繪","顏色"])
+    let codeSegmented = SegmentView(
+        frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44),
+        buttonTitle: ["褲頭","褲子","手繪","顏色"])
 
     var neckline: [DollCloth] = [
         DollCloth(outer: "褲頭1", bottom: "B褲頭1", name: "neckline"),
@@ -73,7 +76,6 @@ class PaperDollBottomsViewController: UIViewController{
         DollCloth(outer: "褲子16", bottom: "B褲子16", name: "sleeve")
     ]
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -89,11 +91,15 @@ class PaperDollBottomsViewController: UIViewController{
         let addButton = UIBarButtonItem(title: "save", style: .plain, target: self, action: #selector(addButtonTapped))
         addButton.tintColor = UIColor.lightBrown()
         navigationItem.rightBarButtonItem = addButton
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
+        let leftButton = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.backward.circle"),
+            style: .plain, target: self, action: #selector(backButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
             leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "My Closet"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.lightBrown(),
+            NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         
         view.addSubview(imageViewDoll)
         imageViewDoll.image = UIImage(named: "doll")
@@ -101,12 +107,11 @@ class PaperDollBottomsViewController: UIViewController{
         addGestures(imageView: imageViewDoll)
 
         setupDollPart(imageView: &dollParts["bottom"], imageName: "上衣", tintColor: nil)
-        //tops
+        // tops
         setupDollPart(imageView: &dollParts["Bsleeve"], imageName: sleeve[0].bottom, tintColor: selectedColor)
         setupDollPart(imageView: &dollParts["Bneckline"], imageName: neckline[0].bottom, tintColor: selectedColor)
         setupDollPart(imageView: &dollParts["sleeve"], imageName: sleeve[0].outer, tintColor: nil)
         setupDollPart(imageView: &dollParts["neckline"], imageName: neckline[0].outer, tintColor: nil)
-        
         
         view.addSubview(imageViewReal)
         if let clothImage = cloth?.image {
@@ -159,7 +164,17 @@ class PaperDollBottomsViewController: UIViewController{
             draw: imageData)
         guard let viewControllers = self.navigationController?.viewControllers else { return }
         for controller in viewControllers {
-            if controller is MyClosetDetailPageViewController {
+            if controller is MyClosetPageViewController {
+                self.navigationController?.popToViewController(controller, animated: true)
+            }
+            if controller is ChangeClothesViewController {
+                if var clothPass = self.cloth {
+                    clothPass.cloth = cloth
+                    clothPass.clothB = clothB
+                    clothPass.color = [red, green, blue]
+                    clothPass.draw = imageData
+                    delegate?.editToChangCloth(cloth: clothPass)
+                }
                 self.navigationController?.popToViewController(controller, animated: true)
             }
         }
@@ -219,7 +234,9 @@ class PaperDollBottomsViewController: UIViewController{
     }
 }
 
-extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SegmentControlDelegate, ColorPickerViewDelegate, PencilPickerViewDelegate {
+extension PaperDollBottomsViewController:
+    UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,
+        SegmentControlDelegate, ColorPickerViewDelegate, PencilPickerViewDelegate {
     func pencilSelectColor(_ color: UIColor) {
         pencilSelectedColor = color
         let newTool = PKInkingTool(.pen, color: color, width: pencilWidth)
@@ -312,33 +329,39 @@ extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollecti
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .white
-        collectionView.register(OutfitCollectionViewCell.self, forCellWithReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier)
+        collectionView.register(
+            OutfitCollectionViewCell.self,
+            forCellWithReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier)
 
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
 
-        let cellWidth = (UIScreen.main.bounds.width - layout.minimumInteritemSpacing * 2 - layout.sectionInset.left - layout.sectionInset.right) / 3
+        let cellWidth = (
+            UIScreen.main.bounds.width - layout.minimumInteritemSpacing * 2 - layout.sectionInset.left - layout.sectionInset.right
+        ) / 3
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
 
-        layout.sectionInset = UIEdgeInsets(top: 10,
-                                           left: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2,
-                                           bottom: 10, right: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2)
+        layout.sectionInset = UIEdgeInsets(
+            top: 10,
+            left: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2,
+            bottom: 10, right: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2)
 
         collectionView.collectionViewLayout = layout
     }
 
-    
-    
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return outfits?.count ?? 0
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier, for: indexPath) as? OutfitCollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier,
+            for: indexPath) as? OutfitCollectionViewCell {
             if let outfit = outfits?[indexPath.item] {
-                cell.configure(with: outfit, yPos: 2)
+                cell.configure(with: outfit, yPos: 4/3)
             }
             return cell
         } else {
@@ -347,7 +370,10 @@ extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollecti
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = (collectionView.frame.width - 30) / 3
         return CGSize(width: cellWidth, height: cellWidth)
     }
@@ -356,7 +382,6 @@ extension PaperDollBottomsViewController: UICollectionViewDataSource, UICollecti
         if let selectedOutfit = outfits?[indexPath.item] {
             updateDollImage(with: selectedOutfit)
             selected?[segmentIndex] = (outfitss?[segmentIndex][indexPath.item])!
-            print(selected)
         }
         
     }

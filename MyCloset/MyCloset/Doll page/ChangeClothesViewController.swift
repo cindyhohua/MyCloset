@@ -35,32 +35,6 @@ class ChangeClothesViewController: UIViewController {
         timer = Timer.scheduledTimer(
             timeInterval: 0.5, target: self, selector: #selector(switchImage),
             userInfo: nil, repeats: true)
-    }
-    
-    @objc func switchImage() {
-            imageViewChanging.image = imageArray[currentIndex]
-            currentIndex += 1
-            if currentIndex >= imageArray.count {
-                currentIndex = 0
-            }
-        }
-        deinit {
-            timer?.invalidate()
-        }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        sections = []
-        sectionAll = []
-        clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
-        print(clothes)
-        makeSectionArray()
-        tableView.reloadData()
-        self.imageViewChanging.isHidden = false
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         DispatchQueue.main.async {
             self.imageViewChanging.isHidden = false
         }
@@ -84,6 +58,36 @@ class ChangeClothesViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    @objc func switchImage() {
+            imageViewChanging.image = imageArray[currentIndex]
+            currentIndex += 1
+            if currentIndex >= imageArray.count {
+                currentIndex = 0
+            }
+        }
+        deinit {
+            timer?.invalidate()
+        }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        sections = []
+        sectionAll = []
+        clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
+        print(clothes)
+        makeSectionArray()
+        tableView.reloadData()
+        self.sections = self.sectionAll[segmentesIndex]
+        self.tableView.reloadData()
+        
+        //        self.imageViewChanging.isHidden = true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+       
     }
     
     func makeSectionArray() {
@@ -167,6 +171,7 @@ extension ChangeClothesViewController: UITableViewDelegate, UITableViewDataSourc
     
     @objc func hairButtonTapped() {
         let secondViewController = PaperDollHairViewController()
+        secondViewController.delegate = self
         self.navigationController?.pushViewController(secondViewController, animated: true)
     }
     
@@ -254,6 +259,28 @@ extension ChangeClothesViewController: UITableViewDelegate, UITableViewDataSourc
                     clothOrNot: false)
             }
             cell.index = segmentesIndex
+            cell.buttonTapped = { [weak self] in
+                let item = self?.sections[indexPath.section].items[indexPath.row]
+                print("Button tapped in cell with item: \(item?.item ?? "")")
+                switch (item?.category)! {
+                case "Tops":
+                    let secondViewController = TopsChosenViewController()
+                    secondViewController.delegate = self
+                    secondViewController.cloth = item
+                    self?.navigationController?.pushViewController(secondViewController, animated: true)
+                case "Bottoms":
+                    let secondViewController = PaperDollBottomsViewController()
+                    secondViewController.cloth = item
+                    secondViewController.delegate = self
+                    self?.navigationController?.pushViewController(secondViewController, animated: true)
+                case "Accessories":
+                    let secondViewController = PaperDollAccessoriesViewController()
+                    secondViewController.cloth = item
+                    secondViewController.delegate = self
+                    self?.navigationController?.pushViewController(secondViewController, animated: true)
+                default: print("default")
+                }
+            }
         } else {
             cell.configureWithoutImage(name: sections[indexPath.section].items[indexPath.row].item ?? "")
         }
@@ -445,11 +472,62 @@ extension ChangeClothesViewController: UITableViewDelegate, UITableViewDataSourc
 extension ChangeClothesViewController: SegmentControlDelegate {
     func changeToIndex(_ manager: SegmentView, index: Int) {
         segmentesIndex = index
-        //        if index >= 0 && index < sectionAll.count && !self.sectionAll[index].isEmpty {
         self.sections = self.sectionAll[index]
         self.tableView.reloadData()
-        //        }
     }
 }
 
+extension ChangeClothesViewController: HairToChangeCloth {
+    func hairToChangCloth() {
+        DispatchQueue.main.async {
+            print("q1")
+            self.imageViewChanging.isHidden = false
+            self.imageViewChanging.isHidden = false
+        }
+        DispatchQueue.global().async {
+            let hair = CoreDataManager.shared.fetchHair()
+            if hair == nil {
+                DispatchQueue.main.async {
+                    print("q2")
+                    self.imageViewDoll.image = UIImage(named: "doll")
+                    self.imageViewChanging.isHidden = true
+                }
+            } else {
+                let colorui = UIColor(
+                    red: hair?.color[0] ?? 0, green: hair?.color[1] ?? 0,
+                    blue: hair?.color[2] ?? 0, alpha: 1)
+                let dollImage = self.mergeImagesDoll(
+                    imageSB: hair?.hairB ?? [],
+                    imageS: hair?.hair ?? [], color: colorui)
+                DispatchQueue.main.async {
+                    print("q3")
+                    self.imageViewDoll.image = dollImage
+                    self.imageViewChanging.isHidden = true
+                }
+            }
+        }
+    }
+}
 
+extension ChangeClothesViewController: EditToChangeCloth {
+    func editToChangCloth(cloth: ClothesStruct) {
+        imageViewChanging.isHidden = false
+        sleep(1)
+        guard let name = cloth.item else { return }
+        removeImageViewFromDoll(name: name)
+        if selectedItems.contains(name) == false {
+            selectedItems.append(name)
+        }
+        print(selectedItems)
+        addButtonTag(items: selectedItems)
+        DispatchQueue.global().async {
+            print("draw", cloth.draw ?? nil)
+            self.addImageViewToDoll(
+                name: name,
+                imageNameArrayB: cloth.clothB ?? [],
+                imageNameArray: cloth.cloth ?? [],
+                color: cloth.color ?? [1.0, 1.0, 1.0],
+                drawing: cloth.draw ?? nil)
+        }
+    }
+}

@@ -10,6 +10,7 @@ import PencilKit
 
 class PaperDollAccessoriesViewController: UIViewController {
     var cloth: ClothesStruct?
+    var delegate: EditToChangeCloth?
 
     var dollParts: [String: UIImageView] = [:]
     
@@ -151,8 +152,18 @@ class PaperDollAccessoriesViewController: UIViewController {
             draw: imageData)
         guard let viewControllers = self.navigationController?.viewControllers else { return }
         for controller in viewControllers {
-            if controller is MyClosetDetailPageViewController {
+            if controller is MyClosetPageViewController {
             self.navigationController?.popToViewController(controller, animated: true)
+            }
+            if controller is ChangeClothesViewController {
+                if var clothPass = self.cloth {
+                    clothPass.cloth = cloth
+                    clothPass.clothB = clothB
+                    clothPass.color = [red, green, blue]
+                    clothPass.draw = imageData
+                    delegate?.editToChangCloth(cloth: clothPass)
+                }
+                self.navigationController?.popToViewController(controller, animated: true)
             }
         }
     }
