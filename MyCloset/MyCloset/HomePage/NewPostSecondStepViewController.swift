@@ -22,6 +22,14 @@ class NewPostSecondStepViewController: UIViewController {
         let actualY = relativePosition.y * ((view.bounds.width-32)*1.4)
         return CGPoint(x: actualX, y: actualY)
     }
+    
+    func createEmptyProducts() {
+        if !position.isEmpty {
+            for _ in 1...position.count {
+                products.append(Product(productName: "", productStore: "", productPrice: "", productComment: ""))
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +53,8 @@ class NewPostSecondStepViewController: UIViewController {
         addButton.tintColor = UIColor.lightBrown()
         navigationItem.rightBarButtonItems = [nextButton, addButton]
         actualPositions = position.map { convertToActualPosition($0) }
+        createEmptyProducts()
+        print("qqqq", products)
         setupTableView()
         FirebaseStorageManager.shared.getAuth { author in
             self.author = author
@@ -58,24 +68,25 @@ class NewPostSecondStepViewController: UIViewController {
     }
     
     @objc func postButtonTapped() {
-        var productList: [Product] = []
-        for row in 2..<tableView.numberOfRows(inSection: 0) {
-            guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? NewPostProductCell else {
-                continue
-            }
-            let name = cell.nameLabel.text ?? ""
-            let store = cell.storeLabel.text ?? ""
-            let price = cell.priceLabel.text ?? ""
-            let comments = cell.commentsLabel.text ?? ""
-            productList.append(
-                Product(
-                    productName: name, productStore: store, productPrice: price, productComment: comments))
-        }
+//        var productList: [Product] = []
+//        for row in 2..<tableView.numberOfRows(inSection: 0) {
+//            guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? NewPostProductCell else {
+//                continue
+//            }
+//            let name = cell.nameLabel.text ?? ""
+//            let store = cell.storeLabel.text ?? ""
+//            let price = cell.priceLabel.text ?? ""
+//            let comments = cell.commentsLabel.text ?? ""
+//            productList.append(
+//                Product(
+//                    productName: name, productStore: store, productPrice: price, productComment: comments))
+//        }
+        print(products)
         var content = ""
         guard let cellContent = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? NewPostCommentCell else {
             return
         }
-        content = cellContent.textView.text ?? ""
+        content = cellContent.textView.textView.text ?? ""
         FirebaseStorageManager.shared.uploadImageAndGetURL(selectedImage!) { [weak self] result in
             switch result {
             case .success(let downloadURL):
@@ -88,7 +99,7 @@ class NewPostSecondStepViewController: UIViewController {
                             FirebaseStorageManager.shared.addArticle(
                                 auth: auth, imageURL: downloadURL.absoluteString, content: content,
                                 positions: self?.position ?? [CGPoint(x: -10, y: -10)],
-                                productList: productList, dollImageURL: downloadDollURL.absoluteString) { _ in
+                                productList: self?.products ?? [], dollImageURL: downloadDollURL.absoluteString) { _ in
                                     guard let viewControllers = self?.navigationController?.viewControllers
                                     else { return }
                                     for controller in viewControllers {
@@ -107,7 +118,7 @@ class NewPostSecondStepViewController: UIViewController {
                     FirebaseStorageManager.shared.addArticle(
                         auth: auth, imageURL: downloadURL.absoluteString, content: content,
                         positions: self?.position ?? [CGPoint(x: -10, y: -10)],
-                        productList: productList, dollImageURL: "") { _ in
+                        productList: self?.products ?? [], dollImageURL: "") { _ in
                             guard let viewControllers = self?.navigationController?.viewControllers else { return }
                             for controller in viewControllers {
                                 if controller is HomePageViewController {
@@ -127,7 +138,7 @@ class NewPostSecondStepViewController: UIViewController {
     }
 }
 
-extension NewPostSecondStepViewController: UITableViewDelegate, UITableViewDataSource {
+extension NewPostSecondStepViewController: UITableViewDelegate, UITableViewDataSource, NewPostProductCellDelegate {
     func setupTableView() {
         view.addSubview(tableView)
         tableView.dataSource = self
@@ -166,11 +177,17 @@ extension NewPostSecondStepViewController: UITableViewDelegate, UITableViewDataS
             cell.selectionStyle = .none
             return cell
         default:
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "product", for: indexPath) as? NewPostProductCell else {
-                fatalError("Cant find cell")
-            }
+//            guard let cell = tableView.dequeueReusableCell(
+//                withIdentifier: "product", for: indexPath) as? NewPostProductCell else {
+//                fatalError("Cant find cell")
+//            }
+            let cell = NewPostProductCell()
+            cell.delegate = self
             cell.numberLabel.text = "品項\(indexPath.row-1) :"
+            cell.nameLabel.text = products[indexPath.row-2].productName
+            cell.storeLabel.text = products[indexPath.row-2].productStore
+            cell.priceLabel.text = products[indexPath.row-2].productPrice
+            cell.commentsLabel.text = products[indexPath.row-2].productComment
             cell.fromClosetButton.tag = indexPath.row
             cell.fromClosetButton.addTarget(self, action: #selector(fromClosetButtonTapped(_:)), for: .touchUpInside)
             cell.isUserInteractionEnabled = true
@@ -178,6 +195,21 @@ extension NewPostSecondStepViewController: UITableViewDelegate, UITableViewDataS
             return cell
         }
     }
+    
+    func textFieldDidChange(text: String?, in cell: NewPostProductCell) {
+        guard let indexPath = tableView.indexPath(for: cell), indexPath.row >= 2 else {
+            return
+        }
+        
+        let index = indexPath.row - 2
+        if index < products.count {
+            products[index].productName = cell.nameLabel.text ?? ""
+            products[index].productStore = cell.storeLabel.text ?? ""
+            products[index].productPrice = cell.priceLabel.text ?? ""
+            products[index].productComment = cell.commentsLabel.text ?? ""
+        }
+    }
+    
     @objc func fromClosetButtonTapped(_ sender: UIButton) {
         let secondVC = ImportFromClosetViewController()
         secondVC.delegate = self

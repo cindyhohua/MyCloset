@@ -68,14 +68,60 @@ class NewPostImageCell: UITableViewCell {
     }
 }
 
-class NewPostCommentCell: UITableViewCell {
-    lazy var textView: UITextView = {
+class PlaceholderTextView: UIView {
+    let textView: UITextView = {
         let textView = UITextView()
-        textView.text = "輸入文字內容"
         textView.font = UIFont.roundedFont(ofSize: 20)
         textView.layer.cornerRadius = 5
         textView.layer.borderWidth = 1
         textView.layer.borderColor = UIColor.lightGray.cgColor
+        return textView
+    }()
+    
+    let placeholderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "輸入文字內容"
+        label.font = UIFont.roundedFont(ofSize: 20)
+        label.textColor = UIColor.lightGray
+        return label
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func setupUI() {
+        addSubview(textView)
+        addSubview(placeholderLabel)
+        
+        textView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
+        }
+        
+        placeholderLabel.snp.makeConstraints { make in
+            make.top.equalTo(textView).offset(8)
+            make.leading.equalTo(textView).offset(5)
+        }
+        
+        // 监听UITextView的文本变化
+        textView.delegate = self
+    }
+}
+
+extension PlaceholderTextView: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        placeholderLabel.isHidden = !textView.text.isEmpty
+    }
+}
+
+class NewPostCommentCell: UITableViewCell {
+    let textView: PlaceholderTextView = {
+        let textView = PlaceholderTextView()
         return textView
     }()
 
@@ -88,7 +134,7 @@ class NewPostCommentCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setupUI() {
+    private func setupUI() {
         contentView.addSubview(textView)
         textView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
@@ -97,11 +143,18 @@ class NewPostCommentCell: UITableViewCell {
     }
 
     func getText() -> String? {
-        return textView.text
+        return textView.textView.text
     }
 }
 
+// 品項輸入
+
+protocol NewPostProductCellDelegate: AnyObject {
+    func textFieldDidChange(text: String?, in cell: NewPostProductCell)
+}
+
 class NewPostProductCell: UITableViewCell {
+    weak var delegate: NewPostProductCellDelegate?
     var numberLabel = UILabel()
     var fromClosetButton = UIButton()
     lazy var nameLabel: UITextField = {
@@ -182,6 +235,11 @@ class NewPostProductCell: UITableViewCell {
         let textField = UITextField()
         textField.placeholder = placeholder
         textField.borderStyle = .roundedRect
+        textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         return textField
     }
+    
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+            delegate?.textFieldDidChange(text: textField.text, in: self)
+        }
 }

@@ -86,9 +86,9 @@ struct Position: Codable {
 
 struct Product: Codable {
     var productName: String
-    let productStore: String
-    let productPrice: String
-    let productComment: String
+    var productStore: String
+    var productPrice: String
+    var productComment: String
 }
 
 // auth

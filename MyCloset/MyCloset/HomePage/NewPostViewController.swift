@@ -109,7 +109,6 @@ class NewPostViewController: UIViewController, UIImagePickerControllerDelegate, 
         button.layer.cornerRadius = 10
         button.tag = self.position.count
         button.setTitle("\(self.position.count)", for: .normal)
-//        button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         imageView.addSubview(button)
     }
     
