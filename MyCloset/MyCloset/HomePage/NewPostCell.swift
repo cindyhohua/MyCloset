@@ -107,31 +107,31 @@ class NewPostProductCell: UITableViewCell {
     lazy var nameLabel: UITextField = {
         return createTextField(placeholder: "輸入品項")
     }()
-    
+
     lazy var storeLabel: UITextField = {
         return createTextField(placeholder: "輸入店家（必填）")
     }()
-    
+
     lazy var priceLabel: UITextField = {
         return createTextField(placeholder: "輸入價錢")
     }()
-    
+
     lazy var commentsLabel: UITextField = {
         return createTextField(placeholder: "輸入註解")
     }()
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
         setupConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - UI Setup
-    
+
     private func setupUI() {
         contentView.addSubview(numberLabel)
         contentView.addSubview(nameLabel)
@@ -143,7 +143,7 @@ class NewPostProductCell: UITableViewCell {
         fromClosetButton.setTitleColor(UIColor.brown, for: .normal)
         setupConstraints()
     }
-    
+
     private func setupConstraints() {
         numberLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView).offset(8)
@@ -175,7 +175,7 @@ class NewPostProductCell: UITableViewCell {
             make.trailing.equalTo(contentView).offset(-16)
             make.bottom.equalTo(contentView).offset(-16)
         }
-        
+
     }
 
     private func createTextField(placeholder: String) -> UITextField {
@@ -185,4 +185,3 @@ class NewPostProductCell: UITableViewCell {
         return textField
     }
 }
-

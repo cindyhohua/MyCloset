@@ -15,6 +15,7 @@ class NewPostSecondStepViewController: UIViewController {
     var actualPositions: [CGPoint] = []
     var author: Author?
     var dollImageData: Data?
+    var products: [Product] = []
     
     func convertToActualPosition(_ relativePosition: CGPoint) -> CGPoint {
         let actualX = relativePosition.x * (view.bounds.width-32)
@@ -139,6 +140,7 @@ extension NewPostSecondStepViewController: UITableViewDelegate, UITableViewDataS
         }
         tableView.register(NewPostImageCell.self, forCellReuseIdentifier: "image")
         tableView.register(NewPostCommentCell.self, forCellReuseIdentifier: "comment")
+        tableView.register(NewPostProductCell.self, forCellReuseIdentifier: "product")
         tableView.separatorStyle = .none
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -164,7 +166,10 @@ extension NewPostSecondStepViewController: UITableViewDelegate, UITableViewDataS
             cell.selectionStyle = .none
             return cell
         default:
-            let cell = NewPostProductCell()
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "product", for: indexPath) as? NewPostProductCell else {
+                fatalError("Cant find cell")
+            }
             cell.numberLabel.text = "品項\(indexPath.row-1) :"
             cell.fromClosetButton.tag = indexPath.row
             cell.fromClosetButton.addTarget(self, action: #selector(fromClosetButtonTapped(_:)), for: .touchUpInside)

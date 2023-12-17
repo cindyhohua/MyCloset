@@ -85,7 +85,7 @@ struct Position: Codable {
 }
 
 struct Product: Codable {
-    let productName: String
+    var productName: String
     let productStore: String
     let productPrice: String
     let productComment: String
