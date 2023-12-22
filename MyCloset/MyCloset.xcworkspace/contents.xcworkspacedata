@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:DollHair+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:DollHair+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:Clothes+CoreDataProperties.swift">
    </FileRef>
    <FileRef
