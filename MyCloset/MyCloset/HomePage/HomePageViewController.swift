@@ -8,14 +8,63 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import FirebaseMessaging
+import PullToRefreshKit
 
 class HomePageViewController: UIViewController {
     let tableView = UITableView()
     let createPostButton = UIButton()
     var articles: [Article] = []
+//    var token: String? {
+//        didSet {
+//            let tokenLable = UILabel()
+//            tokenLable.text = token
+//            view.addSubview(tokenLable)
+//            tokenLable.numberOfLines = 0
+//            tokenLable.snp.makeConstraints { make in
+//                make.center.leading.trailing.equalToSuperview()
+//            }
+//        }
+//    }
+    
+    private lazy var notificationButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(systemName: "bell.fill"), for: .normal)
+        button.tintColor = .lightBrown()
+        button.addTarget(self, action: #selector(rightButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        Messaging.messaging().token { token, error in
+            Messaging.messaging().token { token, error in
+              if let error = error {
+                print("Error fetching FCM registration token: \(error)")
+              } else if let token = token {
+                print("FCM registration token: \(token)")
+                  FirebaseStorageManager.shared.addFMCFieldToAuthDocument(fmc: token)
+              }
+            }
+        }
+        
+        NotificationCenter.default.addObserver(self,
+           selector: #selector(observerTrigger),
+           name: Notification.Name("NotificationUpdate"),
+           object: nil)
+        self.tableView.configRefreshHeader(container: self) { [weak self] in
+            FirebaseStorageManager.shared.getFollowingArticles { articles in
+                self?.articles = articles
+                self?.tableView.reloadData()
+                self?.tableView.switchRefreshHeader(to: .normal(.success, 0.5))
+            }
+        }
+
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -23,6 +72,15 @@ class HomePageViewController: UIViewController {
         FirebaseStorageManager.shared.getFollowingArticles { articles in
             self.articles = articles
             self.tableView.reloadData()
+        }
+        FirebaseStorageManager.shared.fetchNotSeen { notSeenNumber in
+            self.updateBadge(count: notSeenNumber)
+        }
+    }
+    
+    @objc func observerTrigger() {
+        FirebaseStorageManager.shared.fetchNotSeen { notSeenNumber in
+            self.updateBadge(count: notSeenNumber)
         }
     }
     
@@ -44,11 +102,12 @@ class HomePageViewController: UIViewController {
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "crown.fill"), style: .plain, target: self, action: #selector(leftButtonTapped))
         navigationItem.leftBarButtonItem = leftButton
         leftButton.tintColor = UIColor.lightBrown()
-        let rightButton = UIBarButtonItem(image: UIImage(systemName: "bell.fill"), style: .plain, target: self, action: #selector(rightButtonTapped))
-        let rightButtonSearch = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
+        let rightBarButton = UIBarButtonItem(customView: notificationButton)
+        let rightButtonSearch = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"),
+           style: .plain, target: self, action: #selector(searchButtonTapped))
         rightButtonSearch.tintColor = UIColor.lightBrown()
-        navigationItem.rightBarButtonItems = [rightButton,rightButtonSearch]
-        rightButton.tintColor = UIColor.lightBrown()
+        navigationItem.rightBarButtonItems = [rightBarButton, rightButtonSearch]
+        rightBarButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "Home Page"
         view.addSubview(createPostButton)
         createPostButton.setTitle("+", for: .normal)
@@ -63,6 +122,15 @@ class HomePageViewController: UIViewController {
         createPostButton.layer.cornerRadius = 35
         createPostButton.backgroundColor = UIColor.lightBrown()
         createPostButton.addTarget(self, action: #selector(createPost), for: .touchUpInside)
+        
+    }
+    
+    func updateBadge(count: Int) {
+        if count > 0 {
+            notificationButton.addBadge(number: count)
+        } else {
+            notificationButton.removeBadge()
+        }
     }
     
     @objc func createPost() {
@@ -76,6 +144,7 @@ class HomePageViewController: UIViewController {
     }
     
     @objc func rightButtonTapped() {
+        print("tapped")
         let secondViewController = NotificationViewController()
         navigationController?.pushViewController(secondViewController, animated: true)
     }
@@ -97,7 +166,9 @@ extension HomePageViewController: UITableViewDelegate, UITableViewDataSource {
         cell.isUserInteractionEnabled = true
         cell.nameLabel.text = articles[indexPath.row].author.name
         cell.cellImageView.kf.setImage(with: URL(string: articles[indexPath.row].imageURL))
-        cell.profileImage.kf.setImage(with: URL(string: articles[indexPath.row].author.image ?? "https://firebasestorage.googleapis.com/v0/b/mycloset-e2492.appspot.com/o/%E6%88%AA%E5%9C%96%202023-11-25%20%E4%B8%8B%E5%8D%882.17.11.png?alt=media&token=5c303478-6b4c-402a-9c04-c9317a36e469"))
+        if let imageURL = articles[indexPath.row].author.image {
+            cell.profileImage.kf.setImage(with: URL(string: imageURL))
+        }
         cell.selectionStyle = .none
         return cell
     }

@@ -7,9 +7,55 @@
 
 import UIKit
 import SnapKit
+import QuartzCore
+
+protocol LongPressDelegate {
+    func longPress()
+}
+
 class DetailPageImageCell: UITableViewCell {
+    var dollImageURL: String?
+    var imageURL: String?
     var labelTexts: [Product]?
+    var likeCount: Int?
+    var authorId: String?
+    var friendList: [String] = []
+    var delegate: LongPressDelegate?
+    var isLiked: Bool? {
+        didSet {
+            if isLiked == true {
+                self.likeButton.tintColor = .brown
+            } else {
+                self.likeButton.tintColor = .lightLightBrown()
+            }
+        }
+    }
+    var postId: String? {
+        didSet {
+            FirebaseStorageManager.shared.fetchLike(postId: postId ?? "") { result in
+                switch result {
+                case .success(let likeInfo):
+                    self.likeCount = likeInfo.likeCount
+                    let isLiked = likeInfo.isLiked
+                    print("Like Count: \(self.likeCount), Is Liked: \(isLiked)")
+                    self.isLiked = isLiked
+                case .failure(let error):
+                    print("Error fetching like info: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    var likeButton = UIButton()
     lazy var imageViewCell: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.cornerRadius = 5
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.isUserInteractionEnabled = true
+        return imageView
+    }()
+    
+    lazy var dollImageViewCell: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 5
         imageView.contentMode = .scaleAspectFill
@@ -36,13 +82,152 @@ class DetailPageImageCell: UITableViewCell {
             make.height.equalTo(imageViewCell.snp.width).multipliedBy(1.4)
             make.bottom.equalTo(contentView).offset(-16)
         }
-    }
+        imageViewCell.layer.shadowColor = UIColor.black.cgColor
+        imageViewCell.layer.shadowOpacity = 0.5
+        imageViewCell.layer.shadowOffset = CGSize(width: 0, height: 3)
+        imageViewCell.layer.shadowRadius = 5
+        
+        contentView.addSubview(dollImageViewCell)
+        dollImageViewCell.snp.makeConstraints { make in
+            make.top.equalTo(contentView).offset(16)
+            make.leading.equalTo(contentView).offset(16)
+            make.trailing.equalTo(contentView).offset(-16)
+            make.height.equalTo(imageViewCell.snp.width).multipliedBy(1.4)
+            make.bottom.equalTo(contentView).offset(-16)
+        }
+        dollImageViewCell.layer.shadowColor = UIColor.black.cgColor
+        dollImageViewCell.layer.shadowOpacity = 0.5
+        dollImageViewCell.layer.shadowOffset = CGSize(width: 0, height: 3)
+        dollImageViewCell.layer.shadowRadius = 5
+        dollImageViewCell.isHidden = true
+//        dollImageViewCell.addGestureRecognizer(rightSwipeGesture)
+        
+        contentView.addSubview(likeButton)
+        likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        likeButton.imageView?.contentMode = .scaleAspectFit
+        likeButton.snp.makeConstraints { make in
+            make.bottom.equalTo(imageViewCell.snp.bottom).offset(-16)
+            make.leading.equalTo(imageViewCell.snp.leading).offset(16)
+            make.width.height.equalTo(50)
+        }
+        likeButton.tintColor = .lightBrown()
+        likeButton.backgroundColor = .white
+        likeButton.layer.cornerRadius = 25
+        likeButton.addTarget(self, action: #selector(likeTapped), for: .touchUpInside)
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(likeButtonLongPressed(_:)))
+        likeButton.addGestureRecognizer(longPressGesture)
+        
+        imageViewCell.layer.masksToBounds = true
 
-    func configure(with image: String, buttonPosition: [CGPoint]) {
+    }
+    
+    @objc func handleRightSwipe() {
+       performFlipAnimationR()
+    }
+    @objc func handleLeftSwipe() {
+        performFlipAnimationL()
+    }
+    
+    var isFlipped = false
+    
+    func performFlipAnimationR() {
+        UIView.transition(with: contentView, duration: 0.5, options: .transitionFlipFromLeft, animations: {
+            if self.isFlipped {
+                self.imageViewCell.isHidden = false
+                self.dollImageViewCell.isHidden = true
+            } else {
+                self.imageViewCell.isHidden = true
+                self.dollImageViewCell.isHidden = false
+            }
+        }, completion: nil)
+        isFlipped.toggle()
+    }
+    
+    func performFlipAnimationL() {
+        UIView.transition(with: contentView, duration: 0.5, options: .transitionFlipFromRight, animations: {
+            if self.isFlipped {
+                self.imageViewCell.isHidden = false
+                self.dollImageViewCell.isHidden = true
+            } else {
+                self.imageViewCell.isHidden = true
+                self.dollImageViewCell.isHidden = false
+            }
+        }, completion: nil)
+        isFlipped.toggle()
+    }
+    
+    @objc func likeButtonLongPressed(_ gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .began {
+            delegate?.longPress()
+        }
+    }
+  
+    @objc func likeTapped() {
+        FirebaseStorageManager.shared.toggleLike(postId: postId ?? "", authorId: authorId ?? "") { error in
+                if let error = error {
+                    print("Error toggling like: \(error.localizedDescription)")
+                } else {
+                    print("Like toggled successfully")
+                    if self.isLiked == false {
+                        self.playHeartAnimation()
+                        print("play animation")
+                    }
+                    self.isLiked = !(self.isLiked ?? false)
+                }
+            }
+    }
+    
+    func playHeartAnimation() {
+        let heartImageView = UIImageView(image: UIImage(systemName: "heart.fill"))
+        let heartAmountLabel = UILabel()
+        heartAmountLabel.text = "\((self.likeCount ?? 0) + 1)"
+        heartAmountLabel.textColor = .white
+        heartAmountLabel.font = UIFont.roundedFont(ofSize: 16)
+        heartImageView.tintColor = .red
+        heartImageView.contentMode = .scaleAspectFit
+        heartImageView.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        heartImageView.center = likeButton.center
+        
+        contentView.addSubview(heartImageView)
+        heartImageView.addSubview(heartAmountLabel)
+        heartImageView.snp.makeConstraints { make in
+            make.center.equalTo(imageViewCell)
+            make.width.height.equalTo(100)
+        }
+        heartAmountLabel.snp.makeConstraints { make in
+            make.center.equalTo(imageViewCell)
+        }
+
+        UIView.animate(withDuration: 0.5, animations: {
+            heartImageView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+            heartImageView.alpha = 0.0
+        }
+        ) { _ in
+            heartImageView.removeFromSuperview()
+        }
+    }
+    
+    func configure(with image: String, dollImage: String, buttonPosition: [CGPoint]) {
+        self.imageURL = image
+        self.dollImageURL = dollImage
+        if dollImage != "" {
+            dollImageViewCell.kf.setImage(with: URL(string: dollImage))
+            let rightSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleRightSwipe))
+            rightSwipeGesture.direction = .right
+            let leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleLeftSwipe))
+            rightSwipeGesture.direction = .right
+            leftSwipeGesture.direction = .left
+            contentView.addGestureRecognizer(rightSwipeGesture)
+            contentView.addGestureRecognizer(leftSwipeGesture)
+            contentView.layer.shadowColor = UIColor.black.cgColor
+            contentView.layer.shadowOpacity = 0.5
+            contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
+            contentView.layer.shadowRadius = 4
+        }
         imageViewCell.kf.setImage(with: URL(string: image))
         var actualPositions: [CGPoint] = []
         actualPositions = buttonPosition.map { convertToActualPosition($0) }
-        var x = 0
+        var xPosition = 0
         for position in actualPositions {
             let button = UIButton(type: .system)
             button.frame = CGRect(x: position.x - 10, y: position.y - 10, width: 20, height: 20)
@@ -50,11 +235,11 @@ class DetailPageImageCell: UITableViewCell {
             button.layer.cornerRadius = 10
             button.layer.borderWidth = 1
             button.layer.borderColor = UIColor.lightGray.cgColor
-            button.tag = x
+            button.tag = xPosition
             button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
             button.setTitle("", for: .normal)
             imageViewCell.addSubview(button)
-            x += 1
+            xPosition += 1
         }
     }
     
@@ -74,8 +259,8 @@ class DetailPageImageCell: UITableViewCell {
         tagLabel.backgroundColor = .white
         tagLabel.textColor = UIColor.brown
         tagLabel.clipsToBounds = true
-        tagLabel.layer.cornerRadius = 10
-        tagLabel.font = UIFont.systemFont(ofSize: 20)
+        tagLabel.layer.cornerRadius = 18
+        tagLabel.font = UIFont.systemFont(ofSize: 28)
         tagLabel.sizeToFit()
         tagLabel.frame.origin = CGPoint(x: imageViewCell.bounds.width - tagLabel.bounds.width - 8, y: 8)
         imageViewCell.addSubview(tagLabel)
@@ -96,6 +281,7 @@ class DetailPageImageCell: UITableViewCell {
 
 class DetailPageCommentCell: UITableViewCell {
     var contentLabel = UILabel()
+    var timeLabel = UILabel()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupConstraints()
@@ -109,16 +295,29 @@ class DetailPageCommentCell: UITableViewCell {
         contentView.addSubview(contentLabel)
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView).offset(16)
-            make.leading.equalTo(contentView).offset(32)
-            make.trailing.equalTo(contentView).offset(-32)
+            make.leading.equalTo(contentView).offset(16)
+            make.trailing.equalTo(contentView).offset(-16)
+        }
+        contentView.addSubview(timeLabel)
+        timeLabel.snp.makeConstraints { make in
+            make.top.equalTo(contentLabel.snp.bottom).offset(16)
+            make.leading.equalTo(contentView).offset(16)
+            make.trailing.equalTo(contentView).offset(-16)
             make.bottom.equalTo(contentView).offset(-16)
         }
     }
     
-    func configure(content: String) {
+    func configure(content: String, time: Double) {
         contentLabel.text = content
         contentLabel.numberOfLines = 0
         contentLabel.font = UIFont.roundedFont(ofSize: 20)
+        let date = Date(timeIntervalSince1970: time)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd HH:mm"
+        let formattedDate = dateFormatter.string(from: date)
+        timeLabel.text = formattedDate
+        timeLabel.textColor = .lightGray
+        timeLabel.font = UIFont.roundedFont(ofSize: 15)
     }
     
 }
@@ -130,8 +329,8 @@ class DetailPageProductCell: UITableViewCell {
         productLabel.numberOfLines = 0
         productLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView).offset(16)
-            make.leading.equalTo(contentView).offset(32)
-            make.trailing.equalTo(contentView).offset(-32)
+            make.leading.equalTo(contentView).offset(16)
+            make.trailing.equalTo(contentView).offset(-16)
             make.bottom.equalTo(contentView)
         }
         var text = ""

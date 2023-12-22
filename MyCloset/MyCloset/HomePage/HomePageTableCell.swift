@@ -14,6 +14,10 @@ class HomePageTableCell: UITableViewCell {
         imageView.layer.cornerRadius = 5
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.shadowColor = UIColor.black.cgColor
+        imageView.layer.shadowOpacity = 0.5
+        imageView.layer.shadowOffset = CGSize(width: 0, height: 3)
+        imageView.layer.shadowRadius = 5
         return imageView
     }()
     
@@ -70,5 +74,11 @@ class HomePageTableCell: UITableViewCell {
         
         profileImage.layer.cornerRadius = 25
         profileImage.layer.masksToBounds = true
+        cellImageView.layer.masksToBounds = true
+        contentView.layer.shadowColor = UIColor.black.cgColor
+        contentView.layer.shadowOpacity = 0.5
+        contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        contentView.layer.shadowRadius = 4
+        
     }
 }

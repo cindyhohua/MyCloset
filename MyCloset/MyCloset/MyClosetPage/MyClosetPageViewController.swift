@@ -18,10 +18,11 @@ struct Section {
 
 class MyClosetPageViewController: UIViewController, UITabBarControllerDelegate {
     var tableView = UITableView()
-    let buttonTitle = ["Tops","Bottoms","Accessories"]
+    let buttonTitle = ["Tops", "Bottoms", "Accessories"]
     var clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
-    var sectionAll : [[Section]] = []
+    var sectionAll: [[Section]] = []
     var sections: [Section] = []
+    var segmentIndex = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         let tabBarController = self.tabBarController
@@ -36,10 +37,11 @@ class MyClosetPageViewController: UIViewController, UITabBarControllerDelegate {
         super.viewWillAppear(animated)
         sections = []
         sectionAll = []
-        setup()
         clothes = CoreDataManager.shared.fetchAllCategoriesAndSubcategories()
         makeSectionArray()
         tableView.reloadData()
+        self.sections = self.sectionAll[segmentIndex]
+        self.tableView.reloadData()
     }
     
     func tabBarController( _ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
@@ -72,7 +74,7 @@ class MyClosetPageViewController: UIViewController, UITabBarControllerDelegate {
                 var sectionsForCategory: [Section] = []
                 for (_, subcategory) in subcategories.enumerated() {
                     let items = CoreDataManager.shared.fetchClothesFor(category: title, subcategory: subcategory)
-                    let section = Section(title: "\(subcategory)", isExpanded: false, items: items)
+                    let section = Section(title: "\(subcategory)", isExpanded: true, items: items)
                     sectionsForCategory.append(section)
                 }
                 sectionAll.append(sectionsForCategory)
@@ -99,14 +101,19 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
         addButton.tintColor = UIColor.lightBrown()
         navigationItem.rightBarButtonItem = addButton
         let leftButton = UIBarButtonItem(image: UIImage(systemName: "heart"), style: .plain, target: self, action: #selector(heartButtonTapped))
-        navigationItem.leftBarButtonItem = leftButton
+//        navigationItem.leftBarButtonItem = leftButton
         leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "My Closet"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
-        let codeSegmented = SegmentView(frame: CGRect(x: 0, y: 100, width: self.view.frame.width, height: 44), buttonTitle: buttonTitle)
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.lightBrown(),
+            NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        let codeSegmented = SegmentView(
+            frame: CGRect(x: 0, y: 100, width: self.view.frame.width, height: 44),
+            buttonTitle: buttonTitle)
+        view.addSubview(codeSegmented)
         codeSegmented.backgroundColor = UIColor.white
         codeSegmented.delegate = self
-        view.addSubview(codeSegmented)
+        
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
@@ -128,11 +135,42 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ClosetPageCell", for: indexPath) as? ClosetPageCell else {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "ClosetPageCell",
+            for: indexPath) as? ClosetPageCell else {
             fatalError("Cant find cell")
         }
         if let imageData = sections[indexPath.section].items[indexPath.row].image {
-            cell.configure(with: imageData , name: sections[indexPath.section].items[indexPath.row].item ?? "")
+            if sections[indexPath.section].items[indexPath.row].cloth != nil {
+                cell.configure(
+                    with: imageData,
+                    name: sections[indexPath.section].items[indexPath.row].item ?? "",
+                    clothOrNot: true)
+            } else {
+                cell.configure(
+                    with: imageData,
+                    name: sections[indexPath.section].items[indexPath.row].item ?? "",
+                    clothOrNot: false)
+            }
+            cell.buttonTapped = { [weak self] in
+                let item = self?.sections[indexPath.section].items[indexPath.row]
+                print("Button tapped in cell with item: \(item?.item ?? "")")
+                switch (item?.category)! {
+                case "Tops":
+                    let secondViewController = TopsChosenViewController()
+                    secondViewController.cloth = item
+                    self?.navigationController?.pushViewController(secondViewController, animated: true)
+                case "Bottoms":
+                    let secondViewController = PaperDollBottomsViewController()
+                    secondViewController.cloth = item
+                    self?.navigationController?.pushViewController(secondViewController, animated: true)
+                case "Accessories":
+                    let secondViewController = PaperDollAccessoriesViewController()
+                    secondViewController.cloth = item
+                    self?.navigationController?.pushViewController(secondViewController, animated: true)
+                default: print("default")
+                }
+            }
         } else {
             cell.configureWithoutImage(name: sections[indexPath.section].items[indexPath.row].item ?? "")
         }
@@ -179,6 +217,7 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
 
 extension MyClosetPageViewController: SegmentControlDelegate {
     func changeToIndex(_ manager: SegmentView, index: Int) {
+        segmentIndex = index
         self.sections = self.sectionAll[index]
         self.tableView.reloadData()
     }
@@ -188,6 +227,8 @@ class ClosetPageCell: UITableViewCell {
     var selectMine = false
     var index = 0
     let checkButton = UIButton()
+    let clothButton = UIButton()
+    var buttonTapped: (() -> Void)?
     let circularImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 25
@@ -215,6 +256,7 @@ class ClosetPageCell: UITableViewCell {
         contentView.addSubview(circularImageView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(checkButton)
+        contentView.addSubview(clothButton)
         circularImageView.snp.makeConstraints { make in
             make.top.equalTo(contentView).offset(3)
             make.leading.equalTo(contentView).offset(16)
@@ -235,11 +277,29 @@ class ClosetPageCell: UITableViewCell {
             make.width.height.equalTo(50)
         }
         checkButton.isHidden = true
+        
+        clothButton.setImage(UIImage(systemName: "tshirt.fill"), for: .normal)
+        clothButton.tintColor = .lightBrown()
+        clothButton.snp.makeConstraints { make in
+            make.trailing.equalTo(contentView).offset(-16)
+            make.width.height.equalTo(70)
+            make.centerY.equalTo(contentView)
+        }
+        clothButton.addTarget(self, action: #selector(clothButtonTapped), for: .touchUpInside)
     }
-
-    func configure(with imageData: Data, name: String) {
+    
+    @objc func clothButtonTapped() {
+        buttonTapped?()
+    }
+    
+    func configure(with imageData: Data, name: String, clothOrNot: Bool) {
         circularImageView.image = UIImage(data: imageData)
         nameLabel.text = name
+        if clothOrNot == true {
+            clothButton.setImage(UIImage(named: "編輯")?.withTintColor(.lightLightBrown()), for: .normal)
+        } else {
+            clothButton.setImage(UIImage(named: "已建")?.withTintColor(.lightBrown()), for: .normal)
+        }
     }
     
     func configureWithoutImage(name: String) {

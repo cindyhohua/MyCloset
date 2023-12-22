@@ -98,7 +98,7 @@ class MyClosetDetailPageViewController: UIViewController {
         descriptionLabel.text = text
         descriptionLabel.numberOfLines = 0
     
-        dollButton.setTitle("紙娃娃試穿", for: .normal)
+        dollButton.setTitle("建立衣服模型", for: .normal)
         dollButton.setTitleColor(.brown, for: .normal)
         dollButton.addTarget(self, action: #selector(dollButtonTapped), for: .touchUpInside)
         dollButton.backgroundColor = UIColor.lightLightBrown()
