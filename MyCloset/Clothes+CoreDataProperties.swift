@@ -2,7 +2,7 @@
 //  Clothes+CoreDataProperties.swift
 //  
 //
-//  Created by 賀華 on 2023/11/27.
+//  Created by 賀華 on 2023/12/10.
 //
 //
 
@@ -26,5 +26,6 @@ extension Clothes {
     @NSManaged public var price: String?
     @NSManaged public var store: String?
     @NSManaged public var subcategory: String?
+    @NSManaged public var draw: Data?
 
 }

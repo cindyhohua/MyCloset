@@ -6,9 +6,11 @@
 //
 import UIKit
 import SnapKit
+import PencilKit
 
-class PaperDollAccessoriesViewController: UIViewController{
+class PaperDollAccessoriesViewController: UIViewController {
     var cloth: ClothesStruct?
+    var delegate: EditToChangeCloth?
 
     var dollParts: [String: UIImageView] = [:]
     
@@ -25,6 +27,15 @@ class PaperDollAccessoriesViewController: UIViewController{
     }()
     
     var colorPickerView = ColorPickerView()
+    var pencilPickerView = PencilPickerView()
+    
+    var pencilSelectedColor: UIColor = .white
+    var pencilWidth: CGFloat = 5
+    let canvasView: PKCanvasView = {
+        let canvasView = PKCanvasView()
+        canvasView.backgroundColor = .clear
+        return canvasView
+    }()
     
     var outfitss: [[DollCloth]]?
     var outfits: [DollCloth]?
@@ -34,7 +45,9 @@ class PaperDollAccessoriesViewController: UIViewController{
     
     var segmentIndex = 0
     
-    let codeSegmented = SegmentView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44), buttonTitle: ["飾品","顏色"])
+    let codeSegmented = SegmentView(
+        frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44),
+        buttonTitle: ["飾品","手繪","顏色"])
 
     var neckline: [DollCloth] = [
         DollCloth(outer: "飾品1", bottom: "B飾品1", name: "neckline"),
@@ -68,11 +81,15 @@ class PaperDollAccessoriesViewController: UIViewController{
         let addButton = UIBarButtonItem(title: "save", style: .plain, target: self, action: #selector(addButtonTapped))
         addButton.tintColor = UIColor.lightBrown()
         navigationItem.rightBarButtonItem = addButton
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
+        let leftButton = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.backward.circle"),
+            style: .plain, target: self, action: #selector(backButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
             leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "My Closet"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        navigationController?.navigationBar.titleTextAttributes =
+        [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(),
+         NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         
         view.addSubview(imageViewDoll)
         imageViewDoll.image = UIImage(named: "doll")
@@ -96,6 +113,15 @@ class PaperDollAccessoriesViewController: UIViewController{
         }
         imageViewReal.clipsToBounds = true
         imageViewReal.layer.cornerRadius = 60
+        
+        imageViewDoll.addSubview(canvasView)
+        canvasView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            canvasView.topAnchor.constraint(equalTo: imageViewDoll.topAnchor),
+            canvasView.leadingAnchor.constraint(equalTo: imageViewDoll.leadingAnchor),
+            canvasView.trailingAnchor.constraint(equalTo: imageViewDoll.trailingAnchor),
+            canvasView.bottomAnchor.constraint(equalTo: imageViewDoll.bottomAnchor)
+        ])
     }
     
     @objc func addButtonTapped() {
@@ -112,14 +138,32 @@ class PaperDollAccessoriesViewController: UIViewController{
         var green: CGFloat = 0.0
         var blue: CGFloat = 0.0
         var alpha: CGFloat = 0.0
-
+        guard let imageData = canvasView.asImage()?.pngData() else {
+            return
+        }
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         print(red, green, blue)
-        CoreDataManager.shared.addClothAndColor(category: (self.cloth?.category)!, subcategory: (self.cloth?.subcategory)!, item: (self.cloth?.item)!, clothArray: cloth, clothBArray: clothB, color: [red, green, blue])
+        CoreDataManager.shared.addClothAndColor(
+            category: (self.cloth?.category)!,
+            subcategory: (self.cloth?.subcategory)!,
+            item: (self.cloth?.item)!,
+            clothArray: cloth, clothBArray: clothB,
+            color: [red, green, blue],
+            draw: imageData)
         guard let viewControllers = self.navigationController?.viewControllers else { return }
         for controller in viewControllers {
-            if controller is MyClosetDetailPageViewController {
+            if controller is MyClosetPageViewController {
             self.navigationController?.popToViewController(controller, animated: true)
+            }
+            if controller is ChangeClothesViewController {
+                if var clothPass = self.cloth {
+                    clothPass.cloth = cloth
+                    clothPass.clothB = clothB
+                    clothPass.color = [red, green, blue]
+                    clothPass.draw = imageData
+                    delegate?.editToChangCloth(cloth: clothPass)
+                }
+                self.navigationController?.popToViewController(controller, animated: true)
             }
         }
     }
@@ -132,13 +176,16 @@ class PaperDollAccessoriesViewController: UIViewController{
         imageView = UIImageView()
         imageView?.isUserInteractionEnabled = true
         imageView?.contentMode = .scaleAspectFit
-        imageView?.image = (tintColor == nil) ? UIImage(named: imageName) : UIImage(named: imageName)?.withTintColor(tintColor ?? .white)
+        imageView?.image =
+        (tintColor == nil) ?
+        UIImage(named: imageName) : UIImage(named: imageName)?.withTintColor(tintColor ?? .white)
         imageViewDoll.addSubview(imageView!)
         setupConstraints(for: imageView!)
     }
 
     func setupConstraints(for imageView: UIImageView) {
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -150,7 +197,7 @@ class PaperDollAccessoriesViewController: UIViewController{
     func addGestures(imageView: UIImageView) {
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
-        
+        panGesture.minimumNumberOfTouches = 2
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(pinchGesture)
         imageView.addGestureRecognizer(panGesture)
@@ -177,8 +224,31 @@ class PaperDollAccessoriesViewController: UIViewController{
     }
 }
 
-
-extension PaperDollAccessoriesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SegmentControlDelegate, ColorPickerViewDelegate {
+extension PaperDollAccessoriesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SegmentControlDelegate, ColorPickerViewDelegate, PencilPickerViewDelegate {
+    func pencilSelectColor(_ color: UIColor) {
+        pencilSelectedColor = color
+        let newTool = PKInkingTool(.pen, color: color, width: pencilWidth)
+        canvasView.drawingPolicy = .anyInput
+        canvasView.tool = newTool
+    }
+    
+    func undoAction() {
+        print("undo")
+        canvasView.undoManager?.undo()
+    }
+    
+    func redoAction() {
+        print("redo")
+        canvasView.undoManager?.redo()
+    }
+    
+    func thicknessChanged(thickness: CGFloat) {
+        pencilWidth = thickness
+        print(thickness)
+        let newTool = PKInkingTool(.pen, color: pencilSelectedColor, width: thickness)
+        canvasView.tool = newTool
+    }
+    
     func didSelectColor(_ color: UIColor) {
         selectedColor = color
         guard let selected = selected else { return }
@@ -195,7 +265,8 @@ extension PaperDollAccessoriesViewController: UICollectionViewDataSource, UIColl
             outfits = outfitss?[index]
             collectionView.reloadData()
             colorPickerView.removeFromSuperview()
-        } else if index == 1 {
+            pencilPickerView.removeFromSuperview()
+        } else if index == 2 {
             view.addSubview(colorPickerView)
             colorPickerView.backgroundColor = .blue
             colorPickerView.translatesAutoresizingMaskIntoConstraints = false
@@ -205,6 +276,20 @@ extension PaperDollAccessoriesViewController: UICollectionViewDataSource, UIColl
                 colorPickerView.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
                 colorPickerView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor)
             ])
+        } else if index == 1 {
+            view.addSubview(pencilPickerView)
+            pencilPickerView.backgroundColor = .white
+            pencilPickerView.delegate = self
+            canvasView.tool = PKInkingTool(.pen, color: pencilSelectedColor, width: pencilWidth)
+            canvasView.drawingPolicy = .anyInput
+            pencilPickerView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                pencilPickerView.topAnchor.constraint(equalTo: collectionView.topAnchor),
+                pencilPickerView.leadingAnchor.constraint(equalTo: collectionView.leadingAnchor),
+                pencilPickerView.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
+                pencilPickerView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor)
+            ])
+            
         }
     }
 
@@ -233,36 +318,51 @@ extension PaperDollAccessoriesViewController: UICollectionViewDataSource, UIColl
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .white
-        collectionView.register(OutfitCollectionViewCell.self, forCellWithReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier)
+        collectionView.register(
+            OutfitCollectionViewCell.self,
+            forCellWithReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier)
 
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
 
-        let cellWidth = (UIScreen.main.bounds.width - layout.minimumInteritemSpacing * 2 - layout.sectionInset.left - layout.sectionInset.right) / 3
+        let cellWidth = (
+            UIScreen.main.bounds.width - layout.minimumInteritemSpacing * 2 - layout.sectionInset.left - layout.sectionInset.right
+        ) / 3
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
 
-        layout.sectionInset = UIEdgeInsets(top: 10, left: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2, bottom: 10, right: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2)
-
+        layout.sectionInset = UIEdgeInsets(
+            top: 10,
+            left: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2,
+            bottom: 10, right: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2)
+        
         collectionView.collectionViewLayout = layout
     }
-
-    
-    
-    
+ 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return outfits?.count ?? 0
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier, for: indexPath) as! OutfitCollectionViewCell
-        if let outfit = outfits?[indexPath.item] {
-            cell.configure(with: outfit)
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier,
+            for: indexPath) as? OutfitCollectionViewCell {
+            if let outfit = outfits?[indexPath.item] {
+                cell.configureAcc(with: outfit)
+            }
+            return cell
+        } else {
+            let defaultCell = collectionView.dequeueReusableCell(withReuseIdentifier: "DefaultCell", for: indexPath)
+            return defaultCell
         }
-        return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = (collectionView.frame.width - 30) / 3
         return CGSize(width: cellWidth, height: cellWidth)
     }
@@ -271,7 +371,6 @@ extension PaperDollAccessoriesViewController: UICollectionViewDataSource, UIColl
         if let selectedOutfit = outfits?[indexPath.item] {
             updateDollImage(with: selectedOutfit)
             selected?[segmentIndex] = (outfitss?[segmentIndex][indexPath.item])!
-            print(selected)
         }
     }
     
@@ -288,7 +387,7 @@ extension PaperDollAccessoriesViewController: UICollectionViewDataSource, UIColl
         }
     }
     
-    func PaperDollAccessoriesViewController(with cloth: DollCloth) {
+    func paperDollAccessoriesViewController(with cloth: DollCloth) {
         guard let bImageView = dollParts["B" + cloth.name] else { return }
         guard let imageView = dollParts[cloth.name] else { return }
 
@@ -302,5 +401,3 @@ extension PaperDollAccessoriesViewController: UICollectionViewDataSource, UIColl
     }
 
 }
-
-

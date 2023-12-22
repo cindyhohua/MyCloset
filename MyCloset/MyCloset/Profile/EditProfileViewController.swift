@@ -20,11 +20,9 @@ class EditProfileViewController: UIViewController {
     var uploadImageButton = UIButton()
     var nameTextField = UITextField()
     var littleWordsTextField = UITextField()
-
-    var heightTextField = UITextField()
-    var weightTextField = UITextField()
     
     var privateOrNotButton = UIButton()
+    var relationshipButton = UIButton()
     var logoutButton = UIButton()
     var deleteAccountButton = UIButton()
     
@@ -34,20 +32,29 @@ class EditProfileViewController: UIViewController {
     }
     
     func setup() {
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
+        let leftButton = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.backward.circle"),
+            style: .plain, target: self, action: #selector(backButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
             leftButton.tintColor = UIColor.brown
-        let rightButton = UIBarButtonItem(title: "save", style: .plain, target: self, action: #selector(saveButtonTapped))
+        let rightButton = UIBarButtonItem(
+            title: "save", style: .plain, target: self,
+            action: #selector(saveButtonTapped))
             navigationItem.rightBarButtonItem = rightButton
             rightButton.tintColor = UIColor.brown
         navigationItem.title = "Edit Profile"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.brown, NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.brown,
+            NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         
         view.backgroundColor = .white
         view.addSubview(imageView)
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 75
         imageView.clipsToBounds = true
+        if imageView.image == nil {
+            imageView.image = UIImage(named: "placeHolder")
+        }
         imageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
@@ -56,7 +63,7 @@ class EditProfileViewController: UIViewController {
         
         view.addSubview(uploadImageButton)
         uploadImageButton.setTitle("選擇照片", for: .normal)
-        uploadImageButton.setTitleColor(.white, for: .normal)
+        uploadImageButton.setTitleColor(UIColor.lightBrown(), for: .normal)
         uploadImageButton.snp.makeConstraints { make in
             make.centerX.centerY.equalTo(imageView)
         }
@@ -82,28 +89,9 @@ class EditProfileViewController: UIViewController {
             make.height.equalTo(40)
         }
         
-        view.addSubview(heightTextField)
-        heightTextField.borderStyle = .roundedRect
-        heightTextField.placeholder = "height"
-        heightTextField.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(littleWordsTextField.snp.bottom).offset(20)
-            make.width.equalTo(200)
-            make.height.equalTo(40)
-        }
-        
-        view.addSubview(weightTextField)
-        weightTextField.borderStyle = .roundedRect
-        weightTextField.placeholder = "weight"
-        weightTextField.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(heightTextField.snp.bottom).offset(20)
-            make.width.equalTo(200)
-            make.height.equalTo(40)
-        }
-        
         view.addSubview(deleteAccountButton)
         deleteAccountButton.setTitle("刪除帳號", for: .normal)
+        deleteAccountButton.addTarget(self, action: #selector(deleteAccount), for: .touchUpInside)
         deleteAccountButton.backgroundColor = .gray
         deleteAccountButton.layer.cornerRadius = 5
         deleteAccountButton.snp.makeConstraints { make in
@@ -124,21 +112,84 @@ class EditProfileViewController: UIViewController {
             make.height.equalTo(40)
         }
         logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        
+        view.addSubview(relationshipButton)
+        relationshipButton.setTitle("關係列表", for: .normal)
+        relationshipButton.backgroundColor = .brown
+        relationshipButton.layer.cornerRadius = 5
+        relationshipButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(logoutButton.snp.top).offset(-20)
+            make.width.equalTo(150)
+            make.height.equalTo(40)
+        }
+        relationshipButton.addTarget(self, action: #selector(relationshipButtonTapped), for: .touchUpInside)
     }
     
-    @objc func logoutButtonTapped() {
-        do {
-            try Auth.auth().signOut()
-            dismiss(animated: true) {
-                if let tabBarController = self.tabBarController {
-                    tabBarController.selectedIndex = 0 
-                }
-            }
-        } catch {
-            print("Error signing out: \(error.localizedDescription)")
+    @objc func relationshipButtonTapped() {
+        let secondVC = RelationshipListView()
+        FirebaseStorageManager.shared.getAuth { author in
+            secondVC.viewModel.fetchData(friendList: author.following ?? [])
+            self.navigationController?.pushViewController(secondVC, animated: true)
         }
     }
     
+    @objc func deleteAccount() {
+        let alert = UIAlertController(title: "Delete Account", message: "確定要刪除您的帳戶吗？此操作不可恢復。", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+        
+        alert.addAction(UIAlertAction(title: "刪除", style: .destructive, handler: { [weak self] _ in
+            FirebaseStorageManager.shared.deleteUser { result in
+                switch result {
+                case .success:
+                    print("帳戶已删除")
+                    if let currentUser = Auth.auth().currentUser {
+                        currentUser.delete { error in
+                            if let error = error {
+                                print(error)
+                            } else {
+                                self?.dismiss(animated: true) {
+                                    if let tabBarController = self?.tabBarController {
+                                        tabBarController.selectedIndex = 0
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        print("无法获取当前用户")
+                    }
+                case .failure(let error):
+                    print("删除失败: \(error)")
+                }
+            }
+        }))
+        
+        // 显示警告对话框
+        self.present(alert, animated: true)
+    }
+
+    @objc func logoutButtonTapped() {
+        let alertController = UIAlertController(title: "登出", message: "您確定要登出吗？", preferredStyle: .alert)
+        
+        alertController.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+        
+        alertController.addAction(UIAlertAction(title: "確認", style: .destructive, handler: { [weak self] (_) in
+            do {
+                try Auth.auth().signOut()
+                self?.dismiss(animated: true) {
+                    if let tabBarController = self?.tabBarController {
+                        tabBarController.selectedIndex = 0
+                    }
+                }
+            } catch {
+                print("Error signing out: \(error.localizedDescription)")
+            }
+        }))
+        
+        present(alertController, animated: true)
+    }
+
     @objc func uploadImageButtonTapped() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
@@ -152,30 +203,44 @@ class EditProfileViewController: UIViewController {
     
     @objc func saveButtonTapped() {
         print("save")
-        if nameTextField.text?.isEmpty == false {
-            FirebaseStorageManager.shared.uploadImageAndGetURL(imageView.image!) { [weak self] result in
-                switch result {
-                case .success(let downloadURL):
-                    FirebaseStorageManager.shared.updateAuth(image: downloadURL.absoluteString, name: self?.nameTextField.text ?? "", littleWords: self?.littleWordsTextField.text ?? "", weight: self?.weightTextField.text ?? "", height: self?.heightTextField.text ?? "") { _ in
-                        self?.navigationController?.popViewController(animated: true)
-                    }
-                case .failure(let error):
-                    print("Error uploading post data to Firebase: \(error.localizedDescription)")
+        guard let name = nameTextField.text, !name.isEmpty else {
+            showAlert(message: "名字不能為空")
+            return
+        }
+        FirebaseStorageManager.shared.uploadImageAndGetURL(imageView.image!) { [weak self] result in
+            switch result {
+            case .success(let downloadURL):
+                DispatchQueue.main.async {
+                    FirebaseStorageManager.shared.updateAuth(
+                        image: downloadURL.absoluteString,
+                        name: name,
+                        littleWords: self?.littleWordsTextField.text ?? "",
+                        weight: "",
+                        height: "") { _ in
+                            self?.navigationController?.popViewController(animated: true)
+                        }
                 }
+            case .failure(let error):
+                print("Error uploading post data to Firebase: \(error.localizedDescription)")
             }
         }
     }
     
+    func showAlert(message: String) {
+        let alert = UIAlertController(title: "提醒", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "確定", style: .default, handler: nil)
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
+    }
+
     func configure() {
         if let image = author?.image {
             imageView.kf.setImage(with: URL(string: image))
         } else {
-            imageView.image = UIImage(named: "Image")
+            imageView.image = UIImage(named: "placeHolder")
         }
         nameTextField.text = author?.name
         littleWordsTextField.text = author?.littleWords
-        heightTextField.text = author?.height
-        weightTextField.text = author?.weight
     }
 }
 

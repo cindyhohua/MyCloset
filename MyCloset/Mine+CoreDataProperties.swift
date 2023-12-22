@@ -2,7 +2,7 @@
 //  Mine+CoreDataProperties.swift
 //  
 //
-//  Created by 賀華 on 2023/11/27.
+//  Created by 賀華 on 2023/12/9.
 //
 //
 
@@ -17,7 +17,7 @@ extension Mine {
     }
 
     @NSManaged public var myWearing: Data?
-    @NSManaged public var wearing: NSArray?
     @NSManaged public var name: String?
+    @NSManaged public var wearing: NSArray?
 
 }

@@ -35,7 +35,7 @@
 		CA016D5D2B07691A0066FBE7 /* AddMyClothesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */; };
 		CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */; };
 		CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */; };
-		CA3B0FB12B08DE8B001B708E /* DollPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */; };
+		CA3B0FB12B08DE8B001B708E /* TopsDollPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB02B08DE8B001B708E /* TopsDollPageViewController.swift */; };
 		CA3B0FB32B09CF76001B708E /* DollPageCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */; };
 		CA3B0FB52B0B1CD2001B708E /* DollModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB42B0B1CD2001B708E /* DollModel.swift */; };
 		CA3B0FB72B0B2053001B708E /* TopsChosenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */; };
@@ -48,6 +48,24 @@
 		CA61D5C32B148B000028FB39 /* MineDollDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA61D5C22B148B000028FB39 /* MineDollDetailViewController.swift */; };
 		CA61D5C52B15BC870028FB39 /* AccessoriesChosenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA61D5C42B15BC870028FB39 /* AccessoriesChosenViewController.swift */; };
 		CA61D5C72B17422C0028FB39 /* SavedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA61D5C62B17422C0028FB39 /* SavedViewController.swift */; };
+		CA795B042B1888D200D5584E /* AppleLoginSetProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B032B1888D200D5584E /* AppleLoginSetProfileViewController.swift */; };
+		CA795B062B1980F200D5584E /* DetailPageCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B052B1980F200D5584E /* DetailPageCommentCell.swift */; };
+		CA795B082B19818800D5584E /* DetailPageInputCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B072B19818800D5584E /* DetailPageInputCommentView.swift */; };
+		CA795B0B2B19F3CB00D5584E /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B0A2B19F3CB00D5584E /* MyProfileViewController.swift */; };
+		CA795B0D2B1B263C00D5584E /* FirebaseStorageManager2.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B0C2B1B263C00D5584E /* FirebaseStorageManager2.swift */; };
+		CA795B0F2B1C716300D5584E /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = CA795B0E2B1C716300D5584E /* FirebaseMessaging */; };
+		CA795B122B1F0B5800D5584E /* FirebaseStorageManager3.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */; };
+		CA795B142B205D6800D5584E /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = CA795B132B205D6800D5584E /* FirebaseCrashlytics */; };
+		CA795B162B205D8B00D5584E /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CA795B152B205D8B00D5584E /* FirebaseAnalyticsSwift */; };
+		CA795B192B21CACB00D5584E /* FriendList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B182B21CACB00D5584E /* FriendList.swift */; };
+		CA795B1B2B244A7900D5584E /* HairDollPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B1A2B244A7800D5584E /* HairDollPageViewController.swift */; };
+		CA795B1F2B26EE7C00D5584E /* ImportFromClosetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B1E2B26EE7C00D5584E /* ImportFromClosetViewController.swift */; };
+		CA795B212B273E7A00D5584E /* MineDollChooseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B202B273E7A00D5584E /* MineDollChooseViewController.swift */; };
+		CA795B252B2FF68D00D5584E /* RelationshipListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B242B2FF68D00D5584E /* RelationshipListViewModel.swift */; };
+		CA795B282B2FF6E800D5584E /* RelationshipListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B272B2FF6E800D5584E /* RelationshipListView.swift */; };
+		CA795B342B30235200D5584E /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B332B30235100D5584E /* EditProfileView.swift */; };
+		CA795B362B30235E00D5584E /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B352B30235E00D5584E /* EditProfileViewModel.swift */; };
+		CA795B382B31A08D00D5584E /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B372B31A08D00D5584E /* EditPostViewController.swift */; };
 		CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */; };
 		CABCC7CC2B0F3EB700FB38C5 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */; };
 		CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */; };
@@ -83,7 +101,7 @@
 		CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMyClothesViewController.swift; sourceTree = "<group>"; };
 		CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManeger.swift; sourceTree = "<group>"; };
 		CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetDetailPageViewController.swift; sourceTree = "<group>"; };
-		CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageViewController.swift; sourceTree = "<group>"; };
+		CA3B0FB02B08DE8B001B708E /* TopsDollPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopsDollPageViewController.swift; sourceTree = "<group>"; };
 		CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageCVCell.swift; sourceTree = "<group>"; };
 		CA3B0FB42B0B1CD2001B708E /* DollModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollModel.swift; sourceTree = "<group>"; };
 		CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopsChosenViewController.swift; sourceTree = "<group>"; };
@@ -97,6 +115,22 @@
 		CA61D5C22B148B000028FB39 /* MineDollDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineDollDetailViewController.swift; sourceTree = "<group>"; };
 		CA61D5C42B15BC870028FB39 /* AccessoriesChosenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoriesChosenViewController.swift; sourceTree = "<group>"; };
 		CA61D5C62B17422C0028FB39 /* SavedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedViewController.swift; sourceTree = "<group>"; };
+		CA795B032B1888D200D5584E /* AppleLoginSetProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginSetProfileViewController.swift; sourceTree = "<group>"; };
+		CA795B052B1980F200D5584E /* DetailPageCommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageCommentCell.swift; sourceTree = "<group>"; };
+		CA795B072B19818800D5584E /* DetailPageInputCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageInputCommentView.swift; sourceTree = "<group>"; };
+		CA795B0A2B19F3CB00D5584E /* MyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
+		CA795B0C2B1B263C00D5584E /* FirebaseStorageManager2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager2.swift; sourceTree = "<group>"; };
+		CA795B102B1C816200D5584E /* push.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = push.apns; sourceTree = "<group>"; };
+		CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager3.swift; sourceTree = "<group>"; };
+		CA795B182B21CACB00D5584E /* FriendList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendList.swift; sourceTree = "<group>"; };
+		CA795B1A2B244A7800D5584E /* HairDollPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HairDollPageViewController.swift; sourceTree = "<group>"; };
+		CA795B1E2B26EE7C00D5584E /* ImportFromClosetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFromClosetViewController.swift; sourceTree = "<group>"; };
+		CA795B202B273E7A00D5584E /* MineDollChooseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineDollChooseViewController.swift; sourceTree = "<group>"; };
+		CA795B242B2FF68D00D5584E /* RelationshipListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipListViewModel.swift; sourceTree = "<group>"; };
+		CA795B272B2FF6E800D5584E /* RelationshipListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipListView.swift; sourceTree = "<group>"; };
+		CA795B332B30235100D5584E /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		CA795B352B30235E00D5584E /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
+		CA795B372B31A08D00D5584E /* EditPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
 		CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAuthCollectionViewCell.swift; sourceTree = "<group>"; };
 		CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -110,11 +144,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA795B0F2B1C716300D5584E /* FirebaseMessaging in Frameworks */,
 				CA016D482B05FDD50066FBE7 /* FirebaseAnalytics in Frameworks */,
 				CA016D4A2B05FDD50066FBE7 /* FirebaseAuth in Frameworks */,
 				CA016D4C2B05FDD50066FBE7 /* FirebaseDatabase in Frameworks */,
+				CA795B162B205D8B00D5584E /* FirebaseAnalyticsSwift in Frameworks */,
 				CA016D4E2B05FDD50066FBE7 /* FirebaseFirestore in Frameworks */,
 				CA016D522B05FDD50066FBE7 /* FirebaseStorage in Frameworks */,
+				CA795B142B205D6800D5584E /* FirebaseCrashlytics in Frameworks */,
 				82073DDD4A75F060A18ED851 /* Pods_MyCloset.framework in Frameworks */,
 				CA016D502B05FDD50066FBE7 /* FirebaseFirestoreSwift in Frameworks */,
 			);
@@ -165,12 +202,10 @@
 				CA016D302B04CB8C0066FBE7 /* Main.storyboard */,
 				CA016D312B04CB8D0066FBE7 /* LaunchScreen.storyboard */,
 				CA016D2C2B04CB880066FBE7 /* AppDelegate.swift */,
+				CA795B102B1C816200D5584E /* push.apns */,
 				CA016D2F2B04CB8B0066FBE7 /* SceneDelegate.swift */,
-				CA3B0FBE2B0DEA99001B708E /* LogInViewController.swift */,
-				CA3B0FC02B0DF221001B708E /* SignUpViewController.swift */,
-				CA016D272B04CB860066FBE7 /* Extensions.swift */,
-				CA016D442B05FC510066FBE7 /* FirebaseStorageManager.swift */,
-				CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */,
+				CA795B292B300C8300D5584E /* LoginSignupPage */,
+				CA795B2A2B300CBB00D5584E /* Models */,
 				CA016D572B074C180066FBE7 /* MyClosetPage */,
 				CA3B0FAF2B08DE70001B708E /* Doll page */,
 				CA016D292B04CB880066FBE7 /* HomePage */,
@@ -189,9 +224,15 @@
 				CA016D2B2B04CB880066FBE7 /* HomePageViewController.swift */,
 				CA016D2A2B04CB880066FBE7 /* HomePageTableCell.swift */,
 				CA016D3C2B04F36B0066FBE7 /* DetailPageViewController.swift */,
+				CA795B372B31A08D00D5584E /* EditPostViewController.swift */,
+				CA795B182B21CACB00D5584E /* FriendList.swift */,
+				CA795B052B1980F200D5584E /* DetailPageCommentCell.swift */,
+				CA795B072B19818800D5584E /* DetailPageInputCommentView.swift */,
 				CA016D552B0729C00066FBE7 /* DetailPageCell.swift */,
 				CA016D3E2B05AF030066FBE7 /* NewPostViewController.swift */,
 				CA016D422B05BF120066FBE7 /* NewPostSecondStepViewController.swift */,
+				CA795B202B273E7A00D5584E /* MineDollChooseViewController.swift */,
+				CA795B1E2B26EE7C00D5584E /* ImportFromClosetViewController.swift */,
 				CA016D402B05B76C0066FBE7 /* NewPostCell.swift */,
 				CAF701112B11E7A00053B12B /* SearchViewController.swift */,
 				CAF701132B1222440053B12B /* NotificationViewController.swift */,
@@ -215,11 +256,12 @@
 			isa = PBXGroup;
 			children = (
 				CA3B0FB42B0B1CD2001B708E /* DollModel.swift */,
-				CA3B0FB02B08DE8B001B708E /* DollPageViewController.swift */,
 				CA3B0FBC2B0C6C35001B708E /* ChangeClothesViewController.swift */,
-				CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */,
+				CA795B1A2B244A7800D5584E /* HairDollPageViewController.swift */,
+				CA3B0FB02B08DE8B001B708E /* TopsDollPageViewController.swift */,
 				CA3B0FB82B0B4BC4001B708E /* BottomChosenViewController.swift */,
 				CA61D5C42B15BC870028FB39 /* AccessoriesChosenViewController.swift */,
+				CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */,
 				CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */,
 				CA61D5C02B14873A0028FB39 /* MineDollViewController.swift */,
 				CA61D5C22B148B000028FB39 /* MineDollDetailViewController.swift */,
@@ -231,12 +273,55 @@
 			isa = PBXGroup;
 			children = (
 				CA519DF92B0EEF5E00892AC4 /* ProfileViewController.swift */,
+				CA795B0A2B19F3CB00D5584E /* MyProfileViewController.swift */,
 				CA61D5C62B17422C0028FB39 /* SavedViewController.swift */,
 				CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */,
 				CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */,
 				CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */,
+				CA795B302B30231B00D5584E /* EditProfileMVVM */,
+				CA795B262B2FF6AB00D5584E /* RelationshipListMVVM */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		CA795B262B2FF6AB00D5584E /* RelationshipListMVVM */ = {
+			isa = PBXGroup;
+			children = (
+				CA795B272B2FF6E800D5584E /* RelationshipListView.swift */,
+				CA795B242B2FF68D00D5584E /* RelationshipListViewModel.swift */,
+			);
+			path = RelationshipListMVVM;
+			sourceTree = "<group>";
+		};
+		CA795B292B300C8300D5584E /* LoginSignupPage */ = {
+			isa = PBXGroup;
+			children = (
+				CA3B0FBE2B0DEA99001B708E /* LogInViewController.swift */,
+				CA795B032B1888D200D5584E /* AppleLoginSetProfileViewController.swift */,
+				CA3B0FC02B0DF221001B708E /* SignUpViewController.swift */,
+			);
+			path = LoginSignupPage;
+			sourceTree = "<group>";
+		};
+		CA795B2A2B300CBB00D5584E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				CA016D272B04CB860066FBE7 /* Extensions.swift */,
+				CA016D442B05FC510066FBE7 /* FirebaseStorageManager.swift */,
+				CA795B0C2B1B263C00D5584E /* FirebaseStorageManager2.swift */,
+				CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */,
+				CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		CA795B302B30231B00D5584E /* EditProfileMVVM */ = {
+			isa = PBXGroup;
+			children = (
+				CA795B332B30235100D5584E /* EditProfileView.swift */,
+				CA795B352B30235E00D5584E /* EditProfileViewModel.swift */,
+			);
+			path = EditProfileMVVM;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -251,6 +336,7 @@
 				CA016D0A2B04C93D0066FBE7 /* Frameworks */,
 				CA016D0B2B04C93D0066FBE7 /* Resources */,
 				E3A782220BE03FC6CBA2C67A /* [CP] Embed Pods Frameworks */,
+				CA795B092B19C71500D5584E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -264,6 +350,9 @@
 				CA016D4D2B05FDD50066FBE7 /* FirebaseFirestore */,
 				CA016D4F2B05FDD50066FBE7 /* FirebaseFirestoreSwift */,
 				CA016D512B05FDD50066FBE7 /* FirebaseStorage */,
+				CA795B0E2B1C716300D5584E /* FirebaseMessaging */,
+				CA795B132B205D6800D5584E /* FirebaseCrashlytics */,
+				CA795B152B205D8B00D5584E /* FirebaseAnalyticsSwift */,
 			);
 			productName = MyCloset;
 			productReference = CA016D0D2B04C93D0066FBE7 /* MyCloset.app */;
@@ -320,6 +409,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		CA795B092B19C71500D5584E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/SwiftLint/swiftlint\"\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
 		E3A782220BE03FC6CBA2C67A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -367,20 +478,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				CAF701122B11E7A00053B12B /* SearchViewController.swift in Sources */,
+				CA795B042B1888D200D5584E /* AppleLoginSetProfileViewController.swift in Sources */,
 				CA016D362B04CB8D0066FBE7 /* AppDelegate.swift in Sources */,
+				CA795B1F2B26EE7C00D5584E /* ImportFromClosetViewController.swift in Sources */,
 				CA016D5D2B07691A0066FBE7 /* AddMyClothesViewController.swift in Sources */,
 				CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */,
 				CA3B0FB72B0B2053001B708E /* TopsChosenViewController.swift in Sources */,
 				CA3B0FC12B0DF221001B708E /* SignUpViewController.swift in Sources */,
 				CA519DFA2B0EEF5E00892AC4 /* ProfileViewController.swift in Sources */,
+				CA795B192B21CACB00D5584E /* FriendList.swift in Sources */,
 				CA016D342B04CB8D0066FBE7 /* HomePageTableCell.swift in Sources */,
 				CA016D392B04CB8D0066FBE7 /* SceneDelegate.swift in Sources */,
+				CA795B0D2B1B263C00D5584E /* FirebaseStorageManager2.swift in Sources */,
+				CA795B252B2FF68D00D5584E /* RelationshipListViewModel.swift in Sources */,
+				CA795B1B2B244A7900D5584E /* HairDollPageViewController.swift in Sources */,
 				CA61D5C52B15BC870028FB39 /* AccessoriesChosenViewController.swift in Sources */,
+				CA795B122B1F0B5800D5584E /* FirebaseStorageManager3.swift in Sources */,
+				CA795B342B30235200D5584E /* EditProfileView.swift in Sources */,
 				CA016D352B04CB8D0066FBE7 /* HomePageViewController.swift in Sources */,
 				CA016D5B2B0758E40066FBE7 /* SegmentView.swift in Sources */,
 				CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */,
 				CA3B0FB92B0B4BC4001B708E /* BottomChosenViewController.swift in Sources */,
-				CA3B0FB12B08DE8B001B708E /* DollPageViewController.swift in Sources */,
+				CA3B0FB12B08DE8B001B708E /* TopsDollPageViewController.swift in Sources */,
+				CA795B282B2FF6E800D5584E /* RelationshipListView.swift in Sources */,
 				CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */,
 				CA3B0FB32B09CF76001B708E /* DollPageCVCell.swift in Sources */,
 				CAF701142B1222440053B12B /* NotificationViewController.swift in Sources */,
@@ -388,18 +508,24 @@
 				CA016D3F2B05AF030066FBE7 /* NewPostViewController.swift in Sources */,
 				CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */,
 				CA016D592B074C4B0066FBE7 /* MyClosetPageViewController.swift in Sources */,
+				CA795B212B273E7A00D5584E /* MineDollChooseViewController.swift in Sources */,
 				CAF701162B1346E90053B12B /* TopRankingViewController.swift in Sources */,
 				CA3B0FBD2B0C6C35001B708E /* ChangeClothesViewController.swift in Sources */,
 				CABCC7CC2B0F3EB700FB38C5 /* EditProfileViewController.swift in Sources */,
 				CA016D452B05FC510066FBE7 /* FirebaseStorageManager.swift in Sources */,
 				CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */,
+				CA795B382B31A08D00D5584E /* EditPostViewController.swift in Sources */,
 				CA016D322B04CB8D0066FBE7 /* Extensions.swift in Sources */,
 				CA016D1B2B04C93D0066FBE7 /* MyCloset.xcdatamodeld in Sources */,
+				CA795B362B30235E00D5584E /* EditProfileViewModel.swift in Sources */,
+				CA795B0B2B19F3CB00D5584E /* MyProfileViewController.swift in Sources */,
 				CA3B0FBF2B0DEA99001B708E /* LogInViewController.swift in Sources */,
 				CA61D5C72B17422C0028FB39 /* SavedViewController.swift in Sources */,
 				CA61D5C32B148B000028FB39 /* MineDollDetailViewController.swift in Sources */,
+				CA795B082B19818800D5584E /* DetailPageInputCommentView.swift in Sources */,
 				CA016D412B05B76C0066FBE7 /* NewPostCell.swift in Sources */,
 				CA3B0FB52B0B1CD2001B708E /* DollModel.swift in Sources */,
+				CA795B062B1980F200D5584E /* DetailPageCommentCell.swift in Sources */,
 				CA016D562B0729C00066FBE7 /* DetailPageCell.swift in Sources */,
 				CA61D5C12B14873A0028FB39 /* MineDollViewController.swift in Sources */,
 			);
@@ -531,25 +657,33 @@
 				CODE_SIGN_ENTITLEMENTS = MyCloset/MyCloset.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = N4C7YMWND2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyCloset/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = E.Mode;
+				INFOPLIST_KEY_NSCameraUsageDescription = "允許使用相機來記錄衣服及穿搭";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "to let you export images to photo library";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cindyhohua.MyCloset;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -562,25 +696,33 @@
 				CODE_SIGN_ENTITLEMENTS = MyCloset/MyCloset.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = N4C7YMWND2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyCloset/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = E.Mode;
+				INFOPLIST_KEY_NSCameraUsageDescription = "允許使用相機來記錄衣服及穿搭";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "to let you export images to photo library";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cindyhohua.MyCloset;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -648,6 +790,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CA016D462B05FDD50066FBE7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		CA795B0E2B1C716300D5584E /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA016D462B05FDD50066FBE7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		CA795B132B205D6800D5584E /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA016D462B05FDD50066FBE7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		CA795B152B205D8B00D5584E /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA016D462B05FDD50066FBE7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 

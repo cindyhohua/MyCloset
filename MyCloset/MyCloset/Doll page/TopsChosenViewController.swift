@@ -10,6 +10,7 @@ import SnapKit
 
 class TopsChosenViewController: UIViewController {
     var cloth: ClothesStruct?
+    var delegate: EditToChangeCloth?
     private var button1 = UIButton()
     private var button2 = UIButton()
     private var button3 = UIButton()
@@ -67,12 +68,14 @@ class TopsChosenViewController: UIViewController {
     }
     @objc func go1() {
         let secondViewController = PaperDollTopsViewController()
+        secondViewController.delegate = delegate
         secondViewController.cloth = cloth
         navigationController?.pushViewController(secondViewController, animated: true)
     }
     
     @objc func go2() {
         let secondViewController = PaperDollTopsViewController()
+        secondViewController.delegate = delegate
         secondViewController.cloth = cloth
         secondViewController.neckline = neckline2
         secondViewController.hem = hem2
@@ -83,6 +86,7 @@ class TopsChosenViewController: UIViewController {
     
     @objc func go3() {
         let secondViewController = PaperDollTopsViewController()
+        secondViewController.delegate = delegate
         secondViewController.cloth = cloth
         secondViewController.neckline = neckline3
         secondViewController.hem = hem3
