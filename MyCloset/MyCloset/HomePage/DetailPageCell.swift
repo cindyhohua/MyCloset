@@ -281,6 +281,7 @@ class DetailPageImageCell: UITableViewCell {
 
 class DetailPageCommentCell: UITableViewCell {
     var contentLabel = UILabel()
+    var timeLabel = UILabel()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupConstraints()
@@ -294,16 +295,29 @@ class DetailPageCommentCell: UITableViewCell {
         contentView.addSubview(contentLabel)
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView).offset(16)
-            make.leading.equalTo(contentView).offset(32)
-            make.trailing.equalTo(contentView).offset(-32)
+            make.leading.equalTo(contentView).offset(16)
+            make.trailing.equalTo(contentView).offset(-16)
+        }
+        contentView.addSubview(timeLabel)
+        timeLabel.snp.makeConstraints { make in
+            make.top.equalTo(contentLabel.snp.bottom).offset(16)
+            make.leading.equalTo(contentView).offset(16)
+            make.trailing.equalTo(contentView).offset(-16)
             make.bottom.equalTo(contentView).offset(-16)
         }
     }
     
-    func configure(content: String) {
+    func configure(content: String, time: Double) {
         contentLabel.text = content
         contentLabel.numberOfLines = 0
         contentLabel.font = UIFont.roundedFont(ofSize: 20)
+        let date = Date(timeIntervalSince1970: time)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd HH:mm"
+        let formattedDate = dateFormatter.string(from: date)
+        timeLabel.text = formattedDate
+        timeLabel.textColor = .lightGray
+        timeLabel.font = UIFont.roundedFont(ofSize: 15)
     }
     
 }
@@ -315,8 +329,8 @@ class DetailPageProductCell: UITableViewCell {
         productLabel.numberOfLines = 0
         productLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView).offset(16)
-            make.leading.equalTo(contentView).offset(32)
-            make.trailing.equalTo(contentView).offset(-32)
+            make.leading.equalTo(contentView).offset(16)
+            make.trailing.equalTo(contentView).offset(-16)
             make.bottom.equalTo(contentView)
         }
         var text = ""

@@ -20,9 +20,6 @@ class EditProfileViewController: UIViewController {
     var uploadImageButton = UIButton()
     var nameTextField = UITextField()
     var littleWordsTextField = UITextField()
-
-//    var heightTextField = UITextField()
-//    var weightTextField = UITextField()
     
     var privateOrNotButton = UIButton()
     var relationshipButton = UIButton()
@@ -92,26 +89,6 @@ class EditProfileViewController: UIViewController {
             make.height.equalTo(40)
         }
         
-//        view.addSubview(heightTextField)
-//        heightTextField.borderStyle = .roundedRect
-//        heightTextField.placeholder = "height"
-//        heightTextField.snp.makeConstraints { make in
-//            make.centerX.equalToSuperview()
-//            make.top.equalTo(littleWordsTextField.snp.bottom).offset(20)
-//            make.width.equalTo(200)
-//            make.height.equalTo(40)
-//        }
-        
-//        view.addSubview(weightTextField)
-//        weightTextField.borderStyle = .roundedRect
-//        weightTextField.placeholder = "weight"
-//        weightTextField.snp.makeConstraints { make in
-//            make.centerX.equalToSuperview()
-//            make.top.equalTo(heightTextField.snp.bottom).offset(20)
-//            make.width.equalTo(200)
-//            make.height.equalTo(40)
-//        }
-        
         view.addSubview(deleteAccountButton)
         deleteAccountButton.setTitle("刪除帳號", for: .normal)
         deleteAccountButton.addTarget(self, action: #selector(deleteAccount), for: .touchUpInside)
@@ -150,23 +127,19 @@ class EditProfileViewController: UIViewController {
     }
     
     @objc func relationshipButtonTapped() {
-        let secondVC = RelationshipListViewController()
+        let secondVC = RelationshipListView()
         FirebaseStorageManager.shared.getAuth { author in
-            secondVC.fetchData(friendList: author.following ?? [])
+            secondVC.viewModel.fetchData(friendList: author.following ?? [])
             self.navigationController?.pushViewController(secondVC, animated: true)
         }
     }
     
     @objc func deleteAccount() {
-        // 创建UIAlertController，类型为.alert
         let alert = UIAlertController(title: "Delete Account", message: "確定要刪除您的帳戶吗？此操作不可恢復。", preferredStyle: .alert)
         
-        // 添加取消按钮
         alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
         
-        // 添加确认删除的按钮
         alert.addAction(UIAlertAction(title: "刪除", style: .destructive, handler: { [weak self] _ in
-            // 在这里放置删除账户的代码
             FirebaseStorageManager.shared.deleteUser { result in
                 switch result {
                 case .success:
@@ -176,7 +149,6 @@ class EditProfileViewController: UIViewController {
                             if let error = error {
                                 print(error)
                             } else {
-                                // 删除成功后的逻辑处理
                                 self?.dismiss(animated: true) {
                                     if let tabBarController = self?.tabBarController {
                                         tabBarController.selectedIndex = 0
@@ -198,34 +170,26 @@ class EditProfileViewController: UIViewController {
     }
 
     @objc func logoutButtonTapped() {
-        // 创建一个警告控制器
         let alertController = UIAlertController(title: "登出", message: "您確定要登出吗？", preferredStyle: .alert)
         
-        // 添加一个取消操作
         alertController.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
         
-        // 添加一个确认操作
         alertController.addAction(UIAlertAction(title: "確認", style: .destructive, handler: { [weak self] (_) in
-            // 尝试登出
             do {
                 try Auth.auth().signOut()
-                // 成功登出后的处理
                 self?.dismiss(animated: true) {
                     if let tabBarController = self?.tabBarController {
                         tabBarController.selectedIndex = 0
                     }
                 }
             } catch {
-                // 登出失败时打印错误
                 print("Error signing out: \(error.localizedDescription)")
             }
         }))
         
-        // 展示警告控制器
         present(alertController, animated: true)
     }
 
-    
     @objc func uploadImageButtonTapped() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
@@ -277,8 +241,6 @@ class EditProfileViewController: UIViewController {
         }
         nameTextField.text = author?.name
         littleWordsTextField.text = author?.littleWords
-        //        heightTextField.text = author?.height
-        //        weightTextField.text = author?.weight
     }
 }
 

@@ -100,12 +100,12 @@ class MineDollDetailViewController: UIViewController, UITableViewDelegate, UITab
             return
         }
         
-        let activityViewController = UIActivityViewController(activityItems: [imageToExport], applicationActivities: nil)
+        let activityViewController = UIActivityViewController(
+            activityItems: [imageToExport], applicationActivities: nil)
         activityViewController.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         present(activityViewController, animated: true, completion: nil)
     }
-    
-    
+     
     @objc func deleteButtonTapped() {
         if let uid = mineDoll?.name {
             CoreDataManager.shared.deleteMine(uuid: uid)
@@ -153,8 +153,6 @@ class MineDollDetailViewController: UIViewController, UITableViewDelegate, UITab
     }
 }
 
-import UIKit
-
 class MineDollClothesViewCell: UITableViewCell {
 
     let label = UILabel()
@@ -176,5 +174,3 @@ class MineDollClothesViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-

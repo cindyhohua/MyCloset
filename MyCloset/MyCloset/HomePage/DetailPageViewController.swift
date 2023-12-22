@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import Kingfisher
 class DetailPageViewController: UIViewController {
     private var saveButton: UIBarButtonItem!
     var article: Article? {
@@ -76,6 +77,10 @@ class DetailPageViewController: UIViewController {
             image: UIImage(systemName: "trash.fill"),
             style: .plain, target: self, action: #selector(deleteButtonTapped))
         deleteButton.tintColor = UIColor.lightBrown()
+        let editButton = UIBarButtonItem(
+            image: UIImage(systemName: "pencil.circle"),
+            style: .plain, target: self, action: #selector(editButtonTapped))
+        editButton.tintColor = UIColor.lightBrown()
         let leftButton = UIBarButtonItem(
             image: UIImage(systemName: "chevron.backward.circle"),
             style: .plain, target: self, action: #selector(backButtonTapped))
@@ -92,7 +97,7 @@ class DetailPageViewController: UIViewController {
         flexibleSpace.width = 20
         navigationItem.leftBarButtonItems = [leftButton, flexibleSpace, rightButton]
         if article?.author.id == Auth.auth().currentUser?.uid {
-            navigationItem.rightBarButtonItems = [deleteButton, reportButton, saveButton]
+            navigationItem.rightBarButtonItems = [editButton, deleteButton, reportButton, saveButton]
         } else {
             navigationItem.rightBarButtonItems = [reportButton, saveButton]
         }
@@ -100,6 +105,13 @@ class DetailPageViewController: UIViewController {
             NSAttributedString.Key.foregroundColor: UIColor.brown,
             NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         setupTableView()
+    }
+    
+    @objc func editButtonTapped() {
+        let secondVC = NewPostSecondStepViewController()
+        secondVC
+        secondVC.products = article?.productList ?? []
+        self.navigationController?.pushViewController(secondVC, animated: true)
     }
     
     @objc func deleteButtonTapped() {
@@ -288,7 +300,8 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView,
+    func tableView(
+        _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             switch indexPath.row {
@@ -309,7 +322,10 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
                 }
                 cell.isUserInteractionEnabled = true
                 cell.labelTexts = article?.productList
-                cell.configure(with: article?.imageURL ?? "", dollImage: article?.dollImageURL ?? "", buttonPosition: position)
+                cell.configure(
+                    with: article?.imageURL ?? "",
+                    dollImage: article?.dollImageURL ?? "",
+                    buttonPosition: position)
                 cell.postId = article?.id
                 cell.selectionStyle = .none
                 cell.authorId = article?.author.id
@@ -321,7 +337,7 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
                     for: indexPath) as? DetailPageCommentCell else {
                     fatalError("Cant find cell")
                 }
-                cell.configure(content: article?.content ?? "")
+                cell.configure(content: article?.content ?? "", time: article?.createdTime ?? 0)
                 cell.selectionStyle = .none
                 return cell
             default:

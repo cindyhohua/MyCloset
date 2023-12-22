@@ -62,7 +62,9 @@ class DetailPageInputCommentView: UIView {
         guard let comment = commentTextField.text, !comment.isEmpty else {
             return
         }
-        FirebaseStorageManager.shared.addComment(postId: self.postId ?? "", comment: comment, posterId: posterId ?? "") { error in
+        FirebaseStorageManager.shared.addComment(
+            postId: self.postId ?? "", comment: comment,
+            posterId: posterId ?? "") { error in
             if let error = error {
                 print(error.localizedDescription)
             }

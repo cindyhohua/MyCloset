@@ -59,9 +59,13 @@
 		CA795B162B205D8B00D5584E /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CA795B152B205D8B00D5584E /* FirebaseAnalyticsSwift */; };
 		CA795B192B21CACB00D5584E /* FriendList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B182B21CACB00D5584E /* FriendList.swift */; };
 		CA795B1B2B244A7900D5584E /* HairDollPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B1A2B244A7800D5584E /* HairDollPageViewController.swift */; };
-		CA795B1D2B26B3A200D5584E /* RelationshipListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B1C2B26B3A200D5584E /* RelationshipListViewController.swift */; };
 		CA795B1F2B26EE7C00D5584E /* ImportFromClosetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B1E2B26EE7C00D5584E /* ImportFromClosetViewController.swift */; };
 		CA795B212B273E7A00D5584E /* MineDollChooseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B202B273E7A00D5584E /* MineDollChooseViewController.swift */; };
+		CA795B252B2FF68D00D5584E /* RelationshipListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B242B2FF68D00D5584E /* RelationshipListViewModel.swift */; };
+		CA795B282B2FF6E800D5584E /* RelationshipListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B272B2FF6E800D5584E /* RelationshipListView.swift */; };
+		CA795B342B30235200D5584E /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B332B30235100D5584E /* EditProfileView.swift */; };
+		CA795B362B30235E00D5584E /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B352B30235E00D5584E /* EditProfileViewModel.swift */; };
+		CA795B382B31A08D00D5584E /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B372B31A08D00D5584E /* EditPostViewController.swift */; };
 		CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */; };
 		CABCC7CC2B0F3EB700FB38C5 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */; };
 		CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */; };
@@ -120,9 +124,13 @@
 		CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager3.swift; sourceTree = "<group>"; };
 		CA795B182B21CACB00D5584E /* FriendList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendList.swift; sourceTree = "<group>"; };
 		CA795B1A2B244A7800D5584E /* HairDollPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HairDollPageViewController.swift; sourceTree = "<group>"; };
-		CA795B1C2B26B3A200D5584E /* RelationshipListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipListViewController.swift; sourceTree = "<group>"; };
 		CA795B1E2B26EE7C00D5584E /* ImportFromClosetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFromClosetViewController.swift; sourceTree = "<group>"; };
 		CA795B202B273E7A00D5584E /* MineDollChooseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineDollChooseViewController.swift; sourceTree = "<group>"; };
+		CA795B242B2FF68D00D5584E /* RelationshipListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipListViewModel.swift; sourceTree = "<group>"; };
+		CA795B272B2FF6E800D5584E /* RelationshipListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipListView.swift; sourceTree = "<group>"; };
+		CA795B332B30235100D5584E /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		CA795B352B30235E00D5584E /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
+		CA795B372B31A08D00D5584E /* EditPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
 		CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAuthCollectionViewCell.swift; sourceTree = "<group>"; };
 		CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -196,14 +204,8 @@
 				CA016D2C2B04CB880066FBE7 /* AppDelegate.swift */,
 				CA795B102B1C816200D5584E /* push.apns */,
 				CA016D2F2B04CB8B0066FBE7 /* SceneDelegate.swift */,
-				CA3B0FBE2B0DEA99001B708E /* LogInViewController.swift */,
-				CA795B032B1888D200D5584E /* AppleLoginSetProfileViewController.swift */,
-				CA3B0FC02B0DF221001B708E /* SignUpViewController.swift */,
-				CA016D272B04CB860066FBE7 /* Extensions.swift */,
-				CA016D442B05FC510066FBE7 /* FirebaseStorageManager.swift */,
-				CA795B0C2B1B263C00D5584E /* FirebaseStorageManager2.swift */,
-				CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */,
-				CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */,
+				CA795B292B300C8300D5584E /* LoginSignupPage */,
+				CA795B2A2B300CBB00D5584E /* Models */,
 				CA016D572B074C180066FBE7 /* MyClosetPage */,
 				CA3B0FAF2B08DE70001B708E /* Doll page */,
 				CA016D292B04CB880066FBE7 /* HomePage */,
@@ -222,6 +224,7 @@
 				CA016D2B2B04CB880066FBE7 /* HomePageViewController.swift */,
 				CA016D2A2B04CB880066FBE7 /* HomePageTableCell.swift */,
 				CA016D3C2B04F36B0066FBE7 /* DetailPageViewController.swift */,
+				CA795B372B31A08D00D5584E /* EditPostViewController.swift */,
 				CA795B182B21CACB00D5584E /* FriendList.swift */,
 				CA795B052B1980F200D5584E /* DetailPageCommentCell.swift */,
 				CA795B072B19818800D5584E /* DetailPageInputCommentView.swift */,
@@ -275,9 +278,50 @@
 				CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */,
 				CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */,
 				CABCC7CB2B0F3EB700FB38C5 /* EditProfileViewController.swift */,
-				CA795B1C2B26B3A200D5584E /* RelationshipListViewController.swift */,
+				CA795B302B30231B00D5584E /* EditProfileMVVM */,
+				CA795B262B2FF6AB00D5584E /* RelationshipListMVVM */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		CA795B262B2FF6AB00D5584E /* RelationshipListMVVM */ = {
+			isa = PBXGroup;
+			children = (
+				CA795B272B2FF6E800D5584E /* RelationshipListView.swift */,
+				CA795B242B2FF68D00D5584E /* RelationshipListViewModel.swift */,
+			);
+			path = RelationshipListMVVM;
+			sourceTree = "<group>";
+		};
+		CA795B292B300C8300D5584E /* LoginSignupPage */ = {
+			isa = PBXGroup;
+			children = (
+				CA3B0FBE2B0DEA99001B708E /* LogInViewController.swift */,
+				CA795B032B1888D200D5584E /* AppleLoginSetProfileViewController.swift */,
+				CA3B0FC02B0DF221001B708E /* SignUpViewController.swift */,
+			);
+			path = LoginSignupPage;
+			sourceTree = "<group>";
+		};
+		CA795B2A2B300CBB00D5584E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				CA016D272B04CB860066FBE7 /* Extensions.swift */,
+				CA016D442B05FC510066FBE7 /* FirebaseStorageManager.swift */,
+				CA795B0C2B1B263C00D5584E /* FirebaseStorageManager2.swift */,
+				CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */,
+				CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		CA795B302B30231B00D5584E /* EditProfileMVVM */ = {
+			isa = PBXGroup;
+			children = (
+				CA795B332B30235100D5584E /* EditProfileView.swift */,
+				CA795B352B30235E00D5584E /* EditProfileViewModel.swift */,
+			);
+			path = EditProfileMVVM;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -446,14 +490,17 @@
 				CA016D342B04CB8D0066FBE7 /* HomePageTableCell.swift in Sources */,
 				CA016D392B04CB8D0066FBE7 /* SceneDelegate.swift in Sources */,
 				CA795B0D2B1B263C00D5584E /* FirebaseStorageManager2.swift in Sources */,
+				CA795B252B2FF68D00D5584E /* RelationshipListViewModel.swift in Sources */,
 				CA795B1B2B244A7900D5584E /* HairDollPageViewController.swift in Sources */,
 				CA61D5C52B15BC870028FB39 /* AccessoriesChosenViewController.swift in Sources */,
 				CA795B122B1F0B5800D5584E /* FirebaseStorageManager3.swift in Sources */,
+				CA795B342B30235200D5584E /* EditProfileView.swift in Sources */,
 				CA016D352B04CB8D0066FBE7 /* HomePageViewController.swift in Sources */,
 				CA016D5B2B0758E40066FBE7 /* SegmentView.swift in Sources */,
 				CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */,
 				CA3B0FB92B0B4BC4001B708E /* BottomChosenViewController.swift in Sources */,
 				CA3B0FB12B08DE8B001B708E /* TopsDollPageViewController.swift in Sources */,
+				CA795B282B2FF6E800D5584E /* RelationshipListView.swift in Sources */,
 				CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */,
 				CA3B0FB32B09CF76001B708E /* DollPageCVCell.swift in Sources */,
 				CAF701142B1222440053B12B /* NotificationViewController.swift in Sources */,
@@ -467,8 +514,10 @@
 				CABCC7CC2B0F3EB700FB38C5 /* EditProfileViewController.swift in Sources */,
 				CA016D452B05FC510066FBE7 /* FirebaseStorageManager.swift in Sources */,
 				CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */,
+				CA795B382B31A08D00D5584E /* EditPostViewController.swift in Sources */,
 				CA016D322B04CB8D0066FBE7 /* Extensions.swift in Sources */,
 				CA016D1B2B04C93D0066FBE7 /* MyCloset.xcdatamodeld in Sources */,
+				CA795B362B30235E00D5584E /* EditProfileViewModel.swift in Sources */,
 				CA795B0B2B19F3CB00D5584E /* MyProfileViewController.swift in Sources */,
 				CA3B0FBF2B0DEA99001B708E /* LogInViewController.swift in Sources */,
 				CA61D5C72B17422C0028FB39 /* SavedViewController.swift in Sources */,
@@ -478,7 +527,6 @@
 				CA3B0FB52B0B1CD2001B708E /* DollModel.swift in Sources */,
 				CA795B062B1980F200D5584E /* DetailPageCommentCell.swift in Sources */,
 				CA016D562B0729C00066FBE7 /* DetailPageCell.swift in Sources */,
-				CA795B1D2B26B3A200D5584E /* RelationshipListViewController.swift in Sources */,
 				CA61D5C12B14873A0028FB39 /* MineDollViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
