@@ -5,14 +5,10 @@
 //  Created by 賀華 on 2023/12/18.
 //
 
-// import UIKit
-
 class EditProfileViewModel {
     var author: Author? {
         didSet {
-            if let auth = author {
-                setUpAuthor(author: auth)
-            }
+            setUpAuthor(author: author!)
         }
     }
     var didSetAuthor: (() -> Void)?

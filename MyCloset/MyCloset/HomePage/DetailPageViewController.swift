@@ -242,7 +242,7 @@ class DetailPageViewController: UIViewController {
     }
     
     @objc func profileButtonTapped() {
-        let secondViewController = ProfileViewController()
+        let secondViewController = OthersProfileViewController()
         FirebaseStorageManager.shared.getSpecificAuth(id: article?.author.id ?? "") { result in
             switch result {
             case .success(let author):
@@ -381,7 +381,7 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
                 blocked += author.blockedByUsers ?? []
                 if let authId = self.article?.comment[indexPath.row].authId, !blocked.contains(authId) {
                     print(authId)
-                    let secondVC = ProfileViewController()
+                    let secondVC = OthersProfileViewController()
                     FirebaseStorageManager.shared.getSpecificAuth(id: authId) { result in
                         switch result {
                         case .success(let author):

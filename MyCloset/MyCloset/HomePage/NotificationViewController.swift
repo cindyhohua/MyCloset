@@ -219,7 +219,7 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            let secondViewController = ProfileViewController()
+            let secondViewController = OthersProfileViewController()
             FirebaseStorageManager.shared.getSpecificAuth(id: pendingAuthors[indexPath.row].id) { result in
                 switch result {
                 case .success(let author):
@@ -231,7 +231,7 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
             }
         } else {
             if self.notifications?[indexPath.row].postId == "" {
-                let secondViewController = ProfileViewController()
+                let secondViewController = OthersProfileViewController()
                 FirebaseStorageManager.shared.getSpecificAuth(id: self.notifications?[indexPath.row].authId ?? "")
                 { result in
                     switch result {

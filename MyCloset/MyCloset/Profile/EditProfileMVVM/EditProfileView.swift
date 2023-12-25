@@ -28,6 +28,7 @@ class EditProfileView: UIViewController {
     }
     
     func bindViewModel() {
+        print("bindViewModel")
         viewModel.didSetAuthor = { [weak self] in
             do {
                 print("qqq3", self?.viewModel.author)

@@ -134,7 +134,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let secondViewController = ProfileViewController()
+        let secondViewController = OthersProfileViewController()
         FirebaseStorageManager.shared.getSpecificAuth(id: searchResults[indexPath.row].id) { result in
             switch result {
             case .success(let author):

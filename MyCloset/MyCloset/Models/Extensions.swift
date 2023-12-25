@@ -9,7 +9,9 @@ import UIKit
 
 extension UIFont {
     class func roundedFont(ofSize size: CGFloat) -> UIFont {
-        return UIFont(descriptor: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .largeTitle).withDesign(.rounded)!, size: size)
+        return UIFont(
+            descriptor: UIFontDescriptor.preferredFontDescriptor(
+                withTextStyle: .largeTitle).withDesign(.rounded)!, size: size)
         }
 }
 

@@ -8,26 +8,6 @@
 import Foundation
 import CoreData
 
-struct ClothesStruct {
-    var category: String?
-    var subcategory: String?
-    var item: String?
-    var price: String?
-    var store: String?
-    var content: String?
-    var image: Data?
-    var cloth: [String]?
-    var clothB: [String]?
-    var color: [CGFloat]?
-    var draw: Data?
-}
-
-struct HairStruct {
-    var hair: [String]
-    var hairB: [String]
-    var color: [CGFloat]
-}
-
 class CoreDataManager {
 
     static let shared = CoreDataManager()
@@ -169,7 +149,6 @@ class CoreDataManager {
                 newClothes.subcategory = subcategory
                 newClothes.cloth = clothArray as NSArray
                 newClothes.clothB = clothBArray as NSArray
-                
                 let colorNSArray = color.map { NSNumber(value: Float($0)) }
                 newClothes.color = colorNSArray as NSArray
                 newClothes.draw = draw
@@ -256,19 +235,6 @@ class CoreDataManager {
             print("Error fetching Mine data for deletion: \(error.localizedDescription)")
         }
     }
-
-    // MARK: - Update Data
-
-    func updateClothes(_ clothes: Clothes) {
-        saveContext()
-    }
-
-    // MARK: - Delete Data
-
-    func deleteClothes(_ clothes: Clothes) {
-        managedObjectContext.delete(clothes)
-        saveContext()
-    }
     
     func deleteMine(uuid: String) {
         let fetchRequest: NSFetchRequest<Mine> = Mine.fetchRequest()
@@ -333,11 +299,8 @@ class CoreDataManager {
             let result = try CoreDataManager.shared.managedObjectContext.fetch(fetchRequest)
             
             if let dollHair = result.first {
-                // 轉換 NSArray 為 Swift 陣列
                 let hairArray = dollHair.hair as? [String] ?? []
                 let hairBArray = dollHair.hairB as? [String] ?? []
-                
-                // 轉換 NSArray 為 Swift 陣列
                 var colorArray: [CGFloat] = []
                 if let colorNSArray = dollHair.color as? [NSNumber] {
                     colorArray = colorNSArray.map { CGFloat($0.floatValue) }
