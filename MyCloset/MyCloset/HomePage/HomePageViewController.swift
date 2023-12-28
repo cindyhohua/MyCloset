@@ -15,17 +15,6 @@ class HomePageViewController: UIViewController {
     let tableView = UITableView()
     let createPostButton = UIButton()
     var articles: [Article] = []
-//    var token: String? {
-//        didSet {
-//            let tokenLable = UILabel()
-//            tokenLable.text = token
-//            view.addSubview(tokenLable)
-//            tokenLable.numberOfLines = 0
-//            tokenLable.snp.makeConstraints { make in
-//                make.center.leading.trailing.equalToSuperview()
-//            }
-//        }
-//    }
     
     private lazy var notificationButton: UIButton = {
         let button = UIButton(type: .custom)

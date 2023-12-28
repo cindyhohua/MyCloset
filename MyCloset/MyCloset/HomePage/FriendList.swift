@@ -74,7 +74,7 @@ class FriendListViewController: UIViewController, UITableViewDataSource, UITable
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let secondVC = ProfileViewController()
+        let secondVC = OthersProfileViewController()
         secondVC.author = friends[indexPath.row]
         self.navigationController?.pushViewController(secondVC, animated: true)
     }

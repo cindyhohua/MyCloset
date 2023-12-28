@@ -10,11 +10,6 @@ import SnapKit
 import CoreData
 import FirebaseAuth
 
-struct Section {
-    var title: String
-    var isExpanded: Bool
-    var items: [ClothesStruct]
-}
 
 class MyClosetPageViewController: UIViewController, UITabBarControllerDelegate {
     var tableView = UITableView()

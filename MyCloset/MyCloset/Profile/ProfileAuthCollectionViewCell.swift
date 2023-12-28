@@ -51,7 +51,7 @@ class ProfileAuthCollectionViewCell: UICollectionReusableView {
         let stackView = UIStackView(arrangedSubviews: [nameLabel, wordLabel])
         stackView.axis = .vertical
         stackView.alignment = .center
-        stackView.spacing = 6 // 設定 name 和 word 之間的垂直間距
+        stackView.spacing = 6 
         addSubview(stackView)
         
         profileImageView.snp.makeConstraints { make in

@@ -9,12 +9,6 @@ import UIKit
 import SnapKit
 import PencilKit
 
-struct DollCloth {
-    let outer: String
-    let bottom: String
-    let name: String
-}
-
 protocol EditToChangeCloth: AnyObject {
     func editToChangCloth(cloth: ClothesStruct)
 }

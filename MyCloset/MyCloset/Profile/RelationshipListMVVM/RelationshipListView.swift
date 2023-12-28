@@ -82,7 +82,7 @@ class RelationshipListView: UIViewController, SegmentControlDelegate {
         // Handle selection
         tableView.rx.modelSelected(Author.self)
             .subscribe(onNext: { [weak self] author in
-                let secondVC = ProfileViewController()
+                let secondVC = OthersProfileViewController()
                 secondVC.author = author
                 self?.navigationController?.pushViewController(secondVC, animated: true)
             }).disposed(by: disposeBag)

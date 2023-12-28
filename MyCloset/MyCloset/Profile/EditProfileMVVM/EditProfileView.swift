@@ -24,26 +24,38 @@ class EditProfileView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        bindViewModel()
     }
     
     func bindViewModel() {
         viewModel.didSetAuthor = { [weak self] in
-            do {
-                print("qqq3", self?.viewModel.author)
-                guard let author = self?.viewModel.author else { return }
-                if let image = author.image {
-                    self?.imageView.kf.setImage(with: URL(string: image))
-                } else {
-                    self?.imageView.image = UIImage(named: "placeHolder")
+            self?.configure()
+        }
+        
+        viewModel.didDeleteUser = { [weak self] in
+            self?.dismiss(animated: true) {
+                if let tabBarController = self?.tabBarController {
+                    tabBarController.selectedIndex = 0
                 }
-                self?.nameTextField.text = author.name
-                self?.littleWordsTextField.text = author.littleWords
-            } catch {
-                print("Error: \(error)")
             }
         }
-
+        
+        viewModel.didLogOut = { [weak self] in
+            self?.dismiss(animated: true) {
+                if let tabBarController = self?.tabBarController {
+                    tabBarController.selectedIndex = 0
+                }
+            }
+        }
+        
+        viewModel.didUpdate = { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    private func configure() {
+        imageView.kf.setImage(with: URL(string: viewModel.author?.image ?? ""))
+        nameTextField.text =  viewModel.author?.name ?? ""
+        littleWordsTextField.text =  viewModel.author?.littleWords ?? ""
     }
     
     func setup() {
@@ -143,65 +155,24 @@ class EditProfileView: UIViewController {
     
     @objc func relationshipButtonTapped() {
         let secondVC = RelationshipListView()
-        FirebaseStorageManager.shared.getAuth { author in
-            secondVC.viewModel.fetchData(friendList: author.following ?? [])
-            self.navigationController?.pushViewController(secondVC, animated: true)
-        }
+        self.navigationController?.pushViewController(secondVC, animated: true)
     }
     
     @objc func deleteAccount() {
-        let alert = UIAlertController(title: "Delete Account", message: "確定要刪除您的帳戶吗？此操作不可恢復。", preferredStyle: .alert)
-        
+        let alert = UIAlertController(title: "Delete Account", message: "確定要刪除您的帳戶嗎？此操作不可恢復。", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
-        
         alert.addAction(UIAlertAction(title: "刪除", style: .destructive, handler: { [weak self] _ in
-            FirebaseStorageManager.shared.deleteUser { result in
-                switch result {
-                case .success:
-                    print("帳戶已删除")
-                    if let currentUser = Auth.auth().currentUser {
-                        currentUser.delete { error in
-                            if let error = error {
-                                print(error)
-                            } else {
-                                self?.dismiss(animated: true) {
-                                    if let tabBarController = self?.tabBarController {
-                                        tabBarController.selectedIndex = 0
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        print("无法获取当前用户")
-                    }
-                case .failure(let error):
-                    print("删除失败: \(error)")
-                }
-            }
+            self?.viewModel.deleteUser()
         }))
-        
-        // 显示警告对话框
         self.present(alert, animated: true)
     }
 
     @objc func logoutButtonTapped() {
-        let alertController = UIAlertController(title: "登出", message: "您確定要登出吗？", preferredStyle: .alert)
-        
+        let alertController = UIAlertController(title: "登出", message: "您確定要登出嗎？", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
-        
         alertController.addAction(UIAlertAction(title: "確認", style: .destructive, handler: { [weak self] (_) in
-            do {
-                try Auth.auth().signOut()
-                self?.dismiss(animated: true) {
-                    if let tabBarController = self?.tabBarController {
-                        tabBarController.selectedIndex = 0
-                    }
-                }
-            } catch {
-                print("Error signing out: \(error.localizedDescription)")
-            }
+            self?.viewModel.logout()
         }))
-        
         present(alertController, animated: true)
     }
 
@@ -217,28 +188,14 @@ class EditProfileView: UIViewController {
     }
     
     @objc func saveButtonTapped() {
-        print("save")
         guard let name = nameTextField.text, !name.isEmpty else {
             showAlert(message: "名字不能為空")
             return
         }
-        FirebaseStorageManager.shared.uploadImageAndGetURL(imageView.image!) { [weak self] result in
-            switch result {
-            case .success(let downloadURL):
-                DispatchQueue.main.async {
-                    FirebaseStorageManager.shared.updateAuth(
-                        image: downloadURL.absoluteString,
-                        name: name,
-                        littleWords: self?.littleWordsTextField.text ?? "",
-                        weight: "",
-                        height: "") { _ in
-                            self?.navigationController?.popViewController(animated: true)
-                        }
-                }
-            case .failure(let error):
-                print("Error uploading post data to Firebase: \(error.localizedDescription)")
-            }
-        }
+        self.viewModel.updateProfile(
+            name: name,
+            littleWords: self.littleWordsTextField.text ?? "",
+            image: imageView.image!)
     }
     
     func showAlert(message: String) {
@@ -263,47 +220,3 @@ extension EditProfileView: UIImagePickerControllerDelegate, UINavigationControll
         picker.dismiss(animated: true, completion: nil)
     }
 }
-
-// import UIKit
-// import SnapKit
-//
-// class EditProfileView: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-//    
-//    private var viewModel = EditProfileViewModel()
-//
-//    // ... 其他属性保持不变
-//
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        setup()
-//        bindViewModel()
-//    }
-//
-//    func bindViewModel() {
-//        viewModel.onUpdateData = { [weak self] in
-//            self?.configure()
-//        }
-//
-//        viewModel.onShowAlert = { [weak self] title, message in
-//            self?.showAlert(title: title, message: message)
-//        }
-//
-//        viewModel.onSaveSuccess = { [weak self] in
-//            self?.navigationController?.popViewController(animated: true)
-//        }
-//    }
-//
-//    // ... 其他方法保持不变
-//
-//    @objc func saveButtonTapped() {
-//        viewModel.saveProfile(
-// name: nameTextField.text, littleWords: littleWordsTextField.text, image: imageView.image)
-//    }
-//
-//    func configure() {
-//        // 使用 viewModel.author 更新 UI
-//    }
-//
-//    // ... 其他方法保持不变
-// }
-//
