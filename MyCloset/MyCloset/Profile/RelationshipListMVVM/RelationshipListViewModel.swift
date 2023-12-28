@@ -17,6 +17,9 @@
 
     init() {
         likeAmount = friendsRelay.map { $0.count }
+        FirebaseStorageManager.shared.getAuth { author in
+            self.fetchData(friendList: author.following ?? [])
+        }
     }
 
     func fetchData(friendList: [String]) {

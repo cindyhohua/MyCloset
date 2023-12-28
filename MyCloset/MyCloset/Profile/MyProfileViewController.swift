@@ -40,6 +40,7 @@ class MyProfileViewController: ProfileViewController {
 
     @objc func setButtonTapped() {
         let secondViewController = EditProfileView()
+        secondViewController.bindViewModel()
         secondViewController.viewModel.author = self.author
         self.navigationController?.pushViewController(secondViewController, animated: true)
     }

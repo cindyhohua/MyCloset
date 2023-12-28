@@ -25,15 +25,10 @@ class SearchViewController: TopRankingViewController {
         setupSearchBar()
         setup()
         setupTableView()
-
+        collectionView.isHidden = true
         tableView.delegate = self
         tableView.dataSource = self
         searchBar.delegate = self
-        let leftButton = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.backward.circle"),
-            style: .plain, target: self, action: #selector(backButtonTapped))
-        navigationItem.leftBarButtonItem = leftButton
-        leftButton.tintColor = UIColor.lightBrown()
         let switchButton = UIBarButtonItem(
             image: UIImage(systemName: "arrow.left.arrow.right"),
             style: .plain, target: self, action: #selector(switchButtonTapped))
@@ -60,18 +55,6 @@ class SearchViewController: TopRankingViewController {
         searchBar.text = ""
         switchOrNot = !switchOrNot
     }
-    
-    override func setup() {
-        view.backgroundColor = .white
-        view.addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
-            make.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(50)
-        }
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.isHidden = true
-    }
 
     func setupSearchBar() {
         view.addSubview(searchBar)
@@ -80,7 +63,7 @@ class SearchViewController: TopRankingViewController {
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.equalTo(view.snp.leading)
             make.trailing.equalTo(view.snp.trailing)
-            make.height.equalTo(50) // Adjust the height as needed
+            make.height.equalTo(50) 
         }
     }
 
@@ -103,7 +86,7 @@ class SearchViewController: TopRankingViewController {
             }
         } else {
             FirebaseStorageManager.shared.searchStoreName(store: query) { articles in
-                self.articles = articles
+                self.savedPost = articles
                 self.collectionView.reloadData()
             }
         }

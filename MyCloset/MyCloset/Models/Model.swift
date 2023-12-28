@@ -7,6 +7,12 @@
 
 import Foundation
 // Firebase
+
+protocol DisplayableItem {
+    var id: String { get }
+    var image: String { get }
+}
+
 struct Article: Codable {
     let author: Author
     let content: String
@@ -19,6 +25,12 @@ struct Article: Codable {
     let whoLiked: [String]
     let comment: [Comment]
     let dollImageURL: String?
+}
+
+extension Article: DisplayableItem {
+    var image: String {
+        return imageURL
+    }
 }
 
 struct Comment: Codable {
@@ -71,6 +83,7 @@ struct Post: Codable {
     let image: String
     let createdTime: Double
 }
+extension Post: DisplayableItem {}
 
 struct Position: Codable {
     let xPosition: Double
@@ -107,4 +120,16 @@ struct HairStruct {
     var hair: [String]
     var hairB: [String]
     var color: [CGFloat]
+}
+
+struct Section {
+    var title: String
+    var isExpanded: Bool
+    var items: [ClothesStruct]
+}
+
+struct DollCloth {
+    let outer: String
+    let bottom: String
+    let name: String
 }
