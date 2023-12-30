@@ -7,10 +7,10 @@
 
 import UIKit
 
-protocol SegmentControlDelegate{
-    func changeToIndex(_ manager: SegmentView ,index: Int)
+protocol SegmentControlDelegate {
+    func changeToIndex(_ manager: SegmentView,index: Int)
 }
-class SegmentView: UIView{
+class SegmentView: UIView {
     private var buttonTitles: [String]!
     var buttons: [UIButton]!
     private var allView: UIView!
@@ -74,7 +74,7 @@ class SegmentView: UIView{
         configSelectorView()
     }
     
-    convenience init(frame:CGRect,buttonTitle:[String]) {
+    convenience init(frame: CGRect,buttonTitle: [String]) {
         self.init(frame: frame)
         self.buttonTitles = buttonTitle
     }
@@ -84,7 +84,7 @@ class SegmentView: UIView{
         updateView()
     }
     
-    func setButtonTitles(buttonTitles:[String]) {
+    func setButtonTitles(buttonTitles: [String]) {
         self.buttonTitles = buttonTitles
         updateView()
     }

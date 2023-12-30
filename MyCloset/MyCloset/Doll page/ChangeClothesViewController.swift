@@ -170,7 +170,7 @@ extension ChangeClothesViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     @objc func hairButtonTapped() {
-        let secondViewController = PaperDollHairViewController()
+        let secondViewController = HairViewController()
         secondViewController.delegate = self
         self.navigationController?.pushViewController(secondViewController, animated: true)
     }
@@ -249,12 +249,12 @@ extension ChangeClothesViewController: UITableViewDelegate, UITableViewDataSourc
         if let imageData = sections[indexPath.section].items[indexPath.row].image {
             if sections[indexPath.section].items[indexPath.row].cloth != nil {
                 cell.configure(
-                    with: imageData ,
+                    with: imageData,
                     name: sections[indexPath.section].items[indexPath.row].item ?? "",
                     clothOrNot: true)
             } else {
                 cell.configure(
-                    with: imageData ,
+                    with: imageData,
                     name: sections[indexPath.section].items[indexPath.row].item ?? "",
                     clothOrNot: false)
             }
@@ -269,12 +269,12 @@ extension ChangeClothesViewController: UITableViewDelegate, UITableViewDataSourc
                     secondViewController.cloth = item
                     self?.navigationController?.pushViewController(secondViewController, animated: true)
                 case "Bottoms":
-                    let secondViewController = PaperDollBottomsViewController()
+                    let secondViewController = BottomsViewController()
                     secondViewController.cloth = item
                     secondViewController.delegate = self
                     self?.navigationController?.pushViewController(secondViewController, animated: true)
                 case "Accessories":
-                    let secondViewController = PaperDollAccessoriesViewController()
+                    let secondViewController = AccessoriesViewController()
                     secondViewController.cloth = item
                     secondViewController.delegate = self
                     self?.navigationController?.pushViewController(secondViewController, animated: true)
@@ -477,8 +477,8 @@ extension ChangeClothesViewController: SegmentControlDelegate {
     }
 }
 
-extension ChangeClothesViewController: HairToChangeCloth {
-    func hairToChangCloth() {
+extension ChangeClothesViewController: EditToChangeCloth {
+    func hairToChangeCloth() {
         DispatchQueue.main.async {
             print("q1")
             self.imageViewChanging.isHidden = false
@@ -509,8 +509,8 @@ extension ChangeClothesViewController: HairToChangeCloth {
     }
 }
 
-extension ChangeClothesViewController: EditToChangeCloth {
-    func editToChangCloth(cloth: ClothesStruct) {
+extension ChangeClothesViewController {
+    func editToChangeCloth(cloth: ClothesStruct) {
         imageViewChanging.isHidden = false
         sleep(1)
         guard let name = cloth.item else { return }

@@ -10,7 +10,6 @@ import SnapKit
 import CoreData
 import FirebaseAuth
 
-
 class MyClosetPageViewController: UIViewController, UITabBarControllerDelegate {
     var tableView = UITableView()
     let buttonTitle = ["Tops", "Bottoms", "Accessories"]
@@ -156,11 +155,11 @@ extension MyClosetPageViewController : UITableViewDelegate, UITableViewDataSourc
                     secondViewController.cloth = item
                     self?.navigationController?.pushViewController(secondViewController, animated: true)
                 case "Bottoms":
-                    let secondViewController = PaperDollBottomsViewController()
+                    let secondViewController = BottomsViewController()
                     secondViewController.cloth = item
                     self?.navigationController?.pushViewController(secondViewController, animated: true)
                 case "Accessories":
-                    let secondViewController = PaperDollAccessoriesViewController()
+                    let secondViewController = AccessoriesViewController()
                     secondViewController.cloth = item
                     self?.navigationController?.pushViewController(secondViewController, animated: true)
                 default: print("default")

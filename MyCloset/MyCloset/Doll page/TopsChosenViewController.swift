@@ -17,11 +17,15 @@ class TopsChosenViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
+        let leftButton = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.backward.circle"),
+            style: .plain, target: self, action: #selector(backButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
             leftButton.tintColor = UIColor.brown
         navigationItem.title = "Choose type"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.brown, NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.brown,
+            NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         setup()
     }
     @objc func backButtonTapped() {
@@ -67,14 +71,14 @@ class TopsChosenViewController: UIViewController {
         button3.addTarget(self, action: #selector(go3), for: .touchUpInside)
     }
     @objc func go1() {
-        let secondViewController = PaperDollTopsViewController()
+        let secondViewController = BaseTopsViewController()
         secondViewController.delegate = delegate
         secondViewController.cloth = cloth
         navigationController?.pushViewController(secondViewController, animated: true)
     }
     
     @objc func go2() {
-        let secondViewController = PaperDollTopsViewController()
+        let secondViewController = BaseTopsViewController()
         secondViewController.delegate = delegate
         secondViewController.cloth = cloth
         secondViewController.neckline = neckline2
@@ -85,7 +89,7 @@ class TopsChosenViewController: UIViewController {
     }
     
     @objc func go3() {
-        let secondViewController = PaperDollTopsViewController()
+        let secondViewController = BaseTopsViewController()
         secondViewController.delegate = delegate
         secondViewController.cloth = cloth
         secondViewController.neckline = neckline3

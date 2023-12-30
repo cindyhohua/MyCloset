@@ -23,25 +23,27 @@ class MyClosetDetailPageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
-//        let likeButton = UIBarButtonItem(image: UIImage(systemName: "heart"), style: .plain, target: self, action: #selector(heartButtonTapped))
-//        likeButton.tintColor = UIColor.brown
+        let leftButton = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.backward.circle"),
+            style: .plain, target: self, action: #selector(backButtonTapped))
         navigationItem.leftBarButtonItem = leftButton
         leftButton.tintColor = UIColor.brown
-        let rightButton = UIBarButtonItem(image: UIImage(systemName: "pencil.circle"), style: .plain, target: self, action: #selector(editButtonTapped))
-        let deleteButton = UIBarButtonItem(image: UIImage(systemName: "trash"), style: .plain, target: self, action: #selector(trashButtonTapped))
+        let rightButton = UIBarButtonItem(
+            image: UIImage(systemName: "pencil.circle"),
+            style: .plain, target: self, action: #selector(editButtonTapped))
+        let deleteButton = UIBarButtonItem(
+            image: UIImage(systemName: "trash"), style: .plain,
+            target: self, action: #selector(trashButtonTapped))
         navigationItem.rightBarButtonItems = [deleteButton, rightButton]
 
         rightButton.tintColor = UIColor.brown
         deleteButton.tintColor = UIColor.brown
         navigationItem.title = (cloth?.category)! + "/" + (cloth?.subcategory)!
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.brown, NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.brown,
+            NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         setup()
     }
-
-//    @objc func heartButtonTapped() {
-//        print("like")
-//    }
     
     @objc func trashButtonTapped() {
         print("delete")
@@ -117,11 +119,11 @@ class MyClosetDetailPageViewController: UIViewController {
             secondViewController.cloth = cloth
             navigationController?.pushViewController(secondViewController, animated: true)
         case "Bottoms":
-            let secondViewController = PaperDollBottomsViewController()
+            let secondViewController = BottomsViewController()
             secondViewController.cloth = cloth
             navigationController?.pushViewController(secondViewController, animated: true)
         case "Accessories":
-            let secondViewController = PaperDollAccessoriesViewController()
+            let secondViewController = AccessoriesViewController()
             secondViewController.cloth = cloth
             navigationController?.pushViewController(secondViewController, animated: true)
         default: print("default")
@@ -129,5 +131,3 @@ class MyClosetDetailPageViewController: UIViewController {
         
     }
 }
-
-

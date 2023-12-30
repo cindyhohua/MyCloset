@@ -1,24 +1,30 @@
 //
-//  HairDollPageViewController.swift
+//  BaseDollPageViewController.swift
 //  MyCloset
 //
-//  Created by 賀華 on 2023/12/9.
+//  Created by 賀華 on 2023/12/28.
 //
 
 import UIKit
 import SnapKit
+import PencilKit
 
-protocol HairToChangeCloth: AnyObject {
-    func hairToChangCloth()
+protocol EditToChangeCloth: AnyObject {
+    func editToChangeCloth(cloth: ClothesStruct)
+    func hairToChangeCloth()
 }
 
-class PaperDollHairViewController: UIViewController{
+class BaseTopsViewController: UIViewController {
+    
+    var delegate: EditToChangeCloth?
+    
+    var cloth: ClothesStruct?
 
     var dollParts: [String: UIImageView] = [:]
     
-    var delegate: HairToChangeCloth?
-    
     var imageViewDoll = UIImageView()
+    
+    var imageViewReal = UIImageView()
 
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -29,6 +35,15 @@ class PaperDollHairViewController: UIViewController{
     }()
     
     var colorPickerView = ColorPickerView()
+    var pencilPickerView = PencilPickerView()
+    
+    var pencilSelectedColor: UIColor = .white
+    var pencilWidth: CGFloat = 5
+    let canvasView: PKCanvasView = {
+        let canvasView = PKCanvasView()
+        canvasView.backgroundColor = .clear
+        return canvasView
+    }()
     
     var outfitss: [[DollCloth]]?
     var outfits: [DollCloth]?
@@ -36,43 +51,81 @@ class PaperDollHairViewController: UIViewController{
     var selected: [DollCloth]?
     var selectedColor: UIColor = .white
     
+    var drawIndex = 4
+    var colorChosenIndex = 5
+    var cellYPos: CGFloat = 3
+    
     var segmentIndex = 0
     
-    let codeSegmented = SegmentView(
+    lazy var codeSegmented = SegmentView(
         frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44),
-        buttonTitle: ["瀏海","髮型","顏色"])
+        buttonTitle: ["領口", "袖子", "衣襬", "圖案", "手繪", "顏色"])
 
     var neckline: [DollCloth] = [
-        DollCloth(outer: "瀏海1", bottom: "B瀏海1", name: "neckline"),
-        DollCloth(outer: "瀏海2", bottom: "B瀏海2", name: "neckline"),
-        DollCloth(outer: "瀏海3", bottom: "B瀏海3", name: "neckline"),
-        DollCloth(outer: "瀏海4", bottom: "B瀏海4", name: "neckline"),
-        DollCloth(outer: "瀏海5", bottom: "B瀏海5", name: "neckline"),
-        DollCloth(outer: "瀏海6", bottom: "B瀏海6", name: "neckline"),
-        DollCloth(outer: "瀏海7", bottom: "B瀏海7", name: "neckline"),
-        DollCloth(outer: "瀏海8", bottom: "B瀏海8", name: "neckline"),
-        DollCloth(outer: "瀏海9", bottom: "B瀏海9", name: "neckline")
+        DollCloth(outer: "領口1", bottom: "B領口1", name: "neckline"),
+        DollCloth(outer: "領口2", bottom: "B領口2", name: "neckline"),
+        DollCloth(outer: "領口3", bottom: "B領口3", name: "neckline"),
+        DollCloth(outer: "領口4", bottom: "B領口4", name: "neckline")
     ]
     
     var sleeve: [DollCloth] = [
-        DollCloth(outer: "頭髮1", bottom: "B頭髮1", name: "sleeve"),
-        DollCloth(outer: "頭髮2", bottom: "B頭髮2", name: "sleeve"),
-        DollCloth(outer: "頭髮3", bottom: "B頭髮3", name: "sleeve"),
-        DollCloth(outer: "頭髮4", bottom: "B頭髮4", name: "sleeve"),
-        DollCloth(outer: "頭髮5", bottom: "B頭髮5", name: "sleeve"),
-        DollCloth(outer: "頭髮6", bottom: "B頭髮6", name: "sleeve"),
-        DollCloth(outer: "頭髮7", bottom: "B頭髮7", name: "sleeve"),
-        DollCloth(outer: "頭髮8", bottom: "B頭髮8", name: "sleeve"),
-        DollCloth(outer: "頭髮9", bottom: "B頭髮9", name: "sleeve")
+        DollCloth(outer: "袖子1", bottom: "B袖子1", name: "sleeve"),
+        DollCloth(outer: "袖子2", bottom: "B袖子2", name: "sleeve"),
+        DollCloth(outer: "袖子3", bottom: "B袖子3", name: "sleeve"),
+        DollCloth(outer: "袖子4", bottom: "B袖子4", name: "sleeve"),
+        DollCloth(outer: "袖子5", bottom: "B袖子5", name: "sleeve")
+    ]
+    
+    var hem: [DollCloth] = [
+        DollCloth(outer: "衣襬1", bottom: "B衣襬1", name: "hem"),
+        DollCloth(outer: "衣襬2", bottom: "B衣襬2", name: "hem"),
+        DollCloth(outer: "衣襬3", bottom: "B衣襬3", name: "hem")
+    ]
+    
+    var pattern: [DollCloth] = [
+        DollCloth(outer: "無", bottom: "無", name: "pattern"),
+        DollCloth(outer: "圖案1", bottom: "無", name: "pattern"),
+        DollCloth(outer: "圖案2", bottom: "無", name: "pattern"),
+        DollCloth(outer: "圖案3", bottom: "無", name: "pattern"),
+        DollCloth(outer: "圖案4", bottom: "無", name: "pattern")
     ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupCV()
-        outfitss = [neckline, sleeve]
+        setupClothes()
+    }
+    
+    func setupClothes() {
+        outfitss = [neckline, sleeve, hem, pattern]
         outfits = outfitss?[0]
-        selected = [neckline[0], sleeve[0]]
+        selected = [neckline[0], sleeve[0], hem[0], pattern[0]]
+        drawIndex = 4
+        colorChosenIndex = 5
+    }
+    
+    func setupDollEachPart() {
+        setupDollPart(imageView: &dollParts["Bbottom"], imageName: "B下身2", tintColor: selectedColor)
+        setupDollPart(imageView: &dollParts["bottom"], imageName: "下身2", tintColor: nil)
+        setupDollPart(imageView: &dollParts["Bpattern"], imageName: "無", tintColor: nil)
+        setupDollPart(imageView: &dollParts["Bsleeve"], imageName: sleeve[0].bottom, tintColor: selectedColor)
+        setupDollPart(imageView: &dollParts["Bneckline"], imageName: neckline[0].bottom, tintColor: selectedColor)
+        setupDollPart(imageView: &dollParts["Bhem"], imageName: hem[0].bottom, tintColor: selectedColor)
+        setupDollPart(imageView: &dollParts["pattern"], imageName: pattern[0].bottom, tintColor: nil)
+        setupDollPart(imageView: &dollParts["sleeve"], imageName: sleeve[0].outer, tintColor: nil)
+        setupDollPart(imageView: &dollParts["neckline"], imageName: neckline[0].outer, tintColor: nil)
+        setupDollPart(imageView: &dollParts["hem"], imageName: hem[0].outer, tintColor: nil)
+    }
+    
+    func changeClothName(with cloth: DollCloth) {
+        switch cloth.name {
+        case "neckline": selected?[0] = cloth
+        case "sleeve": selected?[1] = cloth
+        case "hem": selected?[2] = cloth
+        case "pattern": selected?[3] = cloth
+        default: break
+        }
     }
 
     func setupViews() {
@@ -81,33 +134,43 @@ class PaperDollHairViewController: UIViewController{
         let addButton = UIBarButtonItem(title: "save", style: .plain, target: self, action: #selector(addButtonTapped))
         addButton.tintColor = UIColor.lightBrown()
         navigationItem.rightBarButtonItem = addButton
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
+        let leftButton = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.backward.circle"),
+            style: .plain, target: self, action: #selector(backButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
             leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "My Closet"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.lightBrown(),
+            NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         // Set up doll parts
         view.addSubview(imageViewDoll)
-        imageViewDoll.image = UIImage(named: "無")
+        imageViewDoll.image = UIImage(named: "doll")
         setupConstraints(for: imageViewDoll)
         addGestures(imageView: imageViewDoll)
-        setupDollPart(imageView: &dollParts["Bdoll"], imageName: "娃娃2B", tintColor: nil)
-        setupDollPart(imageView: &dollParts["doll"], imageName: "娃娃2", tintColor: nil)
+        setupDollEachPart()
         
-        setupDollPart(imageView: &dollParts["Bneckline"], imageName: neckline[0].bottom, tintColor: selectedColor)
-        
-        setupDollPart(imageView: &dollParts["neckline"], imageName: neckline[0].outer, tintColor: nil)
-
-        setupDollPart(imageView: &dollParts["sleeve"], imageName: sleeve[0].outer, tintColor: nil)
-        if let imageView = dollParts["sleeve"] {
-            imageView.superview?.sendSubviewToBack(imageView)
+        view.addSubview(imageViewReal)
+        if let clothImage = cloth?.image {
+            imageViewReal.image = UIImage(data: clothImage)
+            imageViewReal.contentMode = .scaleAspectFill
         }
-        
-        setupDollPart(imageView: &dollParts["Bsleeve"], imageName: sleeve[0].bottom, tintColor: selectedColor)
-        if let imageView = dollParts["Bsleeve"] {
-            imageView.superview?.sendSubviewToBack(imageView)
+        imageViewReal.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(5)
+            make.trailing.equalTo(view).offset(-5)
+            make.width.height.equalTo(120)
         }
+        imageViewReal.clipsToBounds = true
+        imageViewReal.layer.cornerRadius = 60
         
+        imageViewDoll.addSubview(canvasView)
+        canvasView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            canvasView.topAnchor.constraint(equalTo: imageViewDoll.topAnchor),
+            canvasView.leadingAnchor.constraint(equalTo: imageViewDoll.leadingAnchor),
+            canvasView.trailingAnchor.constraint(equalTo: imageViewDoll.trailingAnchor),
+            canvasView.bottomAnchor.constraint(equalTo: imageViewDoll.bottomAnchor)
+        ])
     }
     
     @objc func addButtonTapped() {
@@ -129,12 +192,28 @@ class PaperDollHairViewController: UIViewController{
         print(red, green, blue)
         print(cloth)
         print(clothB)
-        CoreDataManager.shared.addHair(hair: cloth, hairB: clothB, color: [red, green, blue])
-        delegate?.hairToChangCloth()
+        guard let imageData = canvasView.asImage()?.pngData() else {
+            return
+        }
+        CoreDataManager.shared.addClothAndColor(
+            category: (self.cloth?.category)!,
+            subcategory: (self.cloth?.subcategory)!,
+            item: (self.cloth?.item)!, clothArray: cloth,
+            clothBArray: clothB, color: [red, green, blue], draw: imageData)
         guard let viewControllers = self.navigationController?.viewControllers else { return }
         for controller in viewControllers {
+            if controller is MyClosetPageViewController {
+                self.navigationController?.popToViewController(controller, animated: true)
+            }
             if controller is ChangeClothesViewController {
-            self.navigationController?.popToViewController(controller, animated: true)
+                if var clothPass = self.cloth {
+                    clothPass.cloth = cloth
+                    clothPass.clothB = clothB
+                    clothPass.color = [red, green, blue]
+                    clothPass.draw = imageData
+                    delegate?.editToChangeCloth(cloth: clothPass)
+                }
+                self.navigationController?.popToViewController(controller, animated: true)
             }
         }
     }
@@ -154,6 +233,7 @@ class PaperDollHairViewController: UIViewController{
 
     func setupConstraints(for imageView: UIImageView) {
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -165,7 +245,7 @@ class PaperDollHairViewController: UIViewController{
     func addGestures(imageView: UIImageView) {
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
-        
+        panGesture.minimumNumberOfTouches = 2
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(pinchGesture)
         imageView.addGestureRecognizer(panGesture)
@@ -192,8 +272,31 @@ class PaperDollHairViewController: UIViewController{
     }
 }
 
-
-extension PaperDollHairViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SegmentControlDelegate, ColorPickerViewDelegate {
+extension BaseTopsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SegmentControlDelegate, ColorPickerViewDelegate, PencilPickerViewDelegate {
+    func pencilSelectColor(_ color: UIColor) {
+        pencilSelectedColor = color
+        let newTool = PKInkingTool(.pen, color: color, width: pencilWidth)
+        canvasView.drawingPolicy = .anyInput
+        canvasView.tool = newTool
+    }
+    
+    func undoAction() {
+        print("undo")
+        canvasView.undoManager?.undo()
+    }
+    
+    func redoAction() {
+        print("redo")
+        canvasView.undoManager?.redo()
+    }
+    
+    func thicknessChanged(thickness: CGFloat) {
+        pencilWidth = thickness
+        print(thickness)
+        let newTool = PKInkingTool(.pen, color: pencilSelectedColor, width: thickness)
+        canvasView.tool = newTool
+    }
+    
     func didSelectColor(_ color: UIColor) {
         selectedColor = color
         guard let selected = selected else { return }
@@ -210,7 +313,8 @@ extension PaperDollHairViewController: UICollectionViewDataSource, UICollectionV
             outfits = outfitss?[index]
             collectionView.reloadData()
             colorPickerView.removeFromSuperview()
-        } else if index == 2 {
+            pencilPickerView.removeFromSuperview()
+        } else if index == colorChosenIndex {
             view.addSubview(colorPickerView)
             colorPickerView.backgroundColor = .blue
             colorPickerView.translatesAutoresizingMaskIntoConstraints = false
@@ -220,6 +324,20 @@ extension PaperDollHairViewController: UICollectionViewDataSource, UICollectionV
                 colorPickerView.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
                 colorPickerView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor)
             ])
+        } else if index == drawIndex {
+            view.addSubview(pencilPickerView)
+            pencilPickerView.backgroundColor = .white
+            pencilPickerView.delegate = self
+            canvasView.tool = PKInkingTool(.pen, color: pencilSelectedColor , width: pencilWidth)
+            canvasView.drawingPolicy = .anyInput
+            pencilPickerView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                pencilPickerView.topAnchor.constraint(equalTo: collectionView.topAnchor),
+                pencilPickerView.leadingAnchor.constraint(equalTo: collectionView.leadingAnchor),
+                pencilPickerView.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
+                pencilPickerView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor)
+            ])
+            
         }
     }
 
@@ -231,7 +349,7 @@ extension PaperDollHairViewController: UICollectionViewDataSource, UICollectionV
         view.addSubview(collectionView)
         codeSegmented.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            codeSegmented.topAnchor.constraint(equalTo: imageViewDoll.bottomAnchor, constant: -20),
+            codeSegmented.topAnchor.constraint(equalTo: dollParts["neckline"]!.bottomAnchor, constant: -20),
             codeSegmented.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             codeSegmented.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             codeSegmented.heightAnchor.constraint(equalToConstant: 44)
@@ -248,8 +366,9 @@ extension PaperDollHairViewController: UICollectionViewDataSource, UICollectionV
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .white
-        collectionView.register(OutfitCollectionViewCell.self,
-                                forCellWithReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier)
+        collectionView.register(
+            OutfitCollectionViewCell.self,
+            forCellWithReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier)
 
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 10
@@ -258,15 +377,13 @@ extension PaperDollHairViewController: UICollectionViewDataSource, UICollectionV
         let cellWidth = (UIScreen.main.bounds.width - layout.minimumInteritemSpacing * 2 - layout.sectionInset.left - layout.sectionInset.right) / 3
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
 
-        layout.sectionInset = UIEdgeInsets(top: 10,
-                                           left: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2,
-                                           bottom: 10, right: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2)
-
+        layout.sectionInset = UIEdgeInsets(
+            top: 10,
+            left: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2,
+            bottom: 10, right: (UIScreen.main.bounds.width - cellWidth * 3 - layout.minimumInteritemSpacing * 2) / 2)
+        
         collectionView.collectionViewLayout = layout
     }
-
-    
-    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return outfits?.count ?? 0
@@ -277,7 +394,7 @@ extension PaperDollHairViewController: UICollectionViewDataSource, UICollectionV
             withReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier,
             for: indexPath) as? OutfitCollectionViewCell {
             if let outfit = outfits?[indexPath.item] {
-                cell.configure(with: outfit, yPos: 20)
+                cell.configure(with: outfit, yPos: cellYPos)
             }
             return cell
         } else {
@@ -306,11 +423,8 @@ extension PaperDollHairViewController: UICollectionViewDataSource, UICollectionV
         bImageView.image = UIImage(named: cloth.bottom)?.withTintColor(selectedColor)
         imageView.image = UIImage(named: cloth.outer)
 
-        switch cloth.name {
-        case "neckline": selected?[0] = cloth
-        case "sleeve": selected?[1] = cloth
-        default: break
-        }
+        changeClothName(with: cloth)
     }
-
 }
+
+
