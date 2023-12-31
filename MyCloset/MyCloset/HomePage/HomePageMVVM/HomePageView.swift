@@ -28,13 +28,13 @@ class HomePageViewController: UIViewController {
         setupView()
         setupNotifications()
         viewModel.updateFMC()
-        viewModel.getFollowingArticle {
-            self.tableView.reloadData()
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewModel.getFollowingArticle {
+            self.tableView.reloadData()
+        }
         setupRefreshHeader()
         observerTrigger()
     }

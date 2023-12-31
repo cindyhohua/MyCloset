@@ -227,6 +227,14 @@ extension NewPostSecondStepViewController: ClosetToPost {
         cell.storeLabel.text = cloth.store
         cell.priceLabel.text = cloth.price
         cell.commentsLabel.text = cloth.content
+        
+        let index2 = index - 2
+        if index2 < products.count {
+            products[index2].productName = cell.nameLabel.text ?? ""
+            products[index2].productStore = cell.storeLabel.text ?? ""
+            products[index2].productPrice = cell.priceLabel.text ?? ""
+            products[index2].productComment = cell.commentsLabel.text ?? ""
+        }
     }
 }
 

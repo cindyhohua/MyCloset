@@ -45,6 +45,8 @@
 		CA1CD6AC2B405A6700DB70C0 /* MyClosetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6AB2B405A6600DB70C0 /* MyClosetViewModel.swift */; };
 		CA1CD6B42B414B2700DB70C0 /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6B32B414B2700DB70C0 /* HomePageView.swift */; };
 		CA1CD6B62B414B3300DB70C0 /* HomePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6B52B414B3300DB70C0 /* HomePageViewModel.swift */; };
+		CA1CD6BD2B415FE900DB70C0 /* DetailPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6BC2B415FE900DB70C0 /* DetailPageView.swift */; };
+		CA1CD6BF2B415FF700DB70C0 /* DetailPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6BE2B415FF700DB70C0 /* DetailPageViewModel.swift */; };
 		CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */; };
 		CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */; };
 		CA3B0FB32B09CF76001B708E /* DollPageCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */; };
@@ -115,6 +117,8 @@
 		CA1CD6AB2B405A6600DB70C0 /* MyClosetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetViewModel.swift; sourceTree = "<group>"; };
 		CA1CD6B32B414B2700DB70C0 /* HomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
 		CA1CD6B52B414B3300DB70C0 /* HomePageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewModel.swift; sourceTree = "<group>"; };
+		CA1CD6BC2B415FE900DB70C0 /* DetailPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageView.swift; sourceTree = "<group>"; };
+		CA1CD6BE2B415FF700DB70C0 /* DetailPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageViewModel.swift; sourceTree = "<group>"; };
 		CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManeger.swift; sourceTree = "<group>"; };
 		CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetDetailPageViewController.swift; sourceTree = "<group>"; };
 		CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageCVCell.swift; sourceTree = "<group>"; };
@@ -230,13 +234,10 @@
 		CA016D292B04CB880066FBE7 /* HomePage */ = {
 			isa = PBXGroup;
 			children = (
-				CA016D2A2B04CB880066FBE7 /* HomePageTableCell.swift */,
-				CA016D552B0729C00066FBE7 /* DetailPageCell.swift */,
-				CA795B052B1980F200D5584E /* DetailPageCommentCell.swift */,
-				CA016D402B05B76C0066FBE7 /* NewPostCell.swift */,
-				CA795B072B19818800D5584E /* DetailPageInputCommentView.swift */,
+				CA1CD6B82B415F7300DB70C0 /* Cells */,
 				CA1CD6B72B414B3C00DB70C0 /* HomePageMVVM */,
 				CA016D3C2B04F36B0066FBE7 /* DetailPageViewController.swift */,
+				CA1CD6C02B41600000DB70C0 /* DetailPageMVVM */,
 				CA795B182B21CACB00D5584E /* FriendListViewController.swift */,
 				CA016D3E2B05AF030066FBE7 /* NewPostViewController.swift */,
 				CA016D422B05BF120066FBE7 /* NewPostSecondStepViewController.swift */,
@@ -252,7 +253,7 @@
 		CA016D572B074C180066FBE7 /* MyClosetPage */ = {
 			isa = PBXGroup;
 			children = (
-				CA1CD6A72B40547200DB70C0 /* ClosetPageCell.swift */,
+				CA1CD6BB2B415FB400DB70C0 /* Cells */,
 				CA1CD6AD2B405A6C00DB70C0 /* MyClosetMVVM */,
 				CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */,
 				CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */,
@@ -289,15 +290,61 @@
 			path = HomePageMVVM;
 			sourceTree = "<group>";
 		};
+		CA1CD6B82B415F7300DB70C0 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				CA016D2A2B04CB880066FBE7 /* HomePageTableCell.swift */,
+				CA016D552B0729C00066FBE7 /* DetailPageCell.swift */,
+				CA795B052B1980F200D5584E /* DetailPageCommentCell.swift */,
+				CA016D402B05B76C0066FBE7 /* NewPostCell.swift */,
+				CA795B072B19818800D5584E /* DetailPageInputCommentView.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		CA1CD6B92B415F8C00DB70C0 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */,
+				CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		CA1CD6BA2B415FA500DB70C0 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		CA1CD6BB2B415FB400DB70C0 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				CA1CD6A72B40547200DB70C0 /* ClosetPageCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		CA1CD6C02B41600000DB70C0 /* DetailPageMVVM */ = {
+			isa = PBXGroup;
+			children = (
+				CA1CD6BC2B415FE900DB70C0 /* DetailPageView.swift */,
+				CA1CD6BE2B415FF700DB70C0 /* DetailPageViewModel.swift */,
+			);
+			path = DetailPageMVVM;
+			sourceTree = "<group>";
+		};
 		CA3B0FAF2B08DE70001B708E /* Doll page */ = {
 			isa = PBXGroup;
 			children = (
+				CA1CD6BA2B415FA500DB70C0 /* Cells */,
 				CA3B0FBC2B0C6C35001B708E /* ChangeClothesViewController.swift */,
 				CA1CD6A52B4008AD00DB70C0 /* HairViewController.swift */,
 				CA1CD6A12B3FEBB800DB70C0 /* BottomsViewController.swift */,
 				CA1CD6A32B3FFBB700DB70C0 /* AccessoriesViewController.swift */,
 				CA3B0FB62B0B2053001B708E /* TopsChosenViewController.swift */,
-				CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */,
 				CA61D5C02B14873A0028FB39 /* MineDollViewController.swift */,
 				CA61D5C22B148B000028FB39 /* MineDollDetailViewController.swift */,
 			);
@@ -307,13 +354,12 @@
 		CA519DF82B0EEF3000892AC4 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				CA1CD6B92B415F8C00DB70C0 /* Cells */,
+				CA795B302B30231B00D5584E /* EditProfileMVVM */,
+				CA795B262B2FF6AB00D5584E /* RelationshipListMVVM */,
 				CA1CD6952B35800200DB70C0 /* OthersProfileViewController.swift */,
 				CA1CD6992B390F5200DB70C0 /* MyProfileViewController.swift */,
 				CA61D5C62B17422C0028FB39 /* SavedViewController.swift */,
-				CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */,
-				CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */,
-				CA795B302B30231B00D5584E /* EditProfileMVVM */,
-				CA795B262B2FF6AB00D5584E /* RelationshipListMVVM */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -531,6 +577,7 @@
 				CA795B192B21CACB00D5584E /* FriendListViewController.swift in Sources */,
 				CA1CD6AC2B405A6700DB70C0 /* MyClosetViewModel.swift in Sources */,
 				CA1CD6A42B3FFBB700DB70C0 /* AccessoriesViewController.swift in Sources */,
+				CA1CD6BD2B415FE900DB70C0 /* DetailPageView.swift in Sources */,
 				CA016D342B04CB8D0066FBE7 /* HomePageTableCell.swift in Sources */,
 				CA016D392B04CB8D0066FBE7 /* SceneDelegate.swift in Sources */,
 				CA795B0D2B1B263C00D5584E /* FirebaseStorageManager2.swift in Sources */,
@@ -554,6 +601,7 @@
 				CA3B0FBD2B0C6C35001B708E /* ChangeClothesViewController.swift in Sources */,
 				CA016D452B05FC510066FBE7 /* FirebaseStorageManager.swift in Sources */,
 				CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */,
+				CA1CD6BF2B415FF700DB70C0 /* DetailPageViewModel.swift in Sources */,
 				CA1CD69E2B3962CB00DB70C0 /* BaseCollectionViewController.swift in Sources */,
 				CA016D322B04CB8D0066FBE7 /* Extensions.swift in Sources */,
 				CA016D1B2B04C93D0066FBE7 /* MyCloset.xcdatamodeld in Sources */,

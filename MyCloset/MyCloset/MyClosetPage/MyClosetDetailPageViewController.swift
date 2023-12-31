@@ -58,7 +58,7 @@ class MyClosetDetailPageViewController: UIViewController {
     @objc func editButtonTapped() {
         print("edit")
         let secondVC = AddMyClosetViewController()
-        secondVC.viewModel.clothes = self.cloth
+        secondVC.clothes = self.cloth
         secondVC.clothesEdit()
         self.navigationController?.pushViewController(secondVC, animated: true)
     }
