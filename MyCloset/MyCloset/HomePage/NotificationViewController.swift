@@ -102,19 +102,22 @@ class NotificationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        FirebaseStorageManager.shared.fetchNotifications { notifies, error  in
+        FirebaseStorageManager.shared.fetchNotifications { notifies, _  in
             self.notifications = notifies
-            print(self.notifications)
         }
         setupTableView()
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward.circle"), style: .plain, target: self, action: #selector(backButtonTapped))
+        let leftButton = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.backward.circle"), style: .plain,
+            target: self, action: #selector(backButtonTapped))
             navigationItem.leftBarButtonItem = leftButton
             leftButton.tintColor = UIColor.lightBrown()
         navigationItem.title = "Notifications"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.lightBrown(),
+            NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         self.tableView.configRefreshHeader(container: self) { [weak self] in
             self?.fetchPendingAuthors()
-            FirebaseStorageManager.shared.fetchNotifications { notifies, error  in
+            FirebaseStorageManager.shared.fetchNotifications { notifies, _  in
                 self?.notifications = notifies
                 self?.tableView.switchRefreshHeader(to: .normal(.success, 0.5))
             }
@@ -144,7 +147,9 @@ class NotificationViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(FriendRequestCell.self, forCellReuseIdentifier: "friendRequestCell")
-        tableView.register(NotificationTableViewCell.self, forCellReuseIdentifier: NotificationTableViewCell.reuseIdentifier)
+        tableView.register(
+            NotificationTableViewCell.self,
+            forCellReuseIdentifier: NotificationTableViewCell.reuseIdentifier)
     }
 
     func fetchPendingAuthors() {
@@ -162,7 +167,7 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
         return 2
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section{
+        switch section {
         case 0:
             return pendingAuthors.count
         case 1:
@@ -175,7 +180,9 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "friendRequestCell", for: indexPath) as? FriendRequestCell {
+            if let cell = tableView.dequeueReusableCell(
+                withIdentifier: "friendRequestCell",
+                for: indexPath) as? FriendRequestCell {
                 let author = pendingAuthors[indexPath.row]
                 
                 cell.nameLabel.text = author.name
@@ -196,7 +203,9 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
                 return defaultCell
             }
         } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: NotificationTableViewCell.reuseIdentifier, for: indexPath) as? NotificationTableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: NotificationTableViewCell.reuseIdentifier,
+                for: indexPath) as? NotificationTableViewCell else {
                 fatalError("Unable to dequeue NotificationTableViewCell")
             }
             
@@ -256,7 +265,7 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
     @objc func acceptButtonTapped(_ sender: UIButton) {
         let author = pendingAuthors[sender.tag]
         FirebaseStorageManager.shared.acceptFriendRequest(authorID: author.id) {_ in
-            FirebaseStorageManager.shared.fetchNotifications { notifies, error  in
+            FirebaseStorageManager.shared.fetchNotifications { notifies, _  in
                 self.fetchPendingAuthors()
                 self.notifications = notifies
                 self.tableView.reloadData()
@@ -326,4 +335,3 @@ class NotificationTableViewCell: UITableViewCell {
         timeLabel.text = dateString
     }
 }
-

@@ -8,7 +8,10 @@ import UIKit
 import SnapKit
 import TOCropViewController
 
-class AddMyClosetViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class AddMyClosetViewController:
+    UIViewController, UIPickerViewDataSource,
+    UIPickerViewDelegate, UIImagePickerControllerDelegate,
+    UINavigationControllerDelegate {
     var clothes: ClothesStruct?
     var categoryPicker = UIPickerView()
     var subcategoryPicker = UIPickerView()

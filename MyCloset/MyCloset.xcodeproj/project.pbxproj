@@ -11,7 +11,6 @@
 		CA016D1B2B04C93D0066FBE7 /* MyCloset.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CA016D192B04C93D0066FBE7 /* MyCloset.xcdatamodeld */; };
 		CA016D322B04CB8D0066FBE7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D272B04CB860066FBE7 /* Extensions.swift */; };
 		CA016D342B04CB8D0066FBE7 /* HomePageTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D2A2B04CB880066FBE7 /* HomePageTableCell.swift */; };
-		CA016D352B04CB8D0066FBE7 /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D2B2B04CB880066FBE7 /* HomePageViewController.swift */; };
 		CA016D362B04CB8D0066FBE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D2C2B04CB880066FBE7 /* AppDelegate.swift */; };
 		CA016D382B04CB8D0066FBE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA016D2E2B04CB8A0066FBE7 /* Assets.xcassets */; };
 		CA016D392B04CB8D0066FBE7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D2F2B04CB8B0066FBE7 /* SceneDelegate.swift */; };
@@ -30,7 +29,6 @@
 		CA016D522B05FDD50066FBE7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = CA016D512B05FDD50066FBE7 /* FirebaseStorage */; };
 		CA016D542B0603090066FBE7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CA016D532B0603090066FBE7 /* GoogleService-Info.plist */; };
 		CA016D562B0729C00066FBE7 /* DetailPageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D552B0729C00066FBE7 /* DetailPageCell.swift */; };
-		CA016D592B074C4B0066FBE7 /* MyClosetPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D582B074C4B0066FBE7 /* MyClosetPageViewController.swift */; };
 		CA016D5B2B0758E40066FBE7 /* SegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D5A2B0758E40066FBE7 /* SegmentView.swift */; };
 		CA016D5D2B07691A0066FBE7 /* AddMyClothesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */; };
 		CA1CD6932B3559C300DB70C0 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6922B3559C300DB70C0 /* Model.swift */; };
@@ -42,6 +40,11 @@
 		CA1CD6A22B3FEBB800DB70C0 /* BottomsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6A12B3FEBB800DB70C0 /* BottomsViewController.swift */; };
 		CA1CD6A42B3FFBB700DB70C0 /* AccessoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6A32B3FFBB700DB70C0 /* AccessoriesViewController.swift */; };
 		CA1CD6A62B4008AD00DB70C0 /* HairViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6A52B4008AD00DB70C0 /* HairViewController.swift */; };
+		CA1CD6A82B40547200DB70C0 /* ClosetPageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6A72B40547200DB70C0 /* ClosetPageCell.swift */; };
+		CA1CD6AA2B405A5600DB70C0 /* MyClosetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6A92B405A5600DB70C0 /* MyClosetView.swift */; };
+		CA1CD6AC2B405A6700DB70C0 /* MyClosetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6AB2B405A6600DB70C0 /* MyClosetViewModel.swift */; };
+		CA1CD6B42B414B2700DB70C0 /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6B32B414B2700DB70C0 /* HomePageView.swift */; };
+		CA1CD6B62B414B3300DB70C0 /* HomePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6B52B414B3300DB70C0 /* HomePageViewModel.swift */; };
 		CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */; };
 		CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */; };
 		CA3B0FB32B09CF76001B708E /* DollPageCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */; };
@@ -61,14 +64,13 @@
 		CA795B122B1F0B5800D5584E /* FirebaseStorageManager3.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */; };
 		CA795B142B205D6800D5584E /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = CA795B132B205D6800D5584E /* FirebaseCrashlytics */; };
 		CA795B162B205D8B00D5584E /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CA795B152B205D8B00D5584E /* FirebaseAnalyticsSwift */; };
-		CA795B192B21CACB00D5584E /* FriendList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B182B21CACB00D5584E /* FriendList.swift */; };
+		CA795B192B21CACB00D5584E /* FriendListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B182B21CACB00D5584E /* FriendListViewController.swift */; };
 		CA795B1F2B26EE7C00D5584E /* ImportFromClosetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B1E2B26EE7C00D5584E /* ImportFromClosetViewController.swift */; };
 		CA795B212B273E7A00D5584E /* MineDollChooseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B202B273E7A00D5584E /* MineDollChooseViewController.swift */; };
 		CA795B252B2FF68D00D5584E /* RelationshipListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B242B2FF68D00D5584E /* RelationshipListViewModel.swift */; };
 		CA795B282B2FF6E800D5584E /* RelationshipListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B272B2FF6E800D5584E /* RelationshipListView.swift */; };
 		CA795B342B30235200D5584E /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B332B30235100D5584E /* EditProfileView.swift */; };
 		CA795B362B30235E00D5584E /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B352B30235E00D5584E /* EditProfileViewModel.swift */; };
-		CA795B382B31A08D00D5584E /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA795B372B31A08D00D5584E /* EditPostViewController.swift */; };
 		CABCC7CA2B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */; };
 		CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */; };
 		CAF701122B11E7A00053B12B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF701112B11E7A00053B12B /* SearchViewController.swift */; };
@@ -85,7 +87,6 @@
 		CA016D212B04C93F0066FBE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CA016D272B04CB860066FBE7 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		CA016D2A2B04CB880066FBE7 /* HomePageTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageTableCell.swift; sourceTree = "<group>"; };
-		CA016D2B2B04CB880066FBE7 /* HomePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageViewController.swift; sourceTree = "<group>"; };
 		CA016D2C2B04CB880066FBE7 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ../../../MyCloset/MyCloset/MyCloset/AppDelegate.swift; sourceTree = "<group>"; };
 		CA016D2E2B04CB8A0066FBE7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../../../MyCloset/MyCloset/MyCloset/Assets.xcassets; sourceTree = "<group>"; };
 		CA016D2F2B04CB8B0066FBE7 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = ../../../MyCloset/MyCloset/MyCloset/SceneDelegate.swift; sourceTree = "<group>"; };
@@ -98,7 +99,6 @@
 		CA016D442B05FC510066FBE7 /* FirebaseStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager.swift; sourceTree = "<group>"; };
 		CA016D532B0603090066FBE7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CA016D552B0729C00066FBE7 /* DetailPageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageCell.swift; sourceTree = "<group>"; };
-		CA016D582B074C4B0066FBE7 /* MyClosetPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetPageViewController.swift; sourceTree = "<group>"; };
 		CA016D5A2B0758E40066FBE7 /* SegmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentView.swift; sourceTree = "<group>"; };
 		CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMyClothesViewController.swift; sourceTree = "<group>"; };
 		CA1CD6922B3559C300DB70C0 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
@@ -110,6 +110,11 @@
 		CA1CD6A12B3FEBB800DB70C0 /* BottomsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomsViewController.swift; sourceTree = "<group>"; };
 		CA1CD6A32B3FFBB700DB70C0 /* AccessoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoriesViewController.swift; sourceTree = "<group>"; };
 		CA1CD6A52B4008AD00DB70C0 /* HairViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HairViewController.swift; sourceTree = "<group>"; };
+		CA1CD6A72B40547200DB70C0 /* ClosetPageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosetPageCell.swift; sourceTree = "<group>"; };
+		CA1CD6A92B405A5600DB70C0 /* MyClosetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetView.swift; sourceTree = "<group>"; };
+		CA1CD6AB2B405A6600DB70C0 /* MyClosetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetViewModel.swift; sourceTree = "<group>"; };
+		CA1CD6B32B414B2700DB70C0 /* HomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
+		CA1CD6B52B414B3300DB70C0 /* HomePageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewModel.swift; sourceTree = "<group>"; };
 		CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManeger.swift; sourceTree = "<group>"; };
 		CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetDetailPageViewController.swift; sourceTree = "<group>"; };
 		CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageCVCell.swift; sourceTree = "<group>"; };
@@ -128,14 +133,13 @@
 		CA795B0C2B1B263C00D5584E /* FirebaseStorageManager2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager2.swift; sourceTree = "<group>"; };
 		CA795B102B1C816200D5584E /* push.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = push.apns; sourceTree = "<group>"; };
 		CA795B112B1F0B5800D5584E /* FirebaseStorageManager3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManager3.swift; sourceTree = "<group>"; };
-		CA795B182B21CACB00D5584E /* FriendList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendList.swift; sourceTree = "<group>"; };
+		CA795B182B21CACB00D5584E /* FriendListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListViewController.swift; sourceTree = "<group>"; };
 		CA795B1E2B26EE7C00D5584E /* ImportFromClosetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFromClosetViewController.swift; sourceTree = "<group>"; };
 		CA795B202B273E7A00D5584E /* MineDollChooseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineDollChooseViewController.swift; sourceTree = "<group>"; };
 		CA795B242B2FF68D00D5584E /* RelationshipListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipListViewModel.swift; sourceTree = "<group>"; };
 		CA795B272B2FF6E800D5584E /* RelationshipListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipListView.swift; sourceTree = "<group>"; };
 		CA795B332B30235100D5584E /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		CA795B352B30235E00D5584E /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
-		CA795B372B31A08D00D5584E /* EditPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
 		CABCC7C92B0F1C1600FB38C5 /* ProfileAuthCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAuthCollectionViewCell.swift; sourceTree = "<group>"; };
 		CABCC7CD2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
 		CAF701112B11E7A00053B12B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -226,19 +230,18 @@
 		CA016D292B04CB880066FBE7 /* HomePage */ = {
 			isa = PBXGroup;
 			children = (
-				CA016D2B2B04CB880066FBE7 /* HomePageViewController.swift */,
 				CA016D2A2B04CB880066FBE7 /* HomePageTableCell.swift */,
-				CA016D3C2B04F36B0066FBE7 /* DetailPageViewController.swift */,
-				CA795B372B31A08D00D5584E /* EditPostViewController.swift */,
-				CA795B182B21CACB00D5584E /* FriendList.swift */,
-				CA795B052B1980F200D5584E /* DetailPageCommentCell.swift */,
-				CA795B072B19818800D5584E /* DetailPageInputCommentView.swift */,
 				CA016D552B0729C00066FBE7 /* DetailPageCell.swift */,
+				CA795B052B1980F200D5584E /* DetailPageCommentCell.swift */,
+				CA016D402B05B76C0066FBE7 /* NewPostCell.swift */,
+				CA795B072B19818800D5584E /* DetailPageInputCommentView.swift */,
+				CA1CD6B72B414B3C00DB70C0 /* HomePageMVVM */,
+				CA016D3C2B04F36B0066FBE7 /* DetailPageViewController.swift */,
+				CA795B182B21CACB00D5584E /* FriendListViewController.swift */,
 				CA016D3E2B05AF030066FBE7 /* NewPostViewController.swift */,
 				CA016D422B05BF120066FBE7 /* NewPostSecondStepViewController.swift */,
 				CA795B202B273E7A00D5584E /* MineDollChooseViewController.swift */,
 				CA795B1E2B26EE7C00D5584E /* ImportFromClosetViewController.swift */,
-				CA016D402B05B76C0066FBE7 /* NewPostCell.swift */,
 				CAF701112B11E7A00053B12B /* SearchViewController.swift */,
 				CAF701132B1222440053B12B /* NotificationViewController.swift */,
 				CAF701152B1346E90053B12B /* TopRankingViewController.swift */,
@@ -249,7 +252,8 @@
 		CA016D572B074C180066FBE7 /* MyClosetPage */ = {
 			isa = PBXGroup;
 			children = (
-				CA016D582B074C4B0066FBE7 /* MyClosetPageViewController.swift */,
+				CA1CD6A72B40547200DB70C0 /* ClosetPageCell.swift */,
+				CA1CD6AD2B405A6C00DB70C0 /* MyClosetMVVM */,
 				CA016D5C2B07691A0066FBE7 /* AddMyClothesViewController.swift */,
 				CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */,
 			);
@@ -265,6 +269,24 @@
 				CA1CD69F2B3D690F00DB70C0 /* BaseDollPageViewController.swift */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		CA1CD6AD2B405A6C00DB70C0 /* MyClosetMVVM */ = {
+			isa = PBXGroup;
+			children = (
+				CA1CD6A92B405A5600DB70C0 /* MyClosetView.swift */,
+				CA1CD6AB2B405A6600DB70C0 /* MyClosetViewModel.swift */,
+			);
+			path = MyClosetMVVM;
+			sourceTree = "<group>";
+		};
+		CA1CD6B72B414B3C00DB70C0 /* HomePageMVVM */ = {
+			isa = PBXGroup;
+			children = (
+				CA1CD6B32B414B2700DB70C0 /* HomePageView.swift */,
+				CA1CD6B52B414B3300DB70C0 /* HomePageViewModel.swift */,
+			);
+			path = HomePageMVVM;
 			sourceTree = "<group>";
 		};
 		CA3B0FAF2B08DE70001B708E /* Doll page */ = {
@@ -495,6 +517,7 @@
 				CA795B042B1888D200D5584E /* AppleLoginSetProfileViewController.swift in Sources */,
 				CA016D362B04CB8D0066FBE7 /* AppDelegate.swift in Sources */,
 				CA1CD6962B35800200DB70C0 /* OthersProfileViewController.swift in Sources */,
+				CA1CD6AA2B405A5600DB70C0 /* MyClosetView.swift in Sources */,
 				CA795B1F2B26EE7C00D5584E /* ImportFromClosetViewController.swift in Sources */,
 				CA016D5D2B07691A0066FBE7 /* AddMyClothesViewController.swift in Sources */,
 				CA1CD6982B3580AE00DB70C0 /* BaseProfileViewController.swift in Sources */,
@@ -502,8 +525,11 @@
 				CA1CD69A2B390F5300DB70C0 /* MyProfileViewController.swift in Sources */,
 				CA3B0FB72B0B2053001B708E /* TopsChosenViewController.swift in Sources */,
 				CA1CD6A02B3D690F00DB70C0 /* BaseDollPageViewController.swift in Sources */,
+				CA1CD6B62B414B3300DB70C0 /* HomePageViewModel.swift in Sources */,
 				CA3B0FC12B0DF221001B708E /* SignUpViewController.swift in Sources */,
-				CA795B192B21CACB00D5584E /* FriendList.swift in Sources */,
+				CA1CD6B42B414B2700DB70C0 /* HomePageView.swift in Sources */,
+				CA795B192B21CACB00D5584E /* FriendListViewController.swift in Sources */,
+				CA1CD6AC2B405A6700DB70C0 /* MyClosetViewModel.swift in Sources */,
 				CA1CD6A42B3FFBB700DB70C0 /* AccessoriesViewController.swift in Sources */,
 				CA016D342B04CB8D0066FBE7 /* HomePageTableCell.swift in Sources */,
 				CA016D392B04CB8D0066FBE7 /* SceneDelegate.swift in Sources */,
@@ -511,7 +537,7 @@
 				CA795B252B2FF68D00D5584E /* RelationshipListViewModel.swift in Sources */,
 				CA795B122B1F0B5800D5584E /* FirebaseStorageManager3.swift in Sources */,
 				CA795B342B30235200D5584E /* EditProfileView.swift in Sources */,
-				CA016D352B04CB8D0066FBE7 /* HomePageViewController.swift in Sources */,
+				CA1CD6A82B40547200DB70C0 /* ClosetPageCell.swift in Sources */,
 				CA1CD6932B3559C300DB70C0 /* Model.swift in Sources */,
 				CA016D5B2B0758E40066FBE7 /* SegmentView.swift in Sources */,
 				CA016D3D2B04F36B0066FBE7 /* DetailPageViewController.swift in Sources */,
@@ -522,14 +548,12 @@
 				CA016D432B05BF120066FBE7 /* NewPostSecondStepViewController.swift in Sources */,
 				CA016D3F2B05AF030066FBE7 /* NewPostViewController.swift in Sources */,
 				CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */,
-				CA016D592B074C4B0066FBE7 /* MyClosetPageViewController.swift in Sources */,
 				CA795B212B273E7A00D5584E /* MineDollChooseViewController.swift in Sources */,
 				CA1CD6A22B3FEBB800DB70C0 /* BottomsViewController.swift in Sources */,
 				CAF701162B1346E90053B12B /* TopRankingViewController.swift in Sources */,
 				CA3B0FBD2B0C6C35001B708E /* ChangeClothesViewController.swift in Sources */,
 				CA016D452B05FC510066FBE7 /* FirebaseStorageManager.swift in Sources */,
 				CABCC7CE2B0F4FAB00FB38C5 /* ProfileCollectionViewCell.swift in Sources */,
-				CA795B382B31A08D00D5584E /* EditPostViewController.swift in Sources */,
 				CA1CD69E2B3962CB00DB70C0 /* BaseCollectionViewController.swift in Sources */,
 				CA016D322B04CB8D0066FBE7 /* Extensions.swift in Sources */,
 				CA016D1B2B04C93D0066FBE7 /* MyCloset.xcdatamodeld in Sources */,

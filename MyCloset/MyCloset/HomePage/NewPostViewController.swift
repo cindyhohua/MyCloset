@@ -198,7 +198,6 @@ extension NewPostViewController: TOCropViewControllerDelegate {
     func cropViewController(
         _ cropViewController: TOCropViewController,
         didCropTo image: UIImage, with cropRect: CGRect, angle: Int) {
-        // 在這裡處理裁切後的照片，例如顯示在 UIImageView 中
         imageView.image = image
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(_:)))
         imageView.addGestureRecognizer(tapGestureRecognizer)

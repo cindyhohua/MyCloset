@@ -19,8 +19,8 @@ class ImportFromClosetViewController: MyClosetPageViewController {
         let selectedIndexPath = tableView.indexPathForSelectedRow
         tableView.deselectRow(at: selectedIndexPath!, animated: true)
         if let row = indexPathRow {
-            delegate?.closetToPost(cloth: sections[indexPath.section].items[indexPath.row], index: row)
-            print(sections[indexPath.section].items[indexPath.row])
+            delegate?.closetToPost(cloth: viewModel.sections[indexPath.section].items[indexPath.row], index: row)
+//            print(sections[indexPath.section].items[indexPath.row])
             dismiss(animated: true)
         }
     }

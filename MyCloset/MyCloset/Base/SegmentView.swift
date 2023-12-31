@@ -7,8 +7,8 @@
 
 import UIKit
 
-protocol SegmentControlDelegate {
-    func changeToIndex(_ manager: SegmentView,index: Int)
+protocol SegmentControlDelegate: AnyObject {
+    func changeToIndex(_ manager: SegmentView, index: Int)
 }
 class SegmentView: UIView {
     private var buttonTitles: [String]!
@@ -17,7 +17,6 @@ class SegmentView: UIView {
     private var selectorView: UIView!
     var delegate: SegmentControlDelegate?
     private func configStackView() {
-        
         let stack = UIStackView(arrangedSubviews: buttons)
         stack.axis = .horizontal
         stack.alignment = .fill
@@ -74,7 +73,7 @@ class SegmentView: UIView {
         configSelectorView()
     }
     
-    convenience init(frame: CGRect,buttonTitle: [String]) {
+    convenience init(frame: CGRect, buttonTitle: [String]) {
         self.init(frame: frame)
         self.buttonTitles = buttonTitle
     }
@@ -88,7 +87,4 @@ class SegmentView: UIView {
         self.buttonTitles = buttonTitles
         updateView()
     }
-    
-    
-    
 }

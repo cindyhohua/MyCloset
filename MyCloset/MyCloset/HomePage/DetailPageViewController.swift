@@ -77,10 +77,6 @@ class DetailPageViewController: UIViewController {
             image: UIImage(systemName: "trash.fill"),
             style: .plain, target: self, action: #selector(deleteButtonTapped))
         deleteButton.tintColor = UIColor.lightBrown()
-        let editButton = UIBarButtonItem(
-            image: UIImage(systemName: "pencil.circle"),
-            style: .plain, target: self, action: #selector(editButtonTapped))
-        editButton.tintColor = UIColor.lightBrown()
         let leftButton = UIBarButtonItem(
             image: UIImage(systemName: "chevron.backward.circle"),
             style: .plain, target: self, action: #selector(backButtonTapped))
@@ -97,7 +93,7 @@ class DetailPageViewController: UIViewController {
         flexibleSpace.width = 20
         navigationItem.leftBarButtonItems = [leftButton, flexibleSpace, rightButton]
         if article?.author.id == Auth.auth().currentUser?.uid {
-            navigationItem.rightBarButtonItems = [editButton, deleteButton, reportButton, saveButton]
+            navigationItem.rightBarButtonItems = [deleteButton, reportButton, saveButton]
         } else {
             navigationItem.rightBarButtonItems = [reportButton, saveButton]
         }
@@ -105,13 +101,6 @@ class DetailPageViewController: UIViewController {
             NSAttributedString.Key.foregroundColor: UIColor.brown,
             NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 20)]
         setupTableView()
-    }
-    
-    @objc func editButtonTapped() {
-        let secondVC = NewPostSecondStepViewController()
-        secondVC
-        secondVC.products = article?.productList ?? []
-        self.navigationController?.pushViewController(secondVC, animated: true)
     }
     
     @objc func deleteButtonTapped() {
@@ -251,9 +240,7 @@ class DetailPageViewController: UIViewController {
             case .failure(let failure):
                 print(failure)
             }
-            
         }
-        
     }
 }
 

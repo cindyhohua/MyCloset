@@ -1,21 +1,20 @@
 //
-//  ViewController.swift
+//  HomePageView.swift
 //  MyCloset
 //
-//  Created by 賀華 on 2023/11/14.
+//  Created by 賀華 on 2023/12/31.
 //
 
 import UIKit
 import SnapKit
 import Kingfisher
-import FirebaseMessaging
 import PullToRefreshKit
 
 class HomePageViewController: UIViewController {
-    let tableView = UITableView()
-    let createPostButton = UIButton()
-    var articles: [Article] = []
-    
+    private let tableView = UITableView()
+    private let createPostButton = UIButton()
+    private let viewModel = HomePageViewModel()
+
     private lazy var notificationButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "bell.fill"), for: .normal)
@@ -27,59 +26,35 @@ class HomePageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        Messaging.messaging().token { token, error in
-            Messaging.messaging().token { token, error in
-              if let error = error {
-                print("Error fetching FCM registration token: \(error)")
-              } else if let token = token {
-                print("FCM registration token: \(token)")
-                  FirebaseStorageManager.shared.addFMCFieldToAuthDocument(fmc: token)
-              }
-            }
-        }
-        
-        NotificationCenter.default.addObserver(self,
-           selector: #selector(observerTrigger),
-           name: Notification.Name("NotificationUpdate"),
-           object: nil)
-        self.tableView.configRefreshHeader(container: self) { [weak self] in
-            FirebaseStorageManager.shared.getFollowingArticles { articles in
-                self?.articles = articles
-                self?.tableView.reloadData()
-                self?.tableView.switchRefreshHeader(to: .normal(.success, 0.5))
-            }
-        }
-
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        FirebaseStorageManager.shared.getFollowingArticles { articles in
-            self.articles = articles
+        setupNotifications()
+        viewModel.updateFMC()
+        viewModel.getFollowingArticle {
             self.tableView.reloadData()
         }
-        FirebaseStorageManager.shared.fetchNotSeen { notSeenNumber in
-            self.updateBadge(count: notSeenNumber)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupRefreshHeader()
+        observerTrigger()
+    }
+
+    @objc private func observerTrigger() {
+        viewModel.fetchNotSeenNotifications { [weak self] notSeenNumber in
+            self?.updateBadge(count: notSeenNumber)
         }
     }
-    
-    @objc func observerTrigger() {
-        FirebaseStorageManager.shared.fetchNotSeen { notSeenNumber in
-            self.updateBadge(count: notSeenNumber)
-        }
+
+    private func setupView() {
+        setupTableView()
+        setupNavigationBar()
+        setupCreatePostButton()
     }
-    
-    func setupView() {
+
+    private func setupTableView() {
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
-            make.leading.equalTo(view)
-            make.trailing.equalTo(view)
-            make.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.edges.equalTo(view.safeAreaLayoutGuide)
         }
         tableView.register(HomePageTableCell.self, forCellReuseIdentifier: "homepage")
         tableView.dataSource = self
@@ -87,17 +62,25 @@ class HomePageViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 200
         tableView.separatorStyle = .none
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.lightBrown(), NSAttributedString.Key.font: UIFont.roundedFont(ofSize: 25)]
-        let leftButton = UIBarButtonItem(image: UIImage(systemName: "crown.fill"), style: .plain, target: self, action: #selector(leftButtonTapped))
+    }
+
+    private func setupNavigationBar() {
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor.lightBrown(),
+            .font: UIFont.roundedFont(ofSize: 25)
+        ]
+        let leftButton = makeLeftBarButton()
+        leftButton.tintColor = .lightBrown()
+        let rightBarButton = makeRightBarButton()
+        rightBarButton.tintColor = .lightBrown()
+        let searchButton = makeSearchBarButton()
+        searchButton.tintColor = .lightBrown()
         navigationItem.leftBarButtonItem = leftButton
-        leftButton.tintColor = UIColor.lightBrown()
-        let rightBarButton = UIBarButtonItem(customView: notificationButton)
-        let rightButtonSearch = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"),
-           style: .plain, target: self, action: #selector(searchButtonTapped))
-        rightButtonSearch.tintColor = UIColor.lightBrown()
-        navigationItem.rightBarButtonItems = [rightBarButton, rightButtonSearch]
-        rightBarButton.tintColor = UIColor.lightBrown()
+        navigationItem.rightBarButtonItems = [rightBarButton, searchButton]
         navigationItem.title = "Home Page"
+    }
+
+    private func setupCreatePostButton() {
         view.addSubview(createPostButton)
         createPostButton.setTitle("+", for: .normal)
         createPostButton.titleLabel?.font = UIFont.roundedFont(ofSize: 40)
@@ -111,33 +94,72 @@ class HomePageViewController: UIViewController {
         createPostButton.layer.cornerRadius = 35
         createPostButton.backgroundColor = UIColor.lightBrown()
         createPostButton.addTarget(self, action: #selector(createPost), for: .touchUpInside)
-        
     }
-    
-    func updateBadge(count: Int) {
+
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(observerTrigger),
+            name: Notification.Name("NotificationUpdate"),
+            object: nil
+        )
+    }
+
+    private func setupRefreshHeader() {
+        tableView.configRefreshHeader(container: self) { [weak self] in
+            self?.viewModel.getFollowingArticle {
+                self?.tableView.reloadData()
+                self?.tableView.switchRefreshHeader(to: .normal(.success, 0.5))
+            }
+        }
+    }
+
+    private func makeLeftBarButton() -> UIBarButtonItem {
+        return UIBarButtonItem(
+            image: UIImage(systemName: "crown.fill"),
+            style: .plain,
+            target: self,
+            action: #selector(leftButtonTapped)
+        )
+    }
+
+    private func makeRightBarButton() -> UIBarButtonItem {
+        return UIBarButtonItem(customView: notificationButton)
+    }
+
+    private func makeSearchBarButton() -> UIBarButtonItem {
+        return UIBarButtonItem(
+            image: UIImage(systemName: "magnifyingglass"),
+            style: .plain,
+            target: self,
+            action: #selector(searchButtonTapped)
+        )
+    }
+
+    private func updateBadge(count: Int) {
         if count > 0 {
             notificationButton.addBadge(number: count)
         } else {
             notificationButton.removeBadge()
         }
     }
-    
-    @objc func createPost() {
+
+    @objc private func createPost() {
         let secondViewController = NewPostViewController()
         navigationController?.pushViewController(secondViewController, animated: true)
     }
-    
-    @objc func leftButtonTapped() {
+
+    @objc private func leftButtonTapped() {
         let secondViewController = TopRankingViewController()
         navigationController?.pushViewController(secondViewController, animated: true)
     }
-    
-    @objc func rightButtonTapped() {
-        print("tapped")
+
+    @objc private func rightButtonTapped() {
         let secondViewController = NotificationViewController()
         navigationController?.pushViewController(secondViewController, animated: true)
     }
-    @objc func searchButtonTapped() {
+
+    @objc private func searchButtonTapped() {
         let secondViewController = SearchViewController()
         navigationController?.pushViewController(secondViewController, animated: true)
     }
@@ -145,32 +167,32 @@ class HomePageViewController: UIViewController {
 
 extension HomePageViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        articles.count
+        viewModel.articles.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "homepage", for: indexPath) as? HomePageTableCell else {
-            fatalError("Cant find cell")
+            fatalError("Can't find cell")
         }
         cell.isUserInteractionEnabled = true
-        cell.nameLabel.text = articles[indexPath.row].author.name
-        cell.cellImageView.kf.setImage(with: URL(string: articles[indexPath.row].imageURL))
-        if let imageURL = articles[indexPath.row].author.image {
+        cell.nameLabel.text = viewModel.articles[indexPath.row].author.name
+        cell.cellImageView.kf.setImage(with: URL(string: viewModel.articles[indexPath.row].imageURL))
+        if let imageURL = viewModel.articles[indexPath.row].author.image {
             cell.profileImage.kf.setImage(with: URL(string: imageURL))
         }
         cell.selectionStyle = .none
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return (UIScreen.main.bounds.width*1.4)
+        return UIScreen.main.bounds.width * 1.4
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedIndexPath = tableView.indexPathForSelectedRow
         tableView.deselectRow(at: selectedIndexPath!, animated: true)
         let secondViewController = DetailPageViewController()
-        secondViewController.article = articles[indexPath.row]
+        secondViewController.article = viewModel.articles[indexPath.row]
         navigationController?.pushViewController(secondViewController, animated: true)
     }
 }

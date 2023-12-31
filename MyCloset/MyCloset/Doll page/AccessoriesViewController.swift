@@ -21,7 +21,7 @@ class AccessoriesViewController: BaseTopsViewController {
         cellYPos = 4/3
         codeSegmented = SegmentView(
             frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44),
-            buttonTitle: ["飾品","手繪","顏色"])
+            buttonTitle: ["飾品", "手繪", "顏色"])
         neckline = [
             DollCloth(outer: "飾品1", bottom: "B飾品1", name: "neckline"),
             DollCloth(outer: "飾品2", bottom: "B飾品2", name: "neckline"),
@@ -38,11 +38,11 @@ class AccessoriesViewController: BaseTopsViewController {
             DollCloth(outer: "飾品13", bottom: "B飾品13", name: "neckline"),
             DollCloth(outer: "飾品14", bottom: "B飾品14", name: "neckline")
         ]
-        imageViewDoll.image = UIImage(named: "無")
         setupDollPart(imageView: &dollParts["bottom"], imageName: "上衣", tintColor: nil)
         setupDollPart(imageView: &dollParts["Bneckline"], imageName: neckline[0].bottom, tintColor: selectedColor)
         setupDollPart(imageView: &dollParts["neckline"], imageName: neckline[0].outer, tintColor: nil)
     }
+    
     override func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
