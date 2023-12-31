@@ -102,7 +102,7 @@ class RelationshipListView: UIViewController, SegmentControlDelegate {
     }
 }
 
-//class RelationshipListView: UIViewController, UITableViewDataSource, UITableViewDelegate {
+// class RelationshipListView: UIViewController, UITableViewDataSource, UITableViewDelegate {
 //
 //    let viewModel = RelationshipListViewModel()
 //
@@ -182,9 +182,9 @@ class RelationshipListView: UIViewController, SegmentControlDelegate {
 //        secondVC.author = viewModel.getFriend(at: indexPath.row)
 //        self.navigationController?.pushViewController(secondVC, animated: true)
 //    }
-//}
+// }
 //
-//extension RelationshipListView: SegmentControlDelegate {
+// extension RelationshipListView: SegmentControlDelegate {
 //    func changeToIndex(_ manager: SegmentView, index: Int) {
 //        FirebaseStorageManager.shared.getAuth { [weak self] author in
 //            guard let self = self else { return }
@@ -198,7 +198,7 @@ class RelationshipListView: UIViewController, SegmentControlDelegate {
 //            self.viewModel.fetchData(friendList: friendList)
 //        }
 //    }
-//}
+// }
 //
 class AmountHeaderView: UIView {
 

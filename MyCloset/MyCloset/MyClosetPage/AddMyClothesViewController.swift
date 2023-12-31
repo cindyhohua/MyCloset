@@ -255,7 +255,9 @@ class AddMyClosetViewController:
     
     // MARK: - UIImagePickerControllerDelegate
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[.originalImage] as? UIImage {
             picker.dismiss(animated: true)
             let cropViewController = TOCropViewController(image: pickedImage)
@@ -284,10 +286,8 @@ class AddMyClosetViewController:
                 item: itemName, price: price, store: storeName,
                 content: content, image: image)
             guard let viewControllers = self.navigationController?.viewControllers else { return }
-            for controller in viewControllers {
-                if controller is MyClosetPageViewController {
-                    self.navigationController?.popToViewController(controller, animated: true)
-                }
+            for controller in viewControllers where controller is MyClosetPageViewController {
+                self.navigationController?.popToViewController(controller, animated: true)
             }
         } else {
             showAlert(message: "Item name is required")
@@ -323,7 +323,9 @@ class AddMyClosetViewController:
 }
 
 extension AddMyClosetViewController: TOCropViewControllerDelegate {
-    func cropViewController(_ cropViewController: TOCropViewController, didCropTo image: UIImage, with cropRect: CGRect, angle: Int) {
+    func cropViewController(
+        _ cropViewController: TOCropViewController, didCropTo image: UIImage,
+        with cropRect: CGRect, angle: Int) {
         imageView.image = image
         uploadImageButton.setTitle("  重新選擇照片  ", for: .normal)
         uploadImageButton.backgroundColor = .white.withAlphaComponent(0.5)

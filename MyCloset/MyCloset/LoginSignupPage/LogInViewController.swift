@@ -50,17 +50,18 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func loginButtonTapped(_ sender: Any) {
-        guard let email = emailTextField.text, let password = passwordTextField.text, !email.isEmpty, !password.isEmpty else {
+        guard let email = emailTextField.text,
+                let password = passwordTextField.text,
+                !email.isEmpty, !password.isEmpty else {
             showAlert(title: "Error", message: "Please enter an email and password.")
             return
         }
 
-        Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
+        Auth.auth().signIn(withEmail: email, password: password) { (_, error) in
             if let error = error {
                 self.showAlert(title: "Error", message: error.localizedDescription)
             } else {
                 print("User signed in successfully!")
-                print(authResult?.user.uid)
                 self.dismiss(animated: true)
             }
         }
@@ -74,12 +75,16 @@ class LoginViewController: UIViewController {
     }
 }
 
-extension LoginViewController: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+extension LoginViewController:
+    ASAuthorizationControllerDelegate,
+    ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return view.window!
     }
 
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+    func authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
                 guard let nonce = currentNonce else {
                     fatalError("Invalid state: A login callback was received, but no login request was sent.")
@@ -93,7 +98,10 @@ extension LoginViewController: ASAuthorizationControllerDelegate, ASAuthorizatio
                     return
                 }
                 // 產生 Apple ID 登入的 Credential
-                let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: nonce)
+                let credential = OAuthProvider.credential(
+                    withProviderID: "apple.com",
+                    idToken: idTokenString,
+                    rawNonce: nonce)
                 // 與 Firebase Auth 進行串接
                 firebaseSignInWithApple(credential: credential)
 
@@ -103,11 +111,10 @@ extension LoginViewController: ASAuthorizationControllerDelegate, ASAuthorizatio
     func firebaseSignInWithApple(credential: AuthCredential) {
         Auth.auth().signIn(with: credential) { authResult, error in
             guard error == nil else {
-                print(error?.localizedDescription)
+                print(error?.localizedDescription ?? "")
                 return
             }
             print("登入成功")
-            print(authResult?.user.uid)
             var authorExist = false
             FirebaseStorageManager.shared.getAuth { author in
                 if author != nil {
@@ -131,26 +138,26 @@ extension LoginViewController: ASAuthorizationControllerDelegate, ASAuthorizatio
 extension LoginViewController {
     private func randomNonceString(length: Int = 32) -> String {
         precondition(length > 0)
-        let charset: Array<Character> = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+        let charset: [Character] = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
         var result = ""
         var remainingLength = length
 
-        while(remainingLength > 0) {
+        while remainingLength > 0 {
             let randoms: [UInt8] = (0 ..< 16).map { _ in
                 var random: UInt8 = 0
                 let errorCode = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
-                if (errorCode != errSecSuccess) {
+                if errorCode != errSecSuccess {
                     fatalError("Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)")
                 }
                 return random
             }
 
             randoms.forEach { random in
-                if (remainingLength == 0) {
+                if remainingLength == 0 {
                     return
                 }
 
-                if (random < charset.count) {
+                if random < charset.count {
                     result.append(charset[Int(random)])
                     remainingLength -= 1
                 }
@@ -168,4 +175,3 @@ extension LoginViewController {
         return hashString
     }
 }
-

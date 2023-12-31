@@ -16,7 +16,6 @@ class CoreDataManager {
         print(NSPersistentContainer.defaultDirectoryURL())
     }
 
-
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "MyCloset")
         container.loadPersistentStores(completionHandler: { (_, error) in
@@ -129,9 +128,13 @@ class CoreDataManager {
         }
     }
     
-    func addClothAndColor(category: String, subcategory: String, item: String, clothArray: [String], clothBArray: [String], color: [CGFloat], draw: Data) {
+    func addClothAndColor(
+        category: String, subcategory: String, item: String,
+        clothArray: [String], clothBArray: [String], color: [CGFloat], draw: Data) {
         let fetchRequest: NSFetchRequest<Clothes> = Clothes.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "category == %@ AND subcategory == %@ AND item == %@", category, subcategory, item)
+        fetchRequest.predicate = NSPredicate(
+            format: "category == %@ AND subcategory == %@ AND item == %@",
+            category, subcategory, item)
         
         do {
             let result = try CoreDataManager.shared.managedObjectContext.fetch(fetchRequest)
@@ -190,7 +193,9 @@ class CoreDataManager {
     
     // MARK: - Add Data
 
-    func addClothes(category: String, subcategory: String, item: String, price: String, store: String, content: String, image: Data?) {
+    func addClothes(
+        category: String, subcategory: String, item: String,
+        price: String, store: String, content: String, image: Data?) {
         let fetchRequest: NSFetchRequest<Clothes> = Clothes.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "item == %@", item)
         
@@ -254,7 +259,6 @@ class CoreDataManager {
         }
     }
 
-    
     // MARK: - Mine
     func saveMineData(image: Data, selectedItem: [String], uuid: String) {
         let fetchRequest: NSFetchRequest<Mine> = Mine.fetchRequest()
@@ -317,8 +321,7 @@ class CoreDataManager {
         }
     }
     
-    
-    func addHair(hair: [String], hairB: [String],color: [CGFloat]) {
+    func addHair(hair: [String], hairB: [String], color: [CGFloat]) {
         let fetchRequest: NSFetchRequest<DollHair> = DollHair.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "name == %@", "doll")
         
@@ -344,4 +347,3 @@ class CoreDataManager {
         }
     }
 }
-

@@ -58,7 +58,7 @@ extension UIButton {
     
     func removeBadge() {
         for subview in self.subviews {
-            if subview is UIView && subview.tag == 999 {
+            if subview.tag == 999 {
                 subview.removeFromSuperview()
             }
         }

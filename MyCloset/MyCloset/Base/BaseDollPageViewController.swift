@@ -226,7 +226,8 @@ class BaseTopsViewController: UIViewController {
         imageView = UIImageView()
         imageView?.isUserInteractionEnabled = true
         imageView?.contentMode = .scaleAspectFit
-        imageView?.image = (tintColor == nil) ? UIImage(named: imageName) : UIImage(named: imageName)?.withTintColor(tintColor ?? .white)
+        imageView?.image = (tintColor == nil) ?
+        UIImage(named: imageName) : UIImage(named: imageName)?.withTintColor(tintColor ?? .white)
         imageViewDoll.addSubview(imageView!)
         setupConstraints(for: imageView!)
     }
@@ -272,7 +273,9 @@ class BaseTopsViewController: UIViewController {
     }
 }
 
-extension BaseTopsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SegmentControlDelegate, ColorPickerViewDelegate, PencilPickerViewDelegate {
+extension BaseTopsViewController:
+    UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,
+        SegmentControlDelegate, ColorPickerViewDelegate, PencilPickerViewDelegate {
     func pencilSelectColor(_ color: UIColor) {
         pencilSelectedColor = color
         let newTool = PKInkingTool(.pen, color: color, width: pencilWidth)
@@ -328,7 +331,7 @@ extension BaseTopsViewController: UICollectionViewDataSource, UICollectionViewDe
             view.addSubview(pencilPickerView)
             pencilPickerView.backgroundColor = .white
             pencilPickerView.delegate = self
-            canvasView.tool = PKInkingTool(.pen, color: pencilSelectedColor , width: pencilWidth)
+            canvasView.tool = PKInkingTool(.pen, color: pencilSelectedColor, width: pencilWidth)
             canvasView.drawingPolicy = .anyInput
             pencilPickerView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
@@ -374,7 +377,10 @@ extension BaseTopsViewController: UICollectionViewDataSource, UICollectionViewDe
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
 
-        let cellWidth = (UIScreen.main.bounds.width - layout.minimumInteritemSpacing * 2 - layout.sectionInset.left - layout.sectionInset.right) / 3
+        let cellWidth = (
+            UIScreen.main.bounds.width - layout.minimumInteritemSpacing * 2 -
+            layout.sectionInset.left - layout.sectionInset.right
+        ) / 3
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
 
         layout.sectionInset = UIEdgeInsets(
@@ -389,7 +395,9 @@ extension BaseTopsViewController: UICollectionViewDataSource, UICollectionViewDe
         return outfits?.count ?? 0
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: OutfitCollectionViewCell.reuseIdentifier,
             for: indexPath) as? OutfitCollectionViewCell {
@@ -403,7 +411,10 @@ extension BaseTopsViewController: UICollectionViewDataSource, UICollectionViewDe
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = (collectionView.frame.width - 30) / 3
         return CGSize(width: cellWidth, height: cellWidth)
     }
@@ -412,7 +423,6 @@ extension BaseTopsViewController: UICollectionViewDataSource, UICollectionViewDe
         if let selectedOutfit = outfits?[indexPath.item] {
             updateDollImage(with: selectedOutfit)
             selected?[segmentIndex] = (outfitss?[segmentIndex][indexPath.item])!
-            print(selected)
         }
     }
     
@@ -426,5 +436,3 @@ extension BaseTopsViewController: UICollectionViewDataSource, UICollectionViewDe
         changeClothName(with: cloth)
     }
 }
-
-

@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import QuartzCore
 
-protocol LongPressDelegate {
+protocol LongPressDelegate: AnyObject {
     func longPress()
 }
 
@@ -37,7 +37,7 @@ class DetailPageImageCell: UITableViewCell {
                 case .success(let likeInfo):
                     self.likeCount = likeInfo.likeCount
                     let isLiked = likeInfo.isLiked
-                    print("Like Count: \(self.likeCount), Is Liked: \(isLiked)")
+                    print("Like Count: \(self.likeCount ?? 0), Is Liked: \(isLiked)")
                     self.isLiked = isLiked
                 case .failure(let error):
                     print("Error fetching like info: \(error.localizedDescription)")
@@ -201,8 +201,7 @@ class DetailPageImageCell: UITableViewCell {
         UIView.animate(withDuration: 0.5, animations: {
             heartImageView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
             heartImageView.alpha = 0.0
-        }
-        ) { _ in
+        }) { _ in
             heartImageView.removeFromSuperview()
         }
     }

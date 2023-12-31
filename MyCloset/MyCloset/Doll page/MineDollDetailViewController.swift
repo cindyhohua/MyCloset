@@ -134,7 +134,9 @@ class MineDollDetailViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? MineDollClothesViewCell else {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "Cell",
+            for: indexPath) as? MineDollClothesViewCell else {
             fatalError("Cant find cell")
         }
         cell.label.text = mineDoll?.wearing?[indexPath.row] as? String

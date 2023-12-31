@@ -36,14 +36,10 @@ class OutfitCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(with outfit: DollCloth, yPos: CGFloat) {
-        let outerImage = UIImage(named: "\(outfit.outer)")
-        let bottomImage = UIImage(named: "\(outfit.bottom)")
         outfitImageView.image = createCenterCroppedImage(named: "\(outfit.outer)", yPos: yPos)
     }
     
     func configureAcc(with outfit: DollCloth) {
-        let outerImage = UIImage(named: "\(outfit.outer)")
-        let bottomImage = UIImage(named: "\(outfit.bottom)")
         outfitImageView.image = UIImage(named: "\(outfit.outer)")
     }
     
@@ -57,16 +53,13 @@ class OutfitCollectionViewCell: UICollectionViewCell {
         let xPosition = -(originalImage.size.width - width) / 2
         let yPosition = -(originalImage.size.height - width) / yPos
 
-        let image = renderer.image { context in
+        let image = renderer.image { _ in
             originalImage.draw(at: CGPoint(x: xPosition, y: yPosition))
         }
 
         return image
     }
 }
-
-
-import UIKit
 
 protocol ColorPickerViewDelegate: AnyObject {
     func didSelectColor(_ color: UIColor)
@@ -263,7 +256,7 @@ class PencilPickerView: UIView, UIColorPickerViewControllerDelegate {
             colorIndicatorView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             colorIndicatorView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             colorIndicatorView.bottomAnchor.constraint(equalTo: colorPickerButton.bottomAnchor, constant: -8),
-            colorIndicatorView.widthAnchor.constraint(equalToConstant: 30),
+            colorIndicatorView.widthAnchor.constraint(equalToConstant: 30)
         ])
     }
 }

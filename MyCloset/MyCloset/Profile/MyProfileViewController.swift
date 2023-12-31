@@ -15,12 +15,16 @@ class MyProfileViewController: ProfileViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        FirebaseStorageManager.shared.getAuth { author in
-            self.author = author
-        }
         mySetup()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        FirebaseStorageManager.shared.getAuth { author in
+            self.author = author
+        }
+    }
+
     func mySetup() {
         let setButton = UIBarButtonItem(
             image: UIImage(systemName: "gearshape"), style: .plain,

@@ -68,19 +68,6 @@ class NewPostSecondStepViewController: UIViewController {
     }
     
     @objc func postButtonTapped() {
-//        var productList: [Product] = []
-//        for row in 2..<tableView.numberOfRows(inSection: 0) {
-//            guard let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as? NewPostProductCell else {
-//                continue
-//            }
-//            let name = cell.nameLabel.text ?? ""
-//            let store = cell.storeLabel.text ?? ""
-//            let price = cell.priceLabel.text ?? ""
-//            let comments = cell.commentsLabel.text ?? ""
-//            productList.append(
-//                Product(
-//                    productName: name, productStore: store, productPrice: price, productComment: comments))
-//        }
         print(products)
         var content = ""
         guard let cellContent = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? NewPostCommentCell else {
@@ -102,11 +89,8 @@ class NewPostSecondStepViewController: UIViewController {
                                 productList: self?.products ?? [], dollImageURL: downloadDollURL.absoluteString) { _ in
                                     guard let viewControllers = self?.navigationController?.viewControllers
                                     else { return }
-                                    for controller in viewControllers {
-                                        if controller is HomePageViewController {
-                                            self?.navigationController?.popToViewController(controller, animated: true)
-                                            
-                                        }
+                                    for controller in viewControllers where controller is HomePageViewController {
+                                        self?.navigationController?.popToViewController(controller, animated: true)
                                     }
                                 }
                         case .failure(let error):
@@ -120,10 +104,8 @@ class NewPostSecondStepViewController: UIViewController {
                         positions: self?.position ?? [CGPoint(x: -10, y: -10)],
                         productList: self?.products ?? [], dollImageURL: "") { _ in
                             guard let viewControllers = self?.navigationController?.viewControllers else { return }
-                            for controller in viewControllers {
-                                if controller is HomePageViewController {
-                                    self?.navigationController?.popToViewController(controller, animated: true)
-                                }
+                            for controller in viewControllers where controller is HomePageViewController {
+                                self?.navigationController?.popToViewController(controller, animated: true)
                             }
                         }
                 }

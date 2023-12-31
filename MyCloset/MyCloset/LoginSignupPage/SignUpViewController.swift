@@ -19,7 +19,11 @@ class SignupViewController: UIViewController {
         passwordTextField.isSecureTextEntry = true
     }
     @IBAction func signupButtonTapped(_ sender: AnyObject) {
-        guard let email = emailTextField.text, let password = passwordTextField.text, let nickName = nicknameTextField.text, !email.isEmpty, !password.isEmpty, !nickName.isEmpty else {
+        guard let email = emailTextField.text,
+                let password = passwordTextField.text,
+                let nickName = nicknameTextField.text,
+                !email.isEmpty, !password.isEmpty,
+                !nickName.isEmpty else {
             showAlert(title: "Error", message: "Please enter an email, password and nick name.")
             return
         }
@@ -28,8 +32,6 @@ class SignupViewController: UIViewController {
             if let error = error {
                 self.showAlert(title: "Error", message: error.localizedDescription)
             } else {
-                print("nice")
-                print(authResult?.user.uid)
                 let author = Author(
                     email: email, id: authResult?.user.uid ?? "",
                     name: nickName, image: "", height: "", weight: "",
@@ -40,7 +42,7 @@ class SignupViewController: UIViewController {
                     blockedUsers: [], blockedByUsers: [])
                 FirebaseStorageManager.shared.addAuth(uid: authResult?.user.uid ?? "", author: author) { result in
                     switch result {
-                    case .success(_):
+                    case .success:
                         print("success")
                         if let previousVC = self.presentingViewController?.presentingViewController {
                             previousVC.dismiss(animated: true)
@@ -63,4 +65,3 @@ class SignupViewController: UIViewController {
         present(alertController, animated: true, completion: nil)
     }
 }
-

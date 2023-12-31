@@ -21,7 +21,7 @@ class HairViewController: BaseTopsViewController {
         cellYPos = 20
         codeSegmented = SegmentView(
             frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44),
-            buttonTitle: ["瀏海","髮型","顏色"])
+            buttonTitle: ["瀏海", "髮型", "顏色"])
         neckline = [
             DollCloth(outer: "瀏海1", bottom: "B瀏海1", name: "neckline"),
             DollCloth(outer: "瀏海2", bottom: "B瀏海2", name: "neckline"),
@@ -93,10 +93,8 @@ class HairViewController: BaseTopsViewController {
         CoreDataManager.shared.addHair(hair: cloth, hairB: clothB, color: [red, green, blue])
         delegate?.hairToChangeCloth()
         guard let viewControllers = self.navigationController?.viewControllers else { return }
-        for controller in viewControllers {
-            if controller is ChangeClothesViewController {
-                self.navigationController?.popToViewController(controller, animated: true)
-            }
+        for controller in viewControllers where controller is ChangeClothesViewController {
+            self.navigationController?.popToViewController(controller, animated: true)
         }
     }
 }

@@ -10,16 +10,16 @@ import SnapKit
 
 class ProfileCollectionViewCell: UICollectionViewCell {
     let image: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
-        iv.clipsToBounds = true
-        iv.layer.cornerRadius = 5
-        iv.backgroundColor = UIColor.white
-        iv.layer.shadowColor = UIColor.black.cgColor
-        iv.layer.shadowOpacity = 0.5
-        iv.layer.shadowOffset = CGSize(width: 0, height: 3)
-        iv.layer.shadowRadius = 2
-        return iv
+        let iview = UIImageView()
+        iview.contentMode = .scaleAspectFill
+        iview.clipsToBounds = true
+        iview.layer.cornerRadius = 5
+        iview.backgroundColor = UIColor.white
+        iview.layer.shadowColor = UIColor.black.cgColor
+        iview.layer.shadowOpacity = 0.5
+        iview.layer.shadowOffset = CGSize(width: 0, height: 3)
+        iview.layer.shadowRadius = 2
+        return iview
     }()
     
     override init(frame: CGRect) {

@@ -56,7 +56,9 @@ class FirebaseStorageManager {
                         completion(.success(author))
                     } else {
                         print("Document does not exist")
-                        let notExistError = NSError(domain: "YourDomain", code: 404, userInfo: [NSLocalizedDescriptionKey: "Document does not exist"])
+                        let notExistError = NSError(
+                            domain: "YourDomain", code: 404,
+                            userInfo: [NSLocalizedDescriptionKey: "Document does not exist"])
                         completion(.failure(notExistError))
                     }
                 } catch {
@@ -67,7 +69,6 @@ class FirebaseStorageManager {
         }
     }
 
-    
     func addAuth(uid: String, author: Author, completion: @escaping (Result<Void, Error>) -> Void) {
         let auth = firebaseDb.collection("auth")
         let document = auth.document(uid)
@@ -96,7 +97,9 @@ class FirebaseStorageManager {
         }
     }
     
-    func updateAuth(image: String, name: String, littleWords: String, weight: String, height: String, completion: @escaping (Error?) -> Void) {
+    func updateAuth(
+        image: String, name: String, littleWords: String,
+        weight: String, height: String, completion: @escaping (Error?) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             completion(NSError(domain: "YourAppErrorDomain", code: -1,
                                userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
@@ -145,11 +148,9 @@ extension FirebaseStorageManager {
         fetchData { articles in
             var articleStore: [Article] = []
             for article in articles {
-                for list in article.productList {
-                    if list.productStore.lowercased() == store.lowercased() {
-                        articleStore.append(article)
-                        break
-                    }
+                for list in article.productList where list.productStore.lowercased() == store.lowercased() {
+                    articleStore.append(article)
+                    break
                 }
             }
             completion(articleStore)
@@ -292,19 +293,15 @@ extension FirebaseStorageManager {
                 completion([])
                 return
             }
-            
             guard let following = document?.data()?["following"] as? [String] else {
                 print("Following list not found.")
                 completion([])
                 return
             }
             var articles: [Article] = []
-            
             let dispatchGroup = DispatchGroup()
-            
             for followerID in following {
                 dispatchGroup.enter()
-                
                 self.firebaseDb.collection("articles")
                     .whereField("author.id", isEqualTo: followerID)
                 // .whereField("createdTime", isGreaterThan: (Date().timeIntervalSince1970 - (30 * 24 * 60 * 60)))
@@ -322,7 +319,6 @@ extension FirebaseStorageManager {
                             print("Query snapshot is nil for \(followerID)")
                             return
                         }
-                        
                         do {
                             for document in querySnapshot.documents {
                                 let data = document.data()
@@ -336,9 +332,7 @@ extension FirebaseStorageManager {
                         }
                     }
             }
-            
             dispatchGroup.notify(queue: .main) {
-                
                 let sortedArticles = articles.sorted(by: { $0.createdTime > $1.createdTime })
                 completion(sortedArticles)
             }
@@ -375,7 +369,9 @@ extension FirebaseStorageManager {
         return products
     }
     
-    func addArticle(auth: Author, imageURL: String, content: String, positions: [CGPoint] , productList: [Product], dollImageURL: String, completion: @escaping (Error?) -> Void) {
+    func addArticle(
+        auth: Author, imageURL: String, content: String, positions: [CGPoint],
+        productList: [Product], dollImageURL: String, completion: @escaping (Error?) -> Void) {
         let convertedPositions: [[String: CGFloat]] = positions.map { point in
             return ["x": point.x, "y": point.y]
         }
@@ -617,15 +613,6 @@ extension FirebaseStorageManager {
                 print("Send successfully")
             }
         }
-        
-//
-//        updateNotificationArray(authorId: authorID, postId: "", updatedComment: .tapAccept, originComment: .friendRequest) { error in
-//            if let error = error {
-//                print(error.localizedDescription)
-//            } else {
-//                print("update success")
-//            }
-//        }
     }
     
     func rejectFriendRequest(authorID: String, completion: @escaping (Error?) -> Void) {
@@ -648,13 +635,6 @@ extension FirebaseStorageManager {
                 print("Send successfully")
             }
         }
-//        updateNotificationArray(authorId: authorID, postId: "", updatedComment: .tapReject, originComment: .friendRequest) { error in
-//            if let error = error {
-//                print(error.localizedDescription)
-//            } else {
-//                print("update success")
-//            }
-//        }
     }
     
     func removeFriend(friendID: String, completion: @escaping (Error?) -> Void) {

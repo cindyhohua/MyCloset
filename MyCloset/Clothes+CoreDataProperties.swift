@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension Clothes {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Clothes> {

@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension DollHair {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<DollHair> {

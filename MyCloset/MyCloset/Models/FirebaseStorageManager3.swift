@@ -122,9 +122,9 @@ extension FirebaseStorageManager {
         
         getCreatedTime(postId: postId) { createdTime, imageURL in
             let authPost = [
-                "createdTime": createdTime,
+                "createdTime": createdTime ?? 0,
                 "id": postId,
-                "image": imageURL
+                "image": imageURL ?? ""
             ]
             print(authPost)
             
@@ -163,5 +163,3 @@ extension FirebaseStorageManager {
         }
     }
 }
-
-

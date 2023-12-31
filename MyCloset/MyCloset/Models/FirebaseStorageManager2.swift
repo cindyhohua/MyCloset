@@ -98,7 +98,9 @@ extension FirebaseStorageManager {
         }
     }
     
-    func likePost(postRef: DocumentReference, currentUserID: String, authorId: String, postId: String, completion: @escaping (Error?) -> Void) {
+    func likePost(
+        postRef: DocumentReference, currentUserID: String,
+        authorId: String, postId: String, completion: @escaping (Error?) -> Void) {
         postRef.updateData([
             "like": FieldValue.increment(Int64(1)),
             "whoLiked": FieldValue.arrayUnion([currentUserID])
@@ -163,7 +165,9 @@ extension FirebaseStorageManager {
 
 // notification
 extension FirebaseStorageManager {
-    func sendNotification(authorId: String, postId: String, notifyType: NotifyWord, completion: @escaping (Error?) -> Void) {
+    func sendNotification(
+        authorId: String, postId: String,
+        notifyType: NotifyWord, completion: @escaping (Error?) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             completion(NSError(domain: "YourAppErrorDomain", code: -1,
              userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
@@ -197,7 +201,9 @@ extension FirebaseStorageManager {
         }
     }
     
-    func sendNotificationMyAcception(authorId: String, postId: String, notifyType: NotifyWord, completion: @escaping (Error?) -> Void) {
+    func sendNotificationMyAcception(
+        authorId: String, postId: String,
+        notifyType: NotifyWord, completion: @escaping (Error?) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             completion(NSError(domain: "YourAppErrorDomain", code: -1,
              userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
@@ -269,7 +275,7 @@ extension FirebaseStorageManager {
     
     func startListeningForAuthChanges() {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
-            let error = NSError(domain: "YourAppErrorDomain", code: -1,
+            _ = NSError(domain: "YourAppErrorDomain", code: -1,
                                 userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])
             return
         }
@@ -309,10 +315,10 @@ extension FirebaseStorageManager {
                 let newPendingCount = pendingRequests.count
                 
                 if newNotificationCount > oldNotificationCount {
-                    print("Notification change:", notifications.last)
+                    print("Notification change:", notifications.last ?? "")
 //                    self.handleNotificationsChange(notifications: notifications)
                 } else if newPendingCount > oldPendingCount {
-                    print("Pending requests change:", pendingRequests.last)
+                    print("Pending requests change:", pendingRequests.last ?? "")
 //                    self.handlePendingRequestsChange(pendingRequests: pendingRequests)
                 }
                 
@@ -454,7 +460,7 @@ extension FirebaseStorageManager {
     }
     
     func deleteFriend(usersWhoFollowHim: [String]?, usersWhoHasBeenFollowed: [String]?) {
-        guard let followers = usersWhoFollowHim, let following = usersWhoHasBeenFollowed else {
+        guard let followers = usersWhoFollowHim, let _ = usersWhoHasBeenFollowed else {
             return
         }
         

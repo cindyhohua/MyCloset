@@ -77,14 +77,14 @@ class OthersProfileViewController: ProfileViewController {
         return button
     }
 
-    
     @objc func blockButtonTapped() {
         FirebaseStorageManager.shared.getAuth { [weak self] myProfile in
             guard let self = self, let authorId = self.author?.id else { return }
 
             let isUserBlocked = myProfile.blockedUsers?.contains(authorId) ?? false
             let title = isUserBlocked ? "Confirm Unblock" : "Confirm Block"
-            let message = isUserBlocked ? "Are you sure you want to unblock this user?" : "Are you sure you want to block this user?"
+            let message = isUserBlocked ?
+            "Are you sure you want to unblock this user?" : "Are you sure you want to block this user?"
             let actionTitle = isUserBlocked ? "Unblock" : "Block"
 
             self.showAlertForBlocking(
@@ -102,7 +102,8 @@ class OthersProfileViewController: ProfileViewController {
 
         let action = UIAlertAction(title: actionTitle, style: .destructive) { [weak self] _ in
             guard let self = self else { return }
-            let operation = isBlocking ? FirebaseStorageManager.shared.blockOther : FirebaseStorageManager.shared.unblockOther
+            let operation = isBlocking ?
+            FirebaseStorageManager.shared.blockOther : FirebaseStorageManager.shared.unblockOther
 
             operation(authorId) { result in
                 switch result {

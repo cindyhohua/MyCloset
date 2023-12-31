@@ -171,7 +171,9 @@ extension HomePageViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "homepage", for: indexPath) as? HomePageTableCell else {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "homepage",
+            for: indexPath) as? HomePageTableCell else {
             fatalError("Can't find cell")
         }
         cell.isUserInteractionEnabled = true

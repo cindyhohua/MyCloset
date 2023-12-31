@@ -50,9 +50,9 @@ class AppleLoginSetProfileViewController: UIViewController {
                 privateOrNot: false, littleWords: "", following: [],
                 followers: [], pending: [], post: [],
                 saved: [], notification: [], notificationNotSeen: 0,
-                blockedUsers:[], blockedByUsers: [])) { result in
+                blockedUsers: [], blockedByUsers: [])) { result in
                     switch result {
-                case .success(_) :
+                case .success:
                     print("success")
                     if let previousVC = self.presentingViewController?.presentingViewController {
                         previousVC.dismiss(animated: true)

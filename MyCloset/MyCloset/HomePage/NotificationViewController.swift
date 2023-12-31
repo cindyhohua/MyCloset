@@ -241,8 +241,8 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
         } else {
             if self.notifications?[indexPath.row].postId == "" {
                 let secondViewController = OthersProfileViewController()
-                FirebaseStorageManager.shared.getSpecificAuth(id: self.notifications?[indexPath.row].authId ?? "")
-                { result in
+                FirebaseStorageManager.shared.getSpecificAuth(
+                    id: self.notifications?[indexPath.row].authId ?? "") { result in
                     switch result {
                     case .success(let author):
                         secondViewController.author = author
@@ -253,8 +253,8 @@ extension NotificationViewController: UITableViewDataSource, UITableViewDelegate
                 }
             } else {
                 let secondViewController = DetailPageViewController()
-                FirebaseStorageManager.shared.fetchSpecificData(id: self.notifications?[indexPath.row].postId ?? "")
-                { article in
+                FirebaseStorageManager.shared.fetchSpecificData(
+                    id: self.notifications?[indexPath.row].postId ?? "") { article in
                     secondViewController.article = article
                     self.navigationController?.pushViewController(secondViewController, animated: true)
                 }

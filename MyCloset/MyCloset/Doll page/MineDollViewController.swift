@@ -16,11 +16,11 @@ class MineDollViewController: UIViewController {
     }
     fileprivate let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.register(ProfileCollectionViewCell.self, forCellWithReuseIdentifier: "ProfileCell")
-        cv.backgroundColor = UIColor.white
-        return cv
+        let cview = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cview.translatesAutoresizingMaskIntoConstraints = false
+        cview.register(ProfileCollectionViewCell.self, forCellWithReuseIdentifier: "ProfileCell")
+        cview.backgroundColor = UIColor.white
+        return cview
     }()
     
     override func viewDidLoad() {
@@ -59,7 +59,9 @@ class MineDollViewController: UIViewController {
 }
 
 extension MineDollViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath) -> CGSize {
         let itemsPerRow = CGFloat(2)
         let sectionInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
         let paddingSpace =  sectionInsets.left * (itemsPerRow + 1)
@@ -68,7 +70,9 @@ extension MineDollViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: widthPerItem, height: widthPerItem*2)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(
+        _ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int) -> UIEdgeInsets {
         let sectionInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
         return sectionInsets
     }
@@ -79,8 +83,10 @@ extension MineDollViewController: UICollectionViewDelegate, UICollectionViewData
         return mineDoll?.count ?? 0
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProfileCell", for: indexPath) as? ProfileCollectionViewCell else {
+    func collectionView(
+        _ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "ProfileCell", for: indexPath) as? ProfileCollectionViewCell else {
             fatalError("Unable to dequeue ProfileCell")
         }
         if let imageData = mineDoll?[indexPath.row].myWearing {
@@ -97,6 +103,3 @@ extension MineDollViewController: UICollectionViewDelegate, UICollectionViewData
         self.navigationController?.pushViewController(secondViewController, animated: true)
     }
 }
-
-
-

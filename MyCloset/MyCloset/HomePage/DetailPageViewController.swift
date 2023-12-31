@@ -109,7 +109,6 @@ class DetailPageViewController: UIViewController {
             message: "Are you sure you want to delete this post?",
             preferredStyle: .alert
         )
-
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
 
@@ -301,7 +300,8 @@ extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
                 var position: [CGPoint] = []
                 if article?.position.isEmpty == false {
                     for indexI in 0..<(article?.position.count ?? 0) {
-                        position.append(CGPointMake(
+                        position.append(
+                            CGPointMake(
                                 article?.position[indexI].xPosition ?? 0,
                                 article?.position[indexI].yPosition ?? 0)
                         )

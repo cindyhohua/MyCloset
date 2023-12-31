@@ -33,7 +33,7 @@
     }
  }
 
-//class RelationshipListViewModel {
+// class RelationshipListViewModel {
 //    var buttonTitle = ["Following", "Followers", "Block List"]
 //    var backImageName = "chevron.backward.circle"
 //    var likeAmount: Int = 0
@@ -63,4 +63,4 @@
 //    private func updateLikesAmount() {
 //        likeAmount = friends.count
 //    }
-//}
+// }

@@ -9,7 +9,7 @@ import UIKit
 import FirebaseAuth
 import Kingfisher
 
-//class DetailPageViewController: UIViewController {
+// class DetailPageViewController: UIViewController {
 //    private var saveButton: UIBarButtonItem!
 //    var article: Article? {
 //        didSet {
@@ -243,9 +243,9 @@ import Kingfisher
 //            }
 //        }
 //    }
-//}
+// }
 //
-//extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
+// extension DetailPageViewController: UITableViewDelegate, UITableViewDataSource {
 //    func setupTableView() {
 //        view.addSubview(commentInput)
 //        commentInput.delegate = self
@@ -384,9 +384,9 @@ import Kingfisher
 //            }
 //        }
 //    }
-//}
+// }
 //
-//extension DetailPageViewController: DetailPageInputCommentDelegate {
+// extension DetailPageViewController: DetailPageInputCommentDelegate {
 //    func didTapPostComment() {
 //        FirebaseStorageManager.shared.fetchSpecificData(id: article?.id ?? "") { article in
 //            self.article = article
@@ -394,13 +394,13 @@ import Kingfisher
 //        }
 //    }
 //
-//}
+// }
 //
-//extension DetailPageViewController: LongPressDelegate {
+// extension DetailPageViewController: LongPressDelegate {
 //    func longPress() {
 //        let secondVC = FriendListViewController()
 //        secondVC.likeAmount = self.article?.like ?? 0
 //        secondVC.fetchData(friendList: self.article?.whoLiked ?? [])
 //        self.navigationController?.pushViewController(secondVC, animated: true)
 //    }
-//}
+// }
