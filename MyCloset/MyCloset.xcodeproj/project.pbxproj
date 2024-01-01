@@ -47,6 +47,9 @@
 		CA1CD6B62B414B3300DB70C0 /* HomePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6B52B414B3300DB70C0 /* HomePageViewModel.swift */; };
 		CA1CD6BD2B415FE900DB70C0 /* DetailPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6BC2B415FE900DB70C0 /* DetailPageView.swift */; };
 		CA1CD6BF2B415FF700DB70C0 /* DetailPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6BE2B415FF700DB70C0 /* DetailPageViewModel.swift */; };
+		CA1CD6C72B42881D00DB70C0 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA1CD6C62B42881D00DB70C0 /* XCTest.framework */; };
+		CA1CD6CF2B4289A000DB70C0 /* MyClosetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6CE2B4289A000DB70C0 /* MyClosetTests.swift */; };
+		CA1CD6E42B429BC500DB70C0 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CA1CD6E32B429BC500DB70C0 /* FirebaseFirestore */; };
 		CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */; };
 		CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */; };
 		CA3B0FB32B09CF76001B708E /* DollPageCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */; };
@@ -79,6 +82,16 @@
 		CAF701142B1222440053B12B /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF701132B1222440053B12B /* NotificationViewController.swift */; };
 		CAF701162B1346E90053B12B /* TopRankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF701152B1346E90053B12B /* TopRankingViewController.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CA1CD6D02B4289A000DB70C0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA016D052B04C93D0066FBE7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CA016D0C2B04C93D0066FBE7;
+			remoteInfo = MyCloset;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		10852D07CE0A2944B1D819B9 /* Pods-MyCloset.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyCloset.release.xcconfig"; path = "Target Support Files/Pods-MyCloset/Pods-MyCloset.release.xcconfig"; sourceTree = "<group>"; };
@@ -119,6 +132,9 @@
 		CA1CD6B52B414B3300DB70C0 /* HomePageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewModel.swift; sourceTree = "<group>"; };
 		CA1CD6BC2B415FE900DB70C0 /* DetailPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageView.swift; sourceTree = "<group>"; };
 		CA1CD6BE2B415FF700DB70C0 /* DetailPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageViewModel.swift; sourceTree = "<group>"; };
+		CA1CD6C62B42881D00DB70C0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		CA1CD6CC2B4289A000DB70C0 /* MyClosetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyClosetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA1CD6CE2B4289A000DB70C0 /* MyClosetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetTests.swift; sourceTree = "<group>"; };
 		CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManeger.swift; sourceTree = "<group>"; };
 		CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetDetailPageViewController.swift; sourceTree = "<group>"; };
 		CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageCVCell.swift; sourceTree = "<group>"; };
@@ -156,6 +172,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA1CD6C72B42881D00DB70C0 /* XCTest.framework in Frameworks */,
 				CA795B0F2B1C716300D5584E /* FirebaseMessaging in Frameworks */,
 				CA016D482B05FDD50066FBE7 /* FirebaseAnalytics in Frameworks */,
 				CA016D4A2B05FDD50066FBE7 /* FirebaseAuth in Frameworks */,
@@ -169,12 +186,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CA1CD6C92B4289A000DB70C0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA1CD6E42B429BC500DB70C0 /* FirebaseFirestore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		A624D3E56E90D3AF3324B031 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CA1CD6C62B42881D00DB70C0 /* XCTest.framework */,
 				7ACE3835B48A4875E79FD346 /* Pods_MyCloset.framework */,
 			);
 			name = Frameworks;
@@ -193,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				CA016D0F2B04C93D0066FBE7 /* MyCloset */,
+				CA1CD6CD2B4289A000DB70C0 /* MyClosetTests */,
 				CA016D0E2B04C93D0066FBE7 /* Products */,
 				BF0ECF1985EAB92DF056F15B /* Pods */,
 				A624D3E56E90D3AF3324B031 /* Frameworks */,
@@ -203,6 +230,7 @@
 			isa = PBXGroup;
 			children = (
 				CA016D0D2B04C93D0066FBE7 /* MyCloset.app */,
+				CA1CD6CC2B4289A000DB70C0 /* MyClosetTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -336,6 +364,14 @@
 			path = DetailPageMVVM;
 			sourceTree = "<group>";
 		};
+		CA1CD6CD2B4289A000DB70C0 /* MyClosetTests */ = {
+			isa = PBXGroup;
+			children = (
+				CA1CD6CE2B4289A000DB70C0 /* MyClosetTests.swift */,
+			);
+			path = MyClosetTests;
+			sourceTree = "<group>";
+		};
 		CA3B0FAF2B08DE70001B708E /* Doll page */ = {
 			isa = PBXGroup;
 			children = (
@@ -440,6 +476,27 @@
 			productReference = CA016D0D2B04C93D0066FBE7 /* MyCloset.app */;
 			productType = "com.apple.product-type.application";
 		};
+		CA1CD6CB2B4289A000DB70C0 /* MyClosetTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CA1CD6D22B4289A000DB70C0 /* Build configuration list for PBXNativeTarget "MyClosetTests" */;
+			buildPhases = (
+				CA1CD6C82B4289A000DB70C0 /* Sources */,
+				CA1CD6C92B4289A000DB70C0 /* Frameworks */,
+				CA1CD6CA2B4289A000DB70C0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CA1CD6D12B4289A000DB70C0 /* PBXTargetDependency */,
+			);
+			name = MyClosetTests;
+			packageProductDependencies = (
+				CA1CD6E32B429BC500DB70C0 /* FirebaseFirestore */,
+			);
+			productName = MyClosetTests;
+			productReference = CA1CD6CC2B4289A000DB70C0 /* MyClosetTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -447,11 +504,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1400;
+				LastSwiftUpdateCheck = 1420;
 				LastUpgradeCheck = 1400;
 				TargetAttributes = {
 					CA016D0C2B04C93D0066FBE7 = {
 						CreatedOnToolsVersion = 14.0.1;
+					};
+					CA1CD6CB2B4289A000DB70C0 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = CA016D0C2B04C93D0066FBE7;
 					};
 				};
 			};
@@ -472,6 +533,7 @@
 			projectRoot = "";
 			targets = (
 				CA016D0C2B04C93D0066FBE7 /* MyCloset */,
+				CA1CD6CB2B4289A000DB70C0 /* MyClosetTests */,
 			);
 		};
 /* End PBXProject section */
@@ -485,6 +547,13 @@
 				CA016D3B2B04CB8D0066FBE7 /* LaunchScreen.storyboard in Resources */,
 				CA016D542B0603090066FBE7 /* GoogleService-Info.plist in Resources */,
 				CA016D382B04CB8D0066FBE7 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA1CD6CA2B4289A000DB70C0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -619,7 +688,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CA1CD6C82B4289A000DB70C0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA1CD6CF2B4289A000DB70C0 /* MyClosetTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CA1CD6D12B4289A000DB70C0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CA016D0C2B04C93D0066FBE7 /* MyCloset */;
+			targetProxy = CA1CD6D02B4289A000DB70C0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		CA016D222B04C93F0066FBE7 /* Debug */ = {
@@ -814,6 +899,44 @@
 			};
 			name = Release;
 		};
+		CA1CD6D32B4289A000DB70C0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N4C7YMWND2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cindyhohua.MyClosetTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyCloset.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MyCloset";
+			};
+			name = Debug;
+		};
+		CA1CD6D42B4289A000DB70C0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N4C7YMWND2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cindyhohua.MyClosetTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyCloset.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MyCloset";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -831,6 +954,15 @@
 			buildConfigurations = (
 				CA016D252B04C93F0066FBE7 /* Debug */,
 				CA016D262B04C93F0066FBE7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CA1CD6D22B4289A000DB70C0 /* Build configuration list for PBXNativeTarget "MyClosetTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA1CD6D32B4289A000DB70C0 /* Debug */,
+				CA1CD6D42B4289A000DB70C0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -878,6 +1010,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CA016D462B05FDD50066FBE7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		CA1CD6E32B429BC500DB70C0 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA016D462B05FDD50066FBE7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 		CA795B0E2B1C716300D5584E /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;

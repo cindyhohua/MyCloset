@@ -316,10 +316,8 @@ extension FirebaseStorageManager {
                 
                 if newNotificationCount > oldNotificationCount {
                     print("Notification change:", notifications.last ?? "")
-//                    self.handleNotificationsChange(notifications: notifications)
                 } else if newPendingCount > oldPendingCount {
                     print("Pending requests change:", pendingRequests.last ?? "")
-//                    self.handlePendingRequestsChange(pendingRequests: pendingRequests)
                 }
                 
                 if newNotificationNotSeen != oldNotificationNotSeen {
@@ -442,7 +440,6 @@ extension FirebaseStorageManager {
             completion(.success(()))
         }
     }
-    
     func deletePost(for postIDs: [String]?) {
         guard let postIDs = postIDs else {
             return
@@ -458,9 +455,8 @@ extension FirebaseStorageManager {
             }
         }
     }
-    
     func deleteFriend(usersWhoFollowHim: [String]?, usersWhoHasBeenFollowed: [String]?) {
-        guard let followers = usersWhoFollowHim, let _ = usersWhoHasBeenFollowed else {
+        guard let followers = usersWhoFollowHim else {
             return
         }
         
@@ -468,7 +464,6 @@ extension FirebaseStorageManager {
             return
         }
         let authCollection = firebaseDb.collection("auth")
-        
         for user in followers {
             authCollection.document(user).updateData([
                 "following": FieldValue.arrayRemove([currentUserID])
@@ -478,7 +473,6 @@ extension FirebaseStorageManager {
                 }
             }
         }
-        
         for user in followers {
             authCollection.document(user).updateData([
                 "followers": FieldValue.arrayRemove([currentUserID])
@@ -489,7 +483,6 @@ extension FirebaseStorageManager {
             }
         }
     }
-    
     func deleteMyself() {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             return
