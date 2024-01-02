@@ -170,7 +170,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA1CD6C72B42881D00DB70C0 /* XCTest.framework in Frameworks */,
 				CA795B0F2B1C716300D5584E /* FirebaseMessaging in Frameworks */,
 				CA016D482B05FDD50066FBE7 /* FirebaseAnalytics in Frameworks */,
 				CA016D4A2B05FDD50066FBE7 /* FirebaseAuth in Frameworks */,
@@ -198,7 +197,6 @@
 		A624D3E56E90D3AF3324B031 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CA1CD6C62B42881D00DB70C0 /* XCTest.framework */,
 				7ACE3835B48A4875E79FD346 /* Pods_MyCloset.framework */,
 			);
 			name = Frameworks;
@@ -851,10 +849,10 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -890,10 +888,10 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

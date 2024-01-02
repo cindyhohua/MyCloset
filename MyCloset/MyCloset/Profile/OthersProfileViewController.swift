@@ -20,6 +20,7 @@ class OthersProfileViewController: ProfileViewController {
         super.viewDidLoad()
         setup()
         othersSetup()
+        navigationItem.rightBarButtonItem = followButton
     }
     
     func othersSetup() {
