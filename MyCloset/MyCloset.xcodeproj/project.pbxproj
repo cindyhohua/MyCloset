@@ -47,8 +47,7 @@
 		CA1CD6B62B414B3300DB70C0 /* HomePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6B52B414B3300DB70C0 /* HomePageViewModel.swift */; };
 		CA1CD6BD2B415FE900DB70C0 /* DetailPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6BC2B415FE900DB70C0 /* DetailPageView.swift */; };
 		CA1CD6BF2B415FF700DB70C0 /* DetailPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1CD6BE2B415FF700DB70C0 /* DetailPageViewModel.swift */; };
-		CA2C78332B42A5A700464B5C /* MyClosetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2C78322B42A5A700464B5C /* MyClosetTests.swift */; };
-		CA2C783A2B42A5DB00464B5C /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CA2C78392B42A5DB00464B5C /* FirebaseFirestore */; };
+		CA2C783C2B43B6FE00464B5C /* MyClosetTest2.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2C783B2B43B6FE00464B5C /* MyClosetTest2.swift */; };
 		CA3B0FA82B086EE2001B708E /* CoreDataManeger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */; };
 		CA3B0FAE2B08A828001B708E /* MyClosetDetailPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */; };
 		CA3B0FB32B09CF76001B708E /* DollPageCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */; };
@@ -132,7 +131,7 @@
 		CA1CD6BC2B415FE900DB70C0 /* DetailPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageView.swift; sourceTree = "<group>"; };
 		CA1CD6BE2B415FF700DB70C0 /* DetailPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageViewModel.swift; sourceTree = "<group>"; };
 		CA2C78302B42A5A700464B5C /* MyClosetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyClosetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		CA2C78322B42A5A700464B5C /* MyClosetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetTests.swift; sourceTree = "<group>"; };
+		CA2C783B2B43B6FE00464B5C /* MyClosetTest2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetTest2.swift; sourceTree = "<group>"; };
 		CA3B0FA72B086EE2001B708E /* CoreDataManeger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManeger.swift; sourceTree = "<group>"; };
 		CA3B0FAD2B08A828001B708E /* MyClosetDetailPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyClosetDetailPageViewController.swift; sourceTree = "<group>"; };
 		CA3B0FB22B09CF76001B708E /* DollPageCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollPageCVCell.swift; sourceTree = "<group>"; };
@@ -187,7 +186,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA2C783A2B42A5DB00464B5C /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,7 +361,7 @@
 		CA2C78312B42A5A700464B5C /* MyClosetTests */ = {
 			isa = PBXGroup;
 			children = (
-				CA2C78322B42A5A700464B5C /* MyClosetTests.swift */,
+				CA2C783B2B43B6FE00464B5C /* MyClosetTest2.swift */,
 			);
 			path = MyClosetTests;
 			sourceTree = "<group>";
@@ -487,7 +485,6 @@
 			);
 			name = MyClosetTests;
 			packageProductDependencies = (
-				CA2C78392B42A5DB00464B5C /* FirebaseFirestore */,
 			);
 			productName = MyClosetTests;
 			productReference = CA2C78302B42A5A700464B5C /* MyClosetTests.xctest */;
@@ -688,7 +685,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA2C78332B42A5A700464B5C /* MyClosetTests.swift in Sources */,
+				CA2C783C2B43B6FE00464B5C /* MyClosetTest2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -910,7 +907,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyCloset.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MyCloset";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyCloset.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)MyCloset";
 			};
 			name = Debug;
 		};
@@ -929,7 +926,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyCloset.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MyCloset";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyCloset.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)MyCloset";
 			};
 			name = Release;
 		};
@@ -1006,11 +1003,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CA016D462B05FDD50066FBE7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
-		};
-		CA2C78392B42A5DB00464B5C /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CA016D462B05FDD50066FBE7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestore;
 		};
 		CA795B0E2B1C716300D5584E /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;
